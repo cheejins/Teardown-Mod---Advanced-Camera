@@ -1,0 +1,16 @@
+Events
+    > Wait - Time
+    > End
+    > Goto - Jump to an event
+    > Transition - Camera to Camera
+        > Switch
+        > Lerp
+            > Distance
+            > Time
+
+Cameras
+    > Entity
+        > Watch - Watch an entity from a pos
+        > Lock - Lock tr relative to an entity
+    > Clone
+        > Clone an existing camera's tr
