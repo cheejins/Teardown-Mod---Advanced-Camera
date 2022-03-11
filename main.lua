@@ -1,11 +1,18 @@
 #include "script/camera.lua"
 #include "script/cameraFunctions.lua"
-#include "script/mainFunctions.lua"
 #include "script/debug.lua"
+#include "script/draw.lua"
+#include "script/keys.lua"
+#include "script/mainFunctions.lua"
+#include "script/tool.lua"
 #include "script/utility.lua"
 
 
 function init()
+
+    initTool()
+    initKeys()
+
 end
 
 
@@ -29,57 +36,8 @@ function draw(dt)
 
     if db then
 
-        for key, camera in pairs(CAMERA_OBJECTS) do -- Draw camera numbers
-
-            if TransformToLocalPoint(camera.trStart, GetCameraTransform())[3] < 0 then
-
-                local x,y = UiWorldToPixel(camera.trStart.pos)
-                UiPush()
-                    UiTranslate(x,y)
-                    UiText(camera.id)
-                UiPop()
-
-            end
-
-        end
-
-        UiPush()
-
-            local yMargin = 30
-
-            UiTranslate(UiWidth() - 270, yMargin)
-
-            UiAlign('left top')
-            UiText('CAMERA CONTROLS')
-
-
-            UiTranslate(0, yMargin)
-            UiText('g = create camera')
-
-            UiTranslate(0, yMargin)
-            UiText('r = camera mode on/off')
-
-            UiTranslate(0, yMargin)
-            UiText('e = next camera')
-
-            UiTranslate(0, yMargin)
-            UiText('q = previous camera')
-
-            UiTranslate(0, yMargin)
-            UiText('t = delete all cameras')
-
-            UiTranslate(0, yMargin)
-            UiText('z = delete last camera')
-
-            UiTranslate(0, yMargin)
-            UiText('y = auto lerp on/off')
-
-        UiPop()
-
-        UiPush()
-            UiTranslate(UiCenter(), UiHeight() - 50)
-            UiText('Press ctrl+d to enable/disable adv cam debug mode')
-        UiPop()
+        drawCameraNumbers()
+        drawControls()
 
     end
 

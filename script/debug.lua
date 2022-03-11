@@ -4,6 +4,7 @@ function debugMod()
         local cam = CAMERA_OBJECTS[SELECTED_CAMERA]
         dbw('CAM ID', cam.id)
         dbw('CAM TIME', cam.time)
+
     end
 
     dbw('SELECTED_CAMERA', SELECTED_CAMERA or '(No cameras exist...)')
@@ -29,15 +30,6 @@ function debugMod()
     end
 
 end
-
-
-
-
-
-
-
-
-
 
 
 function manageDebugMode()
