@@ -1,6 +1,6 @@
 CAMERA_OBJECTS = {}
-
 CAMERA_IDS = 0
+
 SELECTED_CAMERA = 1
 RUN_CAMERAS = false
 RUN_AUTOLERP = false
@@ -56,11 +56,6 @@ function runCameraSystem()
     -- Activate camera mode
     if KEYS.toggleCameraMode:pressed() then
         RUN_CAMERAS = not RUN_CAMERAS
-    end
-
-    if InputPressed('v') then
-        cam:reset()
-        PrintTable(cam)
     end
 
     -- Toggle lerp mode

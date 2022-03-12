@@ -1,20 +1,17 @@
-#include "script/utility.lua"
-#include "script/tool.lua"
-#include "script/mainFunctions.lua"
-#include "script/keys.lua"
-#include "script/event_functions.lua"
-#include "script/event.lua"
-#include "script/draw.lua"
-#include "script/debug.lua"
-#include "script/cameraFunctions.lua"
 #include "script/camera.lua"
+#include "script/cameraFunctions.lua"
+#include "script/debug.lua"
+#include "script/draw.lua"
+#include "script/event.lua"
+#include "script/event_functions.lua"
+#include "script/keys.lua"
+#include "script/mainFunctions.lua"
+#include "script/tool.lua"
+#include "script/umf.lua"
+#include "script/utility.lua"
 
 
 function init()
-
-    initTool()
-    initKeys()
-
 end
 
 
@@ -42,3 +39,5 @@ function draw(dt)
     end
 
 end
+
+UpdateQuickloadPatch()

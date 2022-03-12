@@ -5,7 +5,7 @@ function event_reset(self)
         end
     end
 end
-function event_replaceDef(self)
+function event_replaceDef(self) -- Replace the event.def with the current version of event.
     self.def = DeepCopy(self)
 end
 
@@ -13,8 +13,9 @@ end
 
 
 
-function event_convertToWait(event, time)
-    event.val.time = time
+function event_convertToWait(self, time)
+    self.val.time = time
+    self:replaceDef()
 end
 
 

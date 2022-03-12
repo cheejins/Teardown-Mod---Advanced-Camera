@@ -58,9 +58,7 @@ function createEventObject()
             running = false,
             done = false,
             progress = 0, -- Universal value between 0.0 and 1.0 used to track exactly how far along the event is. 1.0 = done.
-                          -- For example: a dist lerp event which is 1m/s, 50m/150m would have progress of 0.33/1.0
-
-
+                          -- For example: a dist lerp event which is 0.5m/s, 25m/75m would have progress of 0.33/1.0
         },
 
         link = {
@@ -110,5 +108,15 @@ end
 function runEvent(event)
 
 
+    local progress = nil
 
+end
+
+local tb = {
+    x = 0,
+    func = tablefunc,
+}
+
+function tableFunc(self)
+    self.x = self.x+1
 end

@@ -1,9 +1,11 @@
 function createCameraObject(tr, id)
 
-    local cam = {
+    cam = {
 
         id = id,
         tr = tr,
+
+        time = 2,
 
         vehicle = nil,
         zoom = nil,
@@ -28,35 +30,35 @@ function instantiateCamera()
 
 end
 
--- function autoLerpCameras()
+function autoLerpCameras()
 
---     local cam = CAMERA_OBJECTS[SELECTED_CAMERA] -- Current camera running.
+    local cam = CAMERA_OBJECTS[SELECTED_CAMERA] -- Current camera running.
 
---     local nextCam = CAMERA_OBJECTS[getNextCamera()] -- Next camera AKA the one being approached.
---     local prevCam = CAMERA_OBJECTS[getPrevCamera()]
+    local nextCam = CAMERA_OBJECTS[getNextCamera()] -- Next camera AKA the one being approached.
+    local prevCam = CAMERA_OBJECTS[getPrevCamera()]
 
---     nextCam:reset()
---     prevCam:reset()
+    nextCam:reset()
+    prevCam:reset()
 
---     if cam.time > 0 then -- Camera is still approaching the next camera.
---         cam.time = cam.time - GetTimeStep() -- Reduce time each tick the camera has time left.
+    if cam.time > 0 then -- Camera is still approaching the next camera.
+        cam.time = cam.time - GetTimeStep() -- Reduce time each tick the camera has time left.
 
---         local lerpFraction = (cam.def.time - gtZero(cam.time)) / cam.def.time
+        local lerpFraction = (cam.def.time - gtZero(cam.time)) / cam.def.time
 
---         cam.tr.pos = VecLerp(cam.def.tr.pos, nextCam.def.tr.pos, lerpFraction)
---         cam.tr.rot = QuatSlerp(cam.def.tr.rot, nextCam.def.tr.rot, lerpFraction)
+        cam.tr.pos = VecLerp(cam.def.tr.pos, nextCam.def.tr.pos, lerpFraction)
+        cam.tr.rot = QuatSlerp(cam.def.tr.rot, nextCam.def.tr.rot, lerpFraction)
 
---         dbl(cam.def.tr.pos, nextCam.def.tr.pos, 0,1,1, 1)
---         dbw('lerpFraction', lerpFraction)
+        dbl(cam.def.tr.pos, nextCam.def.tr.pos, 0,1,1, 1)
+        dbw('lerpFraction', lerpFraction)
 
---     elseif cam.time <= 0 then -- Camera is done approaching the next camera.
+    elseif cam.time <= 0 then -- Camera is done approaching the next camera.
 
---         cam:reset()
---         SELECTED_CAMERA = getNextCamera() -- Change to the next camera.
+        cam:reset()
+        SELECTED_CAMERA = getNextCamera() -- Change to the next camera.
 
---     end
+    end
 
--- end
+end
 
 function cam_reset(self)
 

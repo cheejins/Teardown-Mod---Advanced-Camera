@@ -1,27 +1,10 @@
-function initTool()
+TOOL = {}
 
-    TOOL = {
-        objects = {}
-    }
-
-    TOOL.input = {
-        shoot = '',
-        reset = '',
-        reload = '',
-    }
-
-    TOOL.setup = {
-        name = 'advancedCamera',
-        title = 'Advanced Camera',
-        voxPath = 'MOD/vox/tool.vox',
-    }
-
-    TOOL.active = TOOL_active
-    TOOL.init = TOOL_init
-
-    TOOL:init()
-
-end
+TOOL.setup = {
+    name = 'advancedCamera',
+    title = 'Advanced Camera',
+    voxPath = 'MOD/vox/tool.vox',
+}
 
 TOOL_init = function(self, enabled)
     RegisterTool(self.setup.name, self.setup.title, self.setup.voxPath)
@@ -31,3 +14,7 @@ end
 TOOL_active = function(self)
     return GetString('game.player.tool') == self.setup.name and GetPlayerVehicle() == 0
 end
+
+TOOL.active = TOOL_active
+TOOL.init = TOOL_init
+TOOL:init()
