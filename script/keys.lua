@@ -3,12 +3,12 @@ function initKeys()
     KEYS = {
 
         createCamera = {
-            key = 'g',
+            key = 'c',
             desc = 'create camera'
         },
 
         toggleCameraMode = {
-            key = 'r',
+            key = 'g',
             desc = 'camera mode on/off'
         },
 
@@ -23,7 +23,7 @@ function initKeys()
         },
 
         deleteAllCameras = {
-            key = 't',
+            key = 'r',
             desc = 'delete all cameras'
         },
 
@@ -33,7 +33,7 @@ function initKeys()
         },
 
         toggleAutoLerp = {
-            key = 'y',
+            key = 't',
             desc = 'auto lerp on/off'
         },
 

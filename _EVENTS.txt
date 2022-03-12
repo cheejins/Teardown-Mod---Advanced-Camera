@@ -1,12 +1,15 @@
 Events
-    > Wait - Time
-    > End
+    > Wait - Time (cam>>wait>>event)
     > Goto - Jump to an event
+        > Loop - Go to a specific event
     > Transition - Camera to Camera
         > Switch
         > Lerp
             > Distance
             > Time
+    > Action
+        > Trigger an event to start
+
 
 Cameras
     > Entity
@@ -14,3 +17,19 @@ Cameras
         > Lock - Lock tr relative to an entity
     > Clone
         > Clone an existing camera's tr
+    > Position Orbit
+        > Angle
+
+
+Event Types
+
+    Camera to Event
+        > Wait
+        > GOTO
+            > Loop (restart view chain)
+
+    > Event to Event
+        > Transition
+
+    > Camera to Camera
+        > Lerp

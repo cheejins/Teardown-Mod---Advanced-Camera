@@ -5,11 +5,11 @@ function resetCameraSystem()
     RUN_AUTOLERP = false
 end
 
-function getNextCamera()
+function getNextCamera(addIndex)
     if SELECTED_CAMERA + 1 > #CAMERA_OBJECTS then
-        return 1
+        return 1 + (addIndex or 0)
     else
-        return SELECTED_CAMERA + 1
+        return SELECTED_CAMERA + 1 + (addIndex or 0)
     end
 end
 

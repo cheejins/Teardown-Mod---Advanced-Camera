@@ -1,2 +1,5 @@
 Important features
-    > Quicksave compatible
+    > Compatibility
+        > Quicksave
+        > Screen recorder
+        > Photo mode

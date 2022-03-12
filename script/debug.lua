@@ -17,11 +17,11 @@ function debugMod()
 
         if camera == CAMERA_OBJECTS[SELECTED_CAMERA] then
             dbdd(camera.tr.pos, 0.5,0.5, 0,1,1, 1)
-            dbdd(camera.trStart.pos, 0.5,0.5, 1,1,1, 1)
+            dbdd(camera.def.tr.pos, 0.5,0.5, 1,1,1, 1)
         else
             dbdd(camera.tr.pos, 0.5,0.5, 0,1,0, 1)
         end
-        dbcr(camera.trStart.pos, 1,1,0, 1)
+        dbcr(camera.def.tr.pos, 1,1,0, 1)
 
         local dist = 5
         dbray(camera.tr, dist, 1,1,1, 1)

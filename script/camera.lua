@@ -18,6 +18,27 @@ function runCameraSystem()
             SetCameraTransform(cam.tr) -- View the camera.
         end
 
+        -- Change camera
+        if KEYS.nextCamera:pressed() then -- Next camera
+            cam:reset()
+            SELECTED_CAMERA = getNextCamera()
+        elseif KEYS.prevCamera:pressed() then -- Previous camera
+            cam:reset()
+            SELECTED_CAMERA = getPrevCamera()
+        end
+
+        -- Delete all cameras
+        if KEYS.deleteAllCameras:pressed() then
+            CAMERA_OBJECTS = {}
+            beep()
+        end
+
+        -- Delete last camera created.
+        if KEYS.deleteLastCamera:pressed() then
+            table.remove(CAMERA_OBJECTS, #CAMERA_OBJECTS)
+            buzz()
+        end
+
     else
         resetCameraSystem()
     end
@@ -26,36 +47,20 @@ function runCameraSystem()
         autoLerpCameras()
     end
 
-    -- Change camera
-    if KEYS.nextCamera:pressed() then -- Next camera
-        cam:reset()
-        SELECTED_CAMERA = getNextCamera()
-    elseif KEYS.prevCamera:pressed() then -- Previous camera
-        cam:reset()
-        SELECTED_CAMERA = getPrevCamera()
-    end
-
     -- Create camera
     if KEYS.createCamera:pressed() then
         instantiateCamera()
         shine()
     end
 
-    -- Delete all cameras
-    if KEYS.deleteAllCameras:pressed() then
-        CAMERA_OBJECTS = {}
-        beep()
-    end
-
-    -- Delete last camera created.
-    if KEYS.deleteLastCamera:pressed() then
-        table.remove(CAMERA_OBJECTS, #CAMERA_OBJECTS)
-        buzz()
-    end
-
     -- Activate camera mode
     if KEYS.toggleCameraMode:pressed() then
         RUN_CAMERAS = not RUN_CAMERAS
+    end
+
+    if InputPressed('v') then
+        cam:reset()
+        PrintTable(cam)
     end
 
     -- Toggle lerp mode
@@ -70,24 +75,3 @@ function runCameraSystem()
     end
 
 end
-
-function createCameraObject(tr, id)
-
-    local cam = {
-
-        id = id,
-
-        trStart = tr,
-        tr = tr,
-
-        time = 3,
-        time_default = 3
-
-    }
-
-    cam.reset = cam_reset -- Set table function to global function
-
-    return DeepCopy(cam)
-
-end
-
