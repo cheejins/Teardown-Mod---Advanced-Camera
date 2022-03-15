@@ -5,6 +5,16 @@ KEYS = {
         desc = 'create camera'
     },
 
+    createEvent = {
+        key = 'b',
+        desc = 'create event'
+    },
+
+    runEvents = {
+        key = 'n',
+        desc = 'run events'
+    },
+
     toggleCameraMode = {
         key = 'g',
         desc = 'camera mode on/off'
@@ -32,6 +42,11 @@ KEYS = {
 
     toggleAutoLerp = {
         key = 't',
+        desc = 'auto lerp on/off'
+    },
+
+    showUi = {
+        key = 'u',
         desc = 'auto lerp on/off'
     },
 

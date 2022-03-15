@@ -2,6 +2,7 @@ Events
     > Wait - Time (cam>>wait>>event)
     > Goto - Jump to an event
         > Loop - Go to a specific event
+        > Restart event
     > Transition - Camera to Camera
         > Switch
         > Lerp

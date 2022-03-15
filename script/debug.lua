@@ -4,14 +4,14 @@ function debugMod()
         local cam = CAMERA_OBJECTS[SELECTED_CAMERA]
         dbw('CAM ID', cam.id)
         dbw('CAM TIME', cam.time)
-
     end
 
     dbw('SELECTED_CAMERA', SELECTED_CAMERA or '(No cameras exist...)')
     dbw('NEXT CAMERA', getNextCamera() or '(No cameras exist...)')
     dbw('CAMERA_IDS', CAMERA_IDS)
-    dbw('CAMERAS', #CAMERA_OBJECTS or '(No cameras exist...)')
-    dbw('CAMERAS RUNNING', RUN_CAMERAS)
+    dbw('#CAMERA_OBJECTS', #CAMERA_OBJECTS or '(No cameras exist...)')
+    dbw('RUN_CAMERAS', RUN_CAMERAS)
+    dbw('EVENT_RUN', EVENT_RUN)
 
     for key, camera in pairs(CAMERA_OBJECTS) do
 

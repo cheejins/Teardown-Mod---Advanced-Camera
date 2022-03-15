@@ -3,7 +3,7 @@ TOOL = {}
 TOOL.setup = {
     name = 'advancedCamera',
     title = 'Advanced Camera',
-    voxPath = 'MOD/vox/tool.vox',
+    voxPath = 'MOD/vox/camera.vox',
 }
 
 TOOL_init = function(self, enabled)

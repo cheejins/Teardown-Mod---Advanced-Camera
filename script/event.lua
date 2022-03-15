@@ -1,6 +1,10 @@
 EVENT_OBJECTS = {}
 EVENT_IDS = 0
 
+EVENT_RUN = false
+
+EVENT_SELECTED = 1
+
 
 --[[
 
@@ -52,6 +56,9 @@ function createEventObject()
 
     local event = {
 
+        id = nil,
+        type = nil,
+
         status = {
             active = false,
             started = false,
@@ -63,29 +70,20 @@ function createEventObject()
 
         link = {
             event = {
-                master = {},
-                next = {},
+                master = 0,
+                next = 0,
             },
             camera = {
-                master = {},
-                next = {},
+                master = 0,
+                next = 0,
             },
         },
 
         val = {
-            time = math.random(1,4) + math.random(),
+            time = math.random(1,2) + math.random(),
             speed = 0,
             dist = 0,
         },
-
-        reset = event_reset,
-        replaceDef = event_replaceDef,
-
-        -- event.link functions
-        setNextEvent = event_setNextEvent,
-        setMasterEvent = event_setMasterEvent,
-        setNextCamera = event_setNextCamera,
-        setMasterCamera = event_setMasterCamera,
 
     }
 
@@ -94,29 +92,109 @@ function createEventObject()
     return event
 end
 
-function instantiateEvent(EVENT_IDS)
+function instantiateEvent(type, time)
 
     EVENT_IDS = EVENT_IDS + 1
 
-    local event = createEventObject(EVENT_IDS)
+    local event = createEventObject()
+    event.id = EVENT_IDS
+    event.type = type
 
-    table.insert(CAMERA_OBJECTS, event)
+    table.insert(EVENT_OBJECTS, event)
+    return EVENT_OBJECTS[#EVENT_OBJECTS]
+
+end
+
+
+
+function runEvents()
+
+    if EVENT_RUN then
+
+        local event = EVENT_OBJECTS[EVENT_SELECTED]
+
+        event.val.time = event.val.time - GetTimeStep()
+
+        if event.val.time <= 0 then
+
+            local nextEvent = getNextEvent()
+
+            EVENT_SELECTED = nextEvent
+
+            local nextCam = event.link.camera.next
+            SELECTED_CAMERA = nextCam
+
+            event_reset(event)
+
+        end
+
+    end
 
 end
 
 
-function runEvent(event)
 
-
-    local progress = nil
-
+function event_reset(self)
+    for key, value in pairs(self) do
+        if key ~= 'def' then -- self.def does not have a def key.
+            self[key] = DeepCopy(self.def[key]) -- Replace all self values with default self values.
+        end
+    end
+end
+function event_replaceDef(self) -- Replace the event.def with the current version of event.
+    self.def = DeepCopy(self)
 end
 
-local tb = {
-    x = 0,
-    func = tablefunc,
-}
 
-function tableFunc(self)
-    self.x = self.x+1
+
+function event_convertToWait(self, time)
+    self.val.time = time
+    event_replaceDef(self)
+end
+
+
+
+function event_setMasterEvent(self, event, doReset)
+    self.link.event.next = event
+    if doReset then
+        self.link.event.next:reset()
+    end
+end
+function event_setNextEvent(self, event, doReset)
+    self.link.event.next = event
+    if doReset then
+        self.link.event.next:reset()
+    end
+end
+
+
+
+function event_setMasterCamera(self, cameraId, doReset)
+    self.link.camera.next = cameraId
+    if doReset then
+        self.link.camera.next:reset()
+    end
+end
+function event_setNextCamera(self, cameraId, doReset)
+    self.link.camera.next = cameraId
+    if doReset then
+        self.link.camera.next:reset()
+    end
+end
+
+
+function getNextEvent(addIndex)
+    if EVENT_SELECTED + 1 > #EVENT_OBJECTS then
+        return 1 + (addIndex or 0)
+    else
+        return EVENT_SELECTED + 1 + (addIndex or 0)
+    end
+end
+
+function getPrevEvent()
+    if EVENT_SELECTED - 1 <= 0 then
+        return #EVENT_OBJECTS
+    else
+        return EVENT_SELECTED - 1
+    end
 end

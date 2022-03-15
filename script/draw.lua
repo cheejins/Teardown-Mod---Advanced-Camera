@@ -1,3 +1,6 @@
+UI_SHOW_OPTIONS = false
+
+
 function drawControls()
 
     do UiPush()
@@ -41,28 +44,88 @@ function drawCameraNumbers()
     end
 end
 
+function drawUi()
 
--- function drawCameraToolGrid()
-    -- do UiPush()
+    if TOOL:active() then
 
-    --     local h = UiHeight()/10
-    --     local w = UiWidth()/10
+        if UI_SHOW_OPTIONS then
+            UiMakeInteractive()
+        end
 
-    --     local x = UiCenter()/2
-    --     local y = UiMiddle()/2
+        do UiPush()
 
-    --     UiTranslate(x, y)
-    --     UiAlign('center middle')
-    --     UiColor(1,1,1, 1)
+            margin(UiCenter()*1.5, UiMiddle()/5)
 
-    --     for i = 1, 3 do
-    --         -- for j = 1, 3 do
+            UiAlign('left top')
+            UiFont('regular.ttf', 24)
+            UiColor(0,0,0, 0.7)
 
-    --             UiTranslate(h*i, y)
-    --             UiRect()
+            -- Background
+            UiRect(400, 400)
 
-    --         -- end
-    --     end
+            margin(20, 20)
+            UiColor(1,1,1, 1)
+            UiText('Event Objects')
 
-    -- UiPop() end
--- end
+            UiFont('regular.ttf', 20)
+            margin(0, 10)
+            for index, event in ipairs(EVENT_OBJECTS) do
+
+                margin(0, 30)
+
+                do UiPush()
+
+                    if event == EVENT_OBJECTS[EVENT_SELECTED] then
+                        UiColor(0.5,1,0.5, 1)
+                    end
+
+                    UiText('[' .. index .. ']' .. 'Event ID = ' .. event.id .. '       Time = ' .. sfn(event.val.time))
+
+                UiPop() end
+
+            end
+
+        UiPop() end
+
+        do UiPush()
+
+            margin(UiCenter()*1.5, UiMiddle()/5 + 420)
+
+            UiAlign('left top')
+            UiFont('regular.ttf', 24)
+            UiColor(0,0,0, 0.7)
+
+            -- Background
+            UiRect(400, 400)
+
+            margin(20, 20)
+            UiColor(1,1,1, 1)
+            UiText('Camera Objects')
+
+            UiFont('regular.ttf', 20)
+            margin(0, 10)
+            for index, camera in ipairs(CAMERA_OBJECTS) do
+
+                margin(0, 30)
+
+                do UiPush()
+
+                    if camera == CAMERA_OBJECTS[SELECTED_CAMERA] then
+                        UiColor(0.5,1,0.5, 1)
+                    end
+
+                    UiText('[' .. index .. ']' .. ' Camera ID = ' .. camera.id)
+
+                UiPop() end
+
+            end
+
+        UiPop() end
+
+    end
+
+end
+
+function margin(x,y)
+    UiTranslate(x,y)
+end
