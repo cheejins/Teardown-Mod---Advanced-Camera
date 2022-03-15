@@ -10,26 +10,34 @@
 
 function init()
 
-    local cam1 = instantiateCamera(Transform(Vec(3,3,3), QuatLookAt(Vec(3,3,3), Vec(0,0,0))))
-    local cam2 = instantiateCamera(Transform(Vec(-3,3,-3), QuatLookAt(Vec(-3,3,-3), Vec(0,0,0))))
+    local cam1 = instantiateCamera(Transform(Vec(5,5,5), QuatLookAt(Vec(5,5,5), Vec(0,0,0))))
+    local cam2 = instantiateCamera(Transform(Vec(-5,5,-5), QuatLookAt(Vec(-5,5,-5), Vec(0,0,0))))
+    local cam3 = instantiateCamera(Transform(Vec(-10,10,-10), QuatLookAt(Vec(-10,10,-10), Vec(0,0,0))))
 
-    local event = instantiateEvent('wait1')
-    event_setMasterCamera(event, cam1.id)
-    event_setNextCamera(event, cam2.id)
+    local event1 = instantiateEvent('wait')
+    event_setMasterCamera(event1, cam1.id)
+    event_setNextCamera(event1, cam2.id)
+    event1.val.time = 5
+    event_replaceDef(event1)
 
-    local event = instantiateEvent('wait2')
-    event_setMasterCamera(event, cam2.id)
-    event_setNextCamera(event, cam1.id)
+    local event2 = instantiateEvent('wait')
+    event_setMasterCamera(event2, cam2.id)
+    event_setNextCamera(event2, cam3.id)
+    event2.val.time = 2
+    event_replaceDef(event2)
+
+    local event3 = instantiateEvent('wait')
+    event_setMasterCamera(event3, cam3.id)
+    event_setNextCamera(event3, cam1.id)
+    event3.val.time = 4
+    event_replaceDef(event3)
 
 end
 
 
 function tick()
 
-    if toolSet == nil then
-        SetString('game.player.tool', 'advancedCamera')
-        toolSet = true
-    end
+    if toolSet == nil then SetString('game.player.tool', 'advancedCamera') toolSet = true end
 
     runCameraSystem()
     runEvents()
@@ -57,7 +65,6 @@ function draw()
 
 end
 
-
 function runCameraSystem()
 
     local cam = CAMERA_OBJECTS[SELECTED_CAMERA]
@@ -67,9 +74,7 @@ function runCameraSystem()
     -- Create camera
     if KEYS.createCamera:pressed() then
         instantiateCamera()
-
         PrintTable(CAMERA_OBJECTS)
-
         shine()
     end
 
@@ -78,7 +83,6 @@ function runCameraSystem()
     if KEYS.showUi:pressed() then
         UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
     end
-
 
 
     -- If there is at least one camera.
@@ -99,7 +103,7 @@ function runCameraSystem()
 
         if KEYS.deleteAllCameras:pressed() then -- Delete all cameras
             CAMERA_OBJECTS = {}
-            beep()
+            buzz()
         end
 
         if KEYS.deleteLastCamera:pressed() then -- Delete last camera created.

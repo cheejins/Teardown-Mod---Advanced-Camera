@@ -54,11 +54,11 @@ function drawUi()
 
         do UiPush()
 
-            margin(UiCenter()*1.5, UiMiddle()/5)
+            margin(UiCenter()*1.25, UiMiddle()/5)
 
             UiAlign('left top')
             UiFont('regular.ttf', 24)
-            UiColor(0,0,0, 0.7)
+            UiColor(0,0,0, 0.9)
 
             -- Background
             UiRect(400, 400)
@@ -79,7 +79,7 @@ function drawUi()
                         UiColor(0.5,1,0.5, 1)
                     end
 
-                    UiText('[' .. index .. ']' .. 'Event ID = ' .. event.id .. '       Time = ' .. sfn(event.val.time))
+                    UiText('[' .. index .. ']' .. 'Event ID = ' .. event.id .. '       Type = ' .. event.type .. '       Time = ' .. sfn(event.val.time))
 
                 UiPop() end
 
@@ -89,11 +89,11 @@ function drawUi()
 
         do UiPush()
 
-            margin(UiCenter()*1.5, UiMiddle()/5 + 420)
+            margin(UiCenter()*1.25, UiMiddle()/5 + 420)
 
             UiAlign('left top')
             UiFont('regular.ttf', 24)
-            UiColor(0,0,0, 0.7)
+            UiColor(0,0,0, 0.9)
 
             -- Background
             UiRect(400, 400)

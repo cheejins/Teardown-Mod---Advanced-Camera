@@ -51,7 +51,6 @@ EVENT_SELECTED = 1
 ]]
 
 
-
 function createEventObject()
 
     local event = {
@@ -87,18 +86,18 @@ function createEventObject()
 
     }
 
-    event.def = DeepCopy(event)
-
     return event
 end
 
-function instantiateEvent(type, time)
+function instantiateEvent(type)
 
     EVENT_IDS = EVENT_IDS + 1
 
     local event = createEventObject()
     event.id = EVENT_IDS
     event.type = type
+
+    event.def = DeepCopy(event)
 
     table.insert(EVENT_OBJECTS, event)
     return EVENT_OBJECTS[#EVENT_OBJECTS]
@@ -117,12 +116,10 @@ function runEvents()
 
         if event.val.time <= 0 then
 
-            local nextEvent = getNextEvent()
+            EVENT_SELECTED = getNextEvent()
 
-            EVENT_SELECTED = nextEvent
-
-            local nextCam = event.link.camera.next
-            SELECTED_CAMERA = nextCam
+            local camObj, camIndex = getCameraById(event.link.camera.next)
+            SELECTED_CAMERA = camIndex
 
             event_reset(event)
 
@@ -167,8 +164,6 @@ function event_setNextEvent(self, event, doReset)
     end
 end
 
-
-
 function event_setMasterCamera(self, cameraId, doReset)
     self.link.camera.next = cameraId
     if doReset then
@@ -182,7 +177,6 @@ function event_setNextCamera(self, cameraId, doReset)
     end
 end
 
-
 function getNextEvent(addIndex)
     if EVENT_SELECTED + 1 > #EVENT_OBJECTS then
         return 1 + (addIndex or 0)
@@ -190,11 +184,21 @@ function getNextEvent(addIndex)
         return EVENT_SELECTED + 1 + (addIndex or 0)
     end
 end
-
 function getPrevEvent()
     if EVENT_SELECTED - 1 <= 0 then
         return #EVENT_OBJECTS
     else
         return EVENT_SELECTED - 1
+    end
+end
+
+---@param id number
+---@return table tb - Camera object.
+---@return number i -- Index of the camera in the table.
+function getEventById(id)
+    for i = 1, #EVENT_OBJECTS do
+        if EVENT_OBJECTS[i].id == id then
+            return EVENT_OBJECTS[i], i
+        end
     end
 end

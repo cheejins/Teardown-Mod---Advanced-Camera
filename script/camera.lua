@@ -2,7 +2,6 @@ CAMERA_OBJECTS = {}
 CAMERA_IDS = 0
 
 SELECTED_CAMERA = 1
-SELECTED_CAMERA_OBJECT = {}
 RUN_CAMERAS = false
 -- RUN_AUTOLERP = false
 
@@ -13,8 +12,6 @@ function createCameraObject(tr, id)
 
         id = id,
         tr = tr,
-
-        time = 4,
 
         vehicle = nil,
         zoom = nil,
@@ -77,7 +74,7 @@ function cam_reset(self)
 end
 
 function resetCameraSystem()
-    CAMERA_IDS = 0
+    -- CAMERA_IDS = 0
     SELECTED_CAMERA = 1
     RUN_CAMERAS = false
     RUN_AUTOLERP = false
@@ -100,3 +97,13 @@ function getPrevCamera()
 end
 
 
+---@param id number
+---@return table tb - Camera object.
+---@return number i -- Index of the camera in the table.
+function getCameraById(id)
+    for i = 1, #CAMERA_OBJECTS do
+        if CAMERA_OBJECTS[i].id == id then
+            return CAMERA_OBJECTS[i], i
+        end
+    end
+end
