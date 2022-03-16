@@ -5,10 +5,13 @@ function debugMod()
         dbw('CAM ID', cam.id)
     end
 
-    dbw('SELECTED_CAMERA', SELECTED_CAMERA or '(No cameras exist...)')
-    dbw('NEXT CAMERA', getNextCamera() or '(No cameras exist...)')
+    dbw('#ITEM_OBJECTS', #ITEM_OBJECTS)
+    dbw('#CAMERA_OBJECTS', #CAMERA_OBJECTS)
+    dbw('#EVENT_OBJECTS', #EVENT_OBJECTS)
+
+    dbw('SELECTED_CAMERA', SELECTED_CAMERA)
+    dbw('NEXT CAMERA', getNextCamera())
     dbw('CAMERA_IDS', CAMERA_IDS)
-    dbw('#CAMERA_OBJECTS', #CAMERA_OBJECTS or '(No cameras exist...)')
     dbw('RUN_CAMERAS', RUN_CAMERAS)
     dbw('EVENT_RUN', EVENT_RUN)
 

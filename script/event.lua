@@ -1,62 +1,21 @@
+-- An event is an item that is used to control cameras or other events.
+
+
 EVENT_OBJECTS = {}
 EVENT_IDS = 0
 
-EVENT_RUN = false
-
 EVENT_SELECTED = 1
 
-
---[[
-
-    CAMERA1
-    Switch to camera tool
-    New camera
-    Set tr
-    Create camera
-    (Add camera to view group)
-
-    CAMERA2
-    Switch to camera tool
-    New camera
-    Set tr
-    Create camera
-    (Add camera to view group)
-
-    EVENT:WAIT
-    Switch to camera tool
-    New event
-    Select event type: wait
-    Set time = 5s
-    Set camera master
-    Set camera next
-    (Add event to view group)
-
-    EVENT:LERP
-    Switch to camera tool
-    New event
-    Select event type: lerp speed
-    Select 0.5m/s
-    Set camera master
-    Set camera next
-    (Add event to view group)
-
-    EVENT:GOTO
-    Switch to camera tool
-    New event
-    Select event type: goto
-    Set event master
-    Set event next
-    (Add event to view group)
-
-]]
+EVENT_RUN = false
 
 
-function createEventObject()
+
+function createEventObject(id, type)
 
     local event = {
 
-        id = nil,
-        type = nil,
+        id = id,
+        type = 'wait',
 
         status = {
             active = false,
@@ -79,7 +38,7 @@ function createEventObject()
         },
 
         val = {
-            time = math.random(1,2) + math.random(),
+            time = 2 + math.random()*2,
             speed = 0,
             dist = 0,
         },
@@ -87,19 +46,20 @@ function createEventObject()
     }
 
     return event
+
 end
 
-function instantiateEvent(type)
+function instantiateEvent()
 
     EVENT_IDS = EVENT_IDS + 1
 
-    local event = createEventObject()
-    event.id = EVENT_IDS
-    event.type = type
-
+    local event = createEventObject(EVENT_IDS)
     event.def = DeepCopy(event)
-
     table.insert(EVENT_OBJECTS, event)
+
+    local item = instantiateItem('event')
+    item.item = EVENT_OBJECTS[#EVENT_OBJECTS]
+
     return EVENT_OBJECTS[#EVENT_OBJECTS]
 
 end
@@ -112,14 +72,15 @@ function runEvents()
 
         local event = EVENT_OBJECTS[EVENT_SELECTED]
 
+        local camObj, camIndex = getCameraById(event.link.camera.master)
+        SELECTED_CAMERA = camIndex
+
         event.val.time = event.val.time - GetTimeStep()
 
         if event.val.time <= 0 then
 
-            EVENT_SELECTED = getNextEvent()
-
-            local camObj, camIndex = getCameraById(event.link.camera.next)
-            SELECTED_CAMERA = camIndex
+            local event, eventIndex = getEventById(event.link.event.next)
+            EVENT_SELECTED = eventIndex
 
             event_reset(event)
 
@@ -144,38 +105,56 @@ end
 
 
 
-function event_convertToWait(self, time)
+function event_set_wait(self, time)
     self.val.time = time
+
+    self.type = 'Wait'
+    event_replaceDef(self)
+end
+
+function event_set_trigger(self, time)
+
+    self.type = 'Trigger'
+    event_replaceDef(self)
+end
+
+--- Switch the camera immeadiatly.
+function event_set_cameraSwitch(self, time)
+
+    self.type = 'Switch'
+    event_replaceDef(self)
+end
+
+--- Lerp camera at a constant speed regardless of time.
+function event_set_cameraLerp_const(self, speed)
+
+    self.type = 'LerpConst'
+    event_replaceDef(self)
+end
+
+--- Lerp camera over a specific time period.
+function event_set_cameraLerp_timed(self, time)
+
+    self.type = 'LerpTimed'
     event_replaceDef(self)
 end
 
 
 
-function event_setMasterEvent(self, event, doReset)
-    self.link.event.next = event
-    if doReset then
-        self.link.event.next:reset()
-    end
+function event_setMasterEvent(self, event)
+    self.link.event.master = event
 end
-function event_setNextEvent(self, event, doReset)
+function event_setNextEvent(self, event)
     self.link.event.next = event
-    if doReset then
-        self.link.event.next:reset()
-    end
 end
 
-function event_setMasterCamera(self, cameraId, doReset)
-    self.link.camera.next = cameraId
-    if doReset then
-        self.link.camera.next:reset()
-    end
+function event_setMasterCamera(self, cameraId)
+    self.link.camera.master = cameraId
 end
-function event_setNextCamera(self, cameraId, doReset)
+function event_setNextCamera(self, cameraId)
     self.link.camera.next = cameraId
-    if doReset then
-        self.link.camera.next:reset()
-    end
 end
+
 
 function getNextEvent(addIndex)
     if EVENT_SELECTED + 1 > #EVENT_OBJECTS then

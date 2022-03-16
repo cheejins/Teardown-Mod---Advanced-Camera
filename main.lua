@@ -2,6 +2,7 @@
 #include "script/debug.lua"
 #include "script/draw.lua"
 #include "script/event.lua"
+#include "script/item.lua"
 #include "script/keys.lua"
 #include "script/tool.lua"
 #include "script/umf.lua"
@@ -12,28 +13,28 @@ function init()
 
     local cam1 = instantiateCamera(Transform(Vec(5,5,5), QuatLookAt(Vec(5,5,5), Vec(0,0,0))))
     local cam2 = instantiateCamera(Transform(Vec(-5,5,-5), QuatLookAt(Vec(-5,5,-5), Vec(0,0,0))))
-    local cam3 = instantiateCamera(Transform(Vec(-10,10,-10), QuatLookAt(Vec(-10,10,-10), Vec(0,0,0))))
+    local e1 = instantiateEvent('wait')
+    local e2 = instantiateEvent('wait')
+    local e3 = instantiateEvent('wait')
+    local e4 = instantiateEvent('wait')
 
-    local event1 = instantiateEvent('wait')
-    event_setMasterCamera(event1, cam1.id)
-    event_setNextCamera(event1, cam2.id)
-    event1.val.time = 5
-    event_replaceDef(event1)
+    event_setMasterCamera(e1, cam1.id)
+    event_setNextEvent(e1, e2.id)
+    event_replaceDef(e1)
 
-    local event2 = instantiateEvent('wait')
-    event_setMasterCamera(event2, cam2.id)
-    event_setNextCamera(event2, cam3.id)
-    event2.val.time = 2
-    event_replaceDef(event2)
+    event_setMasterCamera(e2, cam2.id)
+    event_setNextEvent(e2, e3.id)
+    event_replaceDef(e2)
 
-    local event3 = instantiateEvent('wait')
-    event_setMasterCamera(event3, cam3.id)
-    event_setNextCamera(event3, cam1.id)
-    event3.val.time = 4
-    event_replaceDef(event3)
+    event_setMasterCamera(e3, cam2.id)
+    event_setNextEvent(e3, e4.id)
+    event_replaceDef(e3)
+
+    event_setMasterCamera(e4, cam1.id)
+    event_setNextEvent(e4, e1.id)
+    event_replaceDef(e4)
 
 end
-
 
 function tick()
 
@@ -56,11 +57,15 @@ function draw()
     UiFont('bold.ttf', 24)
     UiColor(0,0,0,1)
 
-    drawUi()
+    if TOOL:active() then
+        drawUi()
+        if db then
+            drawControls()
+        end
+    end
 
     if db then
         drawCameraNumbers()
-        drawControls()
     end
 
 end
@@ -74,7 +79,6 @@ function runCameraSystem()
     -- Create camera
     if KEYS.createCamera:pressed() then
         instantiateCamera()
-        PrintTable(CAMERA_OBJECTS)
         shine()
     end
 

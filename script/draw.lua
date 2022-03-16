@@ -7,12 +7,20 @@ function drawControls()
 
         local yMargin = 30
 
-        UiTranslate(UiWidth() - 270, yMargin)
+        margin(50, 350)
         UiAlign('left top')
-        UiText('CAMERA CONTROLS')
+
+        UiColor(0,0,0, 0.5)
+        UiRect(250, (GetTableSize(KEYS) + 1) * 30 + 40)
+
+        margin(20,20)
+        UiColor(1,1,1, 1)
+        UiText('CONTROLS')
+        UiFont('regular.ttf', 24)
+        UiTextShadow(0,0,0,0.5, 0.5,0)
 
         for key, k in pairs(KEYS) do
-            UiTranslate(0, yMargin)
+            margin(0, yMargin)
             UiText(k.key .. ' = ' .. k.desc)
         end
 
@@ -20,7 +28,7 @@ function drawControls()
 
     do UiPush()
 
-        UiTranslate(UiCenter(), UiHeight() - 50)
+        margin(UiCenter(), UiHeight() - 50)
         UiText('Press ctrl+d to enable/disable adv cam debug mode')
 
     UiPop() end
@@ -35,7 +43,7 @@ function drawCameraNumbers()
             local x,y = UiWorldToPixel(camera.def.tr.pos)
 
             do UiPush()
-                UiTranslate(x,y)
+                margin(x,y)
                 UiText(camera.id)
             UiPop() end
 
@@ -46,83 +54,102 @@ end
 
 function drawUi()
 
-    if TOOL:active() then
+    UiTextShadow(0,0,0,0.5, 0.5,0)
 
-        if UI_SHOW_OPTIONS then
-            UiMakeInteractive()
+
+    if UI_SHOW_OPTIONS then
+        UiMakeInteractive()
+    end
+
+    do UiPush()
+
+        margin(UiCenter()+400, 0)
+
+        UiAlign('left top')
+        UiFont('bold.ttf', 24)
+        UiColor(0,0,0, 0.5)
+
+        -- Background
+        UiRect(500, 400)
+
+        margin(20, 20)
+        UiColor(1,1,1, 1)
+        UiText('Item Objects')
+
+        margin(0, 10)
+        for index, item in ipairs(ITEM_OBJECTS) do
+
+            margin(0, 30)
+
+            do UiPush()
+
+                local itemValues = {
+                    item = item.type,
+                    type = item.item.type,
+                }
+
+                local text = ''
+                for key, value in pairs(itemValues) do
+                    text = text .. '[' .. key .. '=' .. value .. ']'
+                end
+
+                UiText('['..item.id..']  ' .. text)
+
+            UiPop() end
+
         end
 
-        do UiPush()
+    UiPop() end
 
-            margin(UiCenter()*1.25, UiMiddle()/5)
+    do UiPush()
 
-            UiAlign('left top')
-            UiFont('regular.ttf', 24)
-            UiColor(0,0,0, 0.9)
+        margin(UiCenter()+400, 420)
 
-            -- Background
-            UiRect(400, 400)
+        UiAlign('left top')
+        UiFont('bold.ttf', 24)
+        UiColor(0,0,0, 0.5)
 
-            margin(20, 20)
-            UiColor(1,1,1, 1)
-            UiText('Event Objects')
+        -- Background
+        UiRect(500, 400)
 
-            UiFont('regular.ttf', 20)
-            margin(0, 10)
-            for index, event in ipairs(EVENT_OBJECTS) do
+        margin(20, 20)
+        UiColor(1,1,1, 1)
+        UiText('Item Chain')
 
-                margin(0, 30)
+        margin(0, 10)
 
-                do UiPush()
+        -- local itemChain = {}
+        -- for key, event in pairs(EVENT_OBJECTS) do
 
-                    if event == EVENT_OBJECTS[EVENT_SELECTED] then
-                        UiColor(0.5,1,0.5, 1)
-                    end
+        --     local master = getCameraById(event.link.camera.master)
+        --     table.insert(itemChain, master)
 
-                    UiText('[' .. index .. ']' .. 'Event ID = ' .. event.id .. '       Type = ' .. event.type .. '       Time = ' .. sfn(event.val.time))
+        --     table.insert(itemChain, event)
 
-                UiPop() end
+        -- end
 
-            end
+        for index, item in ipairs(ITEM_OBJECTS) do
 
-        UiPop() end
+            margin(0, 30)
 
-        do UiPush()
+            do UiPush()
 
-            margin(UiCenter()*1.25, UiMiddle()/5 + 420)
+                if item.item == EVENT_OBJECTS[EVENT_SELECTED] or item.item == CAMERA_OBJECTS[SELECTED_CAMERA] then
+                    UiColor(0.5,1,0.5, 1)
+                end
 
-            UiAlign('left top')
-            UiFont('regular.ttf', 24)
-            UiColor(0,0,0, 0.9)
+                local time = ''
+                if item.item.type == 'wait' then
+                    time = 'Time = ' .. sfn(item.item.val.time)
+                end
 
-            -- Background
-            UiRect(400, 400)
+                UiText('['.. index ..']  ' .. ' [Type=' .. item.item.type .. '] ' .. time .. '')
 
-            margin(20, 20)
-            UiColor(1,1,1, 1)
-            UiText('Camera Objects')
+            UiPop() end
 
-            UiFont('regular.ttf', 20)
-            margin(0, 10)
-            for index, camera in ipairs(CAMERA_OBJECTS) do
+        end
 
-                margin(0, 30)
-
-                do UiPush()
-
-                    if camera == CAMERA_OBJECTS[SELECTED_CAMERA] then
-                        UiColor(0.5,1,0.5, 1)
-                    end
-
-                    UiText('[' .. index .. ']' .. ' Camera ID = ' .. camera.id)
-
-                UiPop() end
-
-            end
-
-        UiPop() end
-
-    end
+    UiPop() end
 
 end
 

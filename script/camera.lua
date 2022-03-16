@@ -1,3 +1,6 @@
+-- Cameras are items which usually don't control any other items.
+
+
 CAMERA_OBJECTS = {}
 CAMERA_IDS = 0
 
@@ -13,6 +16,8 @@ function createCameraObject(tr, id)
         id = id,
         tr = tr,
 
+        type = 'static',
+
         vehicle = nil,
         zoom = nil,
 
@@ -22,15 +27,21 @@ function createCameraObject(tr, id)
 
 end
 
+
 --- Create a camera in game.
 function instantiateCamera(tr)
 
     CAMERA_IDS = CAMERA_IDS + 1
 
-    local camObj = createCameraObject(tr or GetCameraTransform(), CAMERA_IDS)
-    camObj.def = DeepCopy(camObj) -- Cloned camera used for the camera's default values.
+    -- Instantiate a new camera.
+    local camera = createCameraObject(tr or GetCameraTransform(), CAMERA_IDS)
+    camera.def = DeepCopy(camera) -- Cloned camera used for the camera's default values.
+    table.insert(CAMERA_OBJECTS, camera)
 
-    table.insert(CAMERA_OBJECTS, camObj)
+    -- Wrap the camera in a new item object.
+    local item = instantiateItem('camera')
+    item.item = CAMERA_OBJECTS[#CAMERA_OBJECTS]
+
     return CAMERA_OBJECTS[#CAMERA_OBJECTS]
 
 end

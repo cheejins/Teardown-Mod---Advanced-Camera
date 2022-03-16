@@ -242,6 +242,11 @@ do
         return copy
     end
 
+    function GetTableSize(tb)
+        local s = 0
+        for index, t in pairs(tb) do s = s + 1 end
+        return s
+    end
 
     function GetRandomIndex(tb)
         return tb[math.random(1, #tb)]
