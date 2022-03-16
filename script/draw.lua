@@ -10,7 +10,7 @@ function drawControls()
         margin(50, 350)
         UiAlign('left top')
 
-        UiColor(0,0,0, 0.5)
+        UiColor(0,0,0, 0.7)
         UiRect(250, (GetTableSize(KEYS) + 1) * 30 + 40)
 
         margin(20,20)
@@ -67,66 +67,18 @@ function drawUi()
 
         UiAlign('left top')
         UiFont('bold.ttf', 24)
-        UiColor(0,0,0, 0.5)
+        UiColor(0,0,0, 0.7)
 
         -- Background
-        UiRect(500, 400)
-
-        margin(20, 20)
-        UiColor(1,1,1, 1)
-        UiText('Item Objects')
-
-        margin(0, 10)
-        for index, item in ipairs(ITEM_OBJECTS) do
-
-            margin(0, 30)
-
-            do UiPush()
-
-                local itemValues = {
-                    item = item.type,
-                    type = item.item.type,
-                }
-
-                local text = ''
-                for key, value in pairs(itemValues) do
-                    text = text .. '[' .. key .. '=' .. value .. ']'
-                end
-
-                UiText('['..item.id..']  ' .. text)
-
-            UiPop() end
-
-        end
-
-    UiPop() end
-
-    do UiPush()
-
-        margin(UiCenter()+400, 420)
-
-        UiAlign('left top')
-        UiFont('bold.ttf', 24)
-        UiColor(0,0,0, 0.5)
-
-        -- Background
-        UiRect(500, 400)
+        UiRect(500, 500)
 
         margin(20, 20)
         UiColor(1,1,1, 1)
         UiText('Item Chain')
 
         margin(0, 10)
+        UiColor(1,1,1, 0.5)
 
-        -- local itemChain = {}
-        -- for key, event in pairs(EVENT_OBJECTS) do
-
-        --     local master = getCameraById(event.link.camera.master)
-        --     table.insert(itemChain, master)
-
-        --     table.insert(itemChain, event)
-
-        -- end
 
         for index, item in ipairs(ITEM_OBJECTS) do
 
@@ -134,8 +86,23 @@ function drawUi()
 
             do UiPush()
 
-                if item.item == EVENT_OBJECTS[EVENT_SELECTED] or item.item == CAMERA_OBJECTS[SELECTED_CAMERA] then
+                local nextEvent = getEventById(EVENT_OBJECTS[EVENT_SELECTED].link.event.next)
+
+                if item.item == EVENT_OBJECTS[EVENT_SELECTED]
+                or item.item == CAMERA_OBJECTS[SELECTED_CAMERA] then
                     UiColor(0.5,1,0.5, 1)
+                end
+
+                if item.type == 'event' then
+                    if item.item == nextEvent then
+                        UiColor(1,0.5,0.2, 1)
+                    end
+                end
+
+                if item.type == 'camera' then
+                    if item.item == getCameraById(nextEvent.link.camera.master) and item.item ~= CAMERA_OBJECTS[SELECTED_CAMERA] then
+                        UiColor(1,0.5,0.2, 1)
+                    end
                 end
 
                 local time = ''
@@ -143,11 +110,28 @@ function drawUi()
                     time = 'Time = ' .. sfn(item.item.val.time)
                 end
 
-                UiText('['.. index ..']  ' .. ' [Type=' .. item.item.type .. '] ' .. time .. '')
+
+                UiText(item.item.type .. item.item.id..' - '  .. time .. '')
+
 
             UiPop() end
 
         end
+
+        margin(0, 60)
+
+        local event = EVENT_OBJECTS[EVENT_SELECTED]
+        local camera = CAMERA_OBJECTS[SELECTED_CAMERA]
+
+        local nextEvent = getEventById(event.link.event.next)
+        local nextCamera = getCameraById(nextEvent.link.camera.master)
+
+        UiColor(1,1,1, 1)
+        UiText(camera.type .. camera.id .. ' -> ' .. nextCamera.type .. nextCamera.id)
+
+        margin(0, 30)
+        UiText(event.type .. event.id .. '  ->  '.. nextEvent.type .. nextEvent.id)
+
 
     UiPop() end
 

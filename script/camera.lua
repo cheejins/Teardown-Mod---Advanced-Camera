@@ -16,7 +16,7 @@ function createCameraObject(tr, id)
         id = id,
         tr = tr,
 
-        type = 'static',
+        type = 'camera',
 
         vehicle = nil,
         zoom = nil,
