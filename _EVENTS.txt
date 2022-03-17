@@ -8,6 +8,9 @@ Events
         > Lerp
             > Distance
             > Time
+            > Options
+                > Smoothing %
+                > Quatdratic Lerp
     > Action
         > Trigger an event to start
 
@@ -22,22 +25,18 @@ Cameras
         > Angle
 
 
-Event Types
+Event Links
 
-    Camera to Event
-        > Wait
-        > GOTO
-            > Loop (restart view chain)
-
-    > Event to Event
-        > Transition
-
-    > Camera to Camera
-        > Lerp
+    > Wait links
+        > cam master    >
+        > cam next      >
+        > event master  >
+        > event next    >
 
 
 
 Example Chain:
+
     CAMERA1
     Switch to camera tool
     New camera

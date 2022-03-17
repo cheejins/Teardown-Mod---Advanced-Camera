@@ -6,7 +6,6 @@ CAMERA_IDS = 0
 
 SELECTED_CAMERA = 1
 RUN_CAMERAS = false
--- RUN_AUTOLERP = false
 
 
 function createCameraObject(tr, id)
@@ -14,12 +13,16 @@ function createCameraObject(tr, id)
     local cam = {
 
         id = id,
-        tr = tr,
-
         type = 'camera',
 
-        vehicle = nil,
-        zoom = nil,
+        tr = tr,
+
+        entity = {
+            body = nil,
+            relTr = nil
+        },
+
+        zoom = 0, -- Meters
 
     }
 
@@ -31,9 +34,8 @@ end
 --- Create a camera in game.
 function instantiateCamera(tr)
 
-    CAMERA_IDS = CAMERA_IDS + 1
-
     -- Instantiate a new camera.
+    CAMERA_IDS = CAMERA_IDS + 1
     local camera = createCameraObject(tr or GetCameraTransform(), CAMERA_IDS)
     camera.def = DeepCopy(camera) -- Cloned camera used for the camera's default values.
     table.insert(CAMERA_OBJECTS, camera)
@@ -45,6 +47,7 @@ function instantiateCamera(tr)
     return CAMERA_OBJECTS[#CAMERA_OBJECTS]
 
 end
+
 
 function autoLerpCameras()
 
@@ -76,6 +79,7 @@ function autoLerpCameras()
 
 end
 
+
 function cam_reset(self)
     for key, value in pairs(self) do
         if key ~= 'def' then -- self.def does not have a def key.
@@ -83,14 +87,11 @@ function cam_reset(self)
         end
     end
 end
-
 function resetCameraSystem()
-    -- CAMERA_IDS = 0
     SELECTED_CAMERA = 1
     RUN_CAMERAS = false
     RUN_AUTOLERP = false
 end
-
 function getNextCamera(addIndex)
     if SELECTED_CAMERA + 1 > #CAMERA_OBJECTS then
         return 1 + (addIndex or 0)
@@ -98,12 +99,29 @@ function getNextCamera(addIndex)
         return SELECTED_CAMERA + 1 + (addIndex or 0)
     end
 end
-
 function getPrevCamera()
     if SELECTED_CAMERA - 1 <= 0 then
         return #CAMERA_OBJECTS
     else
         return SELECTED_CAMERA - 1
+    end
+end
+function getCurrentCamera()
+    return CAMERA_OBJECTS[SELECTED_CAMERA]
+end
+
+
+function getCameraItemById(camera_id)
+    for i = 1, #ITEM_OBJECTS do
+
+        local item = ITEM_OBJECTS[i]
+
+        if item.type == 'camera' then
+            if item.item.id == camera_id then
+                return item
+            end
+        end
+
     end
 end
 

@@ -4,35 +4,25 @@
 ITEM_OBJECTS = {}
 ITEM_IDS = 0
 
+ITEM_CHAIN = {}
+
 
 function createItemObject(id, type)
-
-    local eg = {
-
+    return {
         id = id,
         type = type, -- event, camera, etc...
-
         item = {} -- Holds the actual item (event, camera, etc...)
-
     }
-
-    return eg
-
 end
 
 
 --- Used as a base container for events and cameras.
 function instantiateItem(type)
-
     ITEM_IDS = ITEM_IDS + 1
-    local type = type or 'NA'
-
     local item = createItemObject(ITEM_IDS, type)
-
     table.insert(ITEM_OBJECTS, item)
 
     return ITEM_OBJECTS[#ITEM_OBJECTS]
-
 end
 
 
@@ -54,11 +44,9 @@ function getItems(type, subtype, itemGroup)
 end
 
 
-function event_group_startEvent()
-end
-function event_group_startEventGroup()
-end
-function event_group_stopEvent()
-end
-function event_group_restartEvent()
+
+function itemChain_insertEvent(self)
+
+
+
 end

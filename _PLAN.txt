@@ -3,6 +3,7 @@ Important features
         > Quicksave
         > Screen recorder
         > Photo mode
+        > Look at camera to preview details
 
 
 Menu

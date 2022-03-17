@@ -11,39 +11,17 @@
 
 function init()
 
-    local cam1 = instantiateCamera(Transform(Vec(5,5,5), QuatLookAt(Vec(5,5,5), Vec(0,0,0))))
-    local cam2 = instantiateCamera(Transform(Vec(-5,5,-5), QuatLookAt(Vec(-5,5,-5), Vec(0,0,0))))
-    local cam3 = instantiateCamera(Transform(Vec(-0,5,-5), QuatLookAt(Vec(-0,5,-5), Vec(0,0,0))))
-    local e1 = instantiateEvent('wait')
-    local e2 = instantiateEvent('wait')
-    local e3 = instantiateEvent('wait')
-    local e4 = instantiateEvent('wait')
-    local e5 = instantiateEvent('wait')
-    local e6 = instantiateEvent('wait')
+    cam1 = instantiateCamera(Transform(Vec(5,5,5), QuatLookAt(Vec(5,5,5), Vec(0,0,0))))
+    cam2 = instantiateCamera(Transform(Vec(-5,5,-5), QuatLookAt(Vec(-5,5,-5), Vec(0,0,0))))
 
-    event_setMasterCamera(e1, cam1.id)
-    event_setNextEvent(e1, e2.id)
-    event_replaceDef(e1)
+    e1 = instantiateEvent('wait')
+    e2 = instantiateEvent('wait')
 
-    event_setMasterCamera(e2, cam1.id)
-    event_setNextEvent(e2, e3.id)
-    event_replaceDef(e2)
+    table.insert(ITEM_CHAIN, getCameraItemById(cam1.id))
+    table.insert(ITEM_CHAIN, getEventItemById(e1.id))
 
-    event_setMasterCamera(e3, cam3.id)
-    event_setNextEvent(e3, e4.id)
-    event_replaceDef(e3)
-
-    event_setMasterCamera(e4, cam1.id)
-    event_setNextEvent(e4, e5.id)
-    event_replaceDef(e4)
-
-    event_setMasterCamera(e5, cam1.id)
-    event_setNextEvent(e5, e6.id)
-    event_replaceDef(e5)
-
-    event_setMasterCamera(e6, cam2.id)
-    event_setNextEvent(e6, e1.id)
-    event_replaceDef(e6)
+    table.insert(ITEM_CHAIN, getCameraItemById(cam2.id))
+    table.insert(ITEM_CHAIN, getEventItemById(e2.id))
 
 end
 
@@ -68,6 +46,10 @@ function draw()
     UiFont('bold.ttf', 24)
     UiColor(0,0,0,1)
 
+    if db then
+        drawCameraNumbers()
+    end
+
     if TOOL:active() then
         drawUi()
         if db then
@@ -75,9 +57,6 @@ function draw()
         end
     end
 
-    if db then
-        drawCameraNumbers()
-    end
 
 end
 
@@ -140,15 +119,6 @@ function runCameraSystem()
             EVENT_RUN = not EVENT_RUN
         end
 
-        -- if KEYS.toggleAutoLerp:pressed() then -- Toggle lerp mode.
-
-        --     RUN_AUTOLERP = not RUN_AUTOLERP
-
-        --     for key, cam in pairs(CAMERA_OBJECTS) do
-        --         cam_reset(cam)
-        --     end
-
-        -- end
 
         if #CAMERA_OBJECTS >= 2 and RUN_AUTOLERP then -- Only run autoLerp if there are at least 2 cameras.
             autoLerpCameras()
