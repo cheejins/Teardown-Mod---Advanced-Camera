@@ -22,6 +22,11 @@ function init()
     cam3 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
     x = x + 5
 
+    cam4 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
+    x = x + 5
+
+    cam5 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
+    x = x + 5
 
 
     e1 = instantiateEvent()
@@ -29,18 +34,25 @@ function init()
     e3 = instantiateEvent()
     e4 = instantiateEvent()
     e5 = instantiateEvent()
+    e6 = instantiateEvent()
+    e7 = instantiateEvent()
 
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam2.id))
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam3.id))
     table.insert(ITEM_CHAIN, getItemByEventId(e1.id))
 
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam1.id))
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam2.id))
     table.insert(ITEM_CHAIN, getItemByEventId(e2.id))
     table.insert(ITEM_CHAIN, getItemByEventId(e3.id))
 
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam3.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e4.id))
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam5.id))
     table.insert(ITEM_CHAIN, getItemByEventId(e5.id))
 
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam1.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e4.id))
+
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e6.id))
 
 end
 
@@ -55,10 +67,16 @@ function tick()
         initializeItemChain()
     end
     if InputPressed('f2') then
-        SELECTED_CAMERA = SELECTED_CAMERA + 1
+        SELECTED_CAMERA = getNextCameraItem().item.id
+        dbp(SELECTED_CAMERA .. ' >> ' .. getNextCameraItem().item.id)
     end
     if InputPressed('f3') then
-        SELECTED_EVENT = SELECTED_EVENT + 1
+        SELECTED_EVENT = getNextEventItem().item.id
+        dbp(SELECTED_EVENT .. ' >> ' .. getNextEventItem().item.id)
+    end
+    if InputPressed('f9') then
+        RUN_ITEM_CHAIN = not RUN_ITEM_CHAIN
+        beep()
     end
 
 
@@ -121,38 +139,38 @@ function runCameraSystem()
             SetCameraTransform(cam.tr) -- View the camera.
         end
 
-        -- Change camera
-        if KEYS.nextCamera:pressed() then -- Next camera.
-            cam_reset(cam)
-            SELECTED_CAMERA = getNextCamera()
-        elseif KEYS.prevCamera:pressed() then -- Previous camera.
-            cam_reset(cam)
-            SELECTED_CAMERA = getPrevCamera()
-        end
+        -- -- Change camera
+        -- if KEYS.nextCamera:pressed() then -- Next camera.
+        --     cam_reset(cam)
+        --     SELECTED_CAMERA = getNextCamera()
+        -- elseif KEYS.prevCamera:pressed() then -- Previous camera.
+        --     cam_reset(cam)
+        --     SELECTED_CAMERA = getPrevCamera()
+        -- end
 
-        if KEYS.deleteAllCameras:pressed() then -- Delete all cameras
-            CAMERA_OBJECTS = {}
-            buzz()
-        end
+        -- if KEYS.deleteAllCameras:pressed() then -- Delete all cameras
+        --     CAMERA_OBJECTS = {}
+        --     buzz()
+        -- end
 
-        if KEYS.deleteLastCamera:pressed() then -- Delete last camera created.
+        -- if KEYS.deleteLastCamera:pressed() then -- Delete last camera created.
 
-            if SELECTED_CAMERA == #CAMERA_OBJECTS then
-                SELECTED_CAMERA = SELECTED_CAMERA - 1
-            end
+        --     if SELECTED_CAMERA == #CAMERA_OBJECTS then
+        --         SELECTED_CAMERA = SELECTED_CAMERA - 1
+        --     end
 
-            CAMERA_OBJECTS[#CAMERA_OBJECTS] = nil
+        --     CAMERA_OBJECTS[#CAMERA_OBJECTS] = nil
 
-            buzz()
-        end
+        --     buzz()
+        -- end
 
-        if KEYS.toggleCameraMode:pressed() then -- Activate camera mode.
-            RUN_CAMERAS = not RUN_CAMERAS
-        end
+        -- if KEYS.toggleCameraMode:pressed() then -- Activate camera mode.
+        --     RUN_CAMERAS = not RUN_CAMERAS
+        -- end
 
-        if KEYS.runEvents:pressed() then -- Activate camera mode.
-            RUN_ITEM_CHAIN = not RUN_ITEM_CHAIN
-        end
+        -- if KEYS.runEvents:pressed() then -- Activate camera mode.
+        --     RUN_ITEM_CHAIN = not RUN_ITEM_CHAIN
+        -- end
 
     end
 

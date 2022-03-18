@@ -28,26 +28,24 @@ function instantiateItem(type)
     return ITEM_OBJECTS[#ITEM_OBJECTS]
 end
 function runItemChain()
-
     -- Auto set camera and event order
-
 end
---- Return a table of every item with the specified properties
-function getItems(type, subtype)
-    local items = {}
-    for key, item in pairs(ITEM_OBJECTS) do
-        if item.type == type then
+-- --- Return a table of every item with the specified properties
+-- function getItems(type, subtype)
+--     local items = {}
+--     for key, item in pairs(ITEM_OBJECTS) do
+--         if item.type == type then
 
-            if subtype ~= nil and item.subType == subtype then -- Evaluate subtype.
-                table.insert(items, item)
-            else
-                table.insert(items, item) -- subtype irrelevant, only evaluate type.
-            end
+--             if subtype ~= nil and item.subType == subtype then -- Evaluate subtype.
+--                 table.insert(items, item)
+--             else
+--                 table.insert(items, item) -- subtype irrelevant, only evaluate type.
+--             end
 
-        end
-    end
-    return items
-end
+--         end
+--     end
+--     return items
+-- end
 
 
 
@@ -100,7 +98,7 @@ function initializeItemChain()
     -- First camera in ITEM_CHAIN.
     for index, item in ipairs(ITEM_CHAIN) do
         if item.type == 'camera' then
-            setSelectedCamera(item.item.id)
+            setSelectedCameraId(item.item.id)
             break
         end
     end
@@ -108,7 +106,7 @@ function initializeItemChain()
     -- First event in ITEM_CHAIN.
     for index, item in ipairs(ITEM_CHAIN) do
         if item.type == 'event' then
-            setSelectedEvent(item.item.id)
+            setSelectedEventId(item.item.id)
             break
         end
     end
@@ -117,40 +115,57 @@ end
 
 
 
+
 -- Selected
-function getSelectedCamera()
+function getSelectedCameraItem()
     return getItemByCameraId(SELECTED_CAMERA)
 end
-function getSelectedEvent()
+function getSelectedEventItem()
     return getItemByEventId(SELECTED_EVENT)
 end
-function setSelectedCamera(camera_id)
+function setSelectedCameraId(camera_id) -- item.item.id
     SELECTED_CAMERA = camera_id
 end
-function setSelectedEvent(event_id)
+function setSelectedEventId(event_id) -- item.item.id
     SELECTED_EVENT = event_id
 end
 
 
 
 -- Next/Prev
--- function getNextItem()
---     local currentItemIndex = getItemIndex(getItemByCameraId(SELECTED_CAMERA))
---     return GetTableNextValue(ITEM_CHAIN, currentItemIndex)
--- end
--- function getPrevItem()
---     local currentItemIndex = getItemIndex(getItemByCameraId(SELECTED_EVENT))
---     return GetTablePrevValue(ITEM_CHAIN, currentItemIndex)
+function getNextItem(type)
+
+    local i = getItemIndex(ITEM_CHAIN, getItemByEventId(SELECTED_EVENT))
+
+    if type == 'camera' then
+        i = getItemIndex(ITEM_CHAIN, getItemByCameraId(SELECTED_CAMERA))
+    end
+
+    for _, value in ipairs(ITEM_CHAIN) do
+
+        i = GetTableNextIndex(ITEM_CHAIN, i)
+
+        if ITEM_CHAIN[i].type == type then
+            return ITEM_CHAIN[i]
+        end
+
+    end
+
+end
+function getPrevItem()
+end
+
+
+
+function getNextCameraItem()
+    return getNextItem('camera')
+end
+-- function getPrevCameraItem(index)
 -- end
 
 
--- function getNextCamera(index)
--- end
--- function getPrevCamera(index)
--- end
-
-
--- function getNextEvent(index)
--- end
--- function getPrevEvent(index)
+function getNextEventItem()
+    return getNextItem('event')
+end
+-- function getPrevEventItem(index)
 -- end

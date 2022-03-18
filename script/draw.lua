@@ -82,7 +82,7 @@ function drawUi()
         UiColor(0,0,0, 0.9)
 
         -- Background
-        UiRect(400, 600)
+        UiRect(400, 700)
 
         margin(20, 20)
         UiColor(1,1,1, 1)
@@ -100,15 +100,15 @@ function drawUi()
 
                 do UiPush()
 
-                    if (item.type == 'camera' and item.item.id == SELECTED_CAMERA)
-                    or (item.type == 'event' and item.item.id == SELECTED_EVENT)
-                    then
+                    if item.type == 'camera' and item.item.id == SELECTED_CAMERA then
                         UiColor(0.5,1,0.5,1)
+                    elseif item.type == 'event' and item.item.id == SELECTED_EVENT then
+                        UiColor(1,1,0,1)
                     end
 
                     UiText('['.. index ..'] ' .. item.type)
                     margin(120, 0)
-                    UiText('' .. item.id)
+                    UiText('' .. item.item.id)
                     margin(0, 24)
 
                 UiPop() end
@@ -130,7 +130,7 @@ function drawUi()
         UiColor(0,0,0, 0.9)
 
         -- Background
-        UiRect(400, 600)
+        UiRect(400, 700)
 
         margin(20, 20)
         UiColor(1,1,1, 1)
@@ -148,10 +148,10 @@ function drawUi()
 
                 do UiPush()
 
-                    if (item.type == 'camera' and item.item.id == SELECTED_CAMERA)
-                    or (item.type == 'event' and item.item.id == SELECTED_EVENT)
-                    then
+                    if item.type == 'camera' and item.item.id == SELECTED_CAMERA then
                         UiColor(0.5,1,0.5,1)
+                    elseif item.type == 'event' and item.item.id == SELECTED_EVENT then
+                        UiColor(1,1,0,1)
                     end
 
                     UiText('['.. index ..'] ' .. item.type)

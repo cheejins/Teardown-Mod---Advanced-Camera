@@ -299,7 +299,7 @@ do
         end
     end
 
-    function GetTableNextValue(tb, i)
+    function GetTableNextIndex(tb, i)
         if i + 1 > #tb then
             return 1
         else
@@ -307,7 +307,7 @@ do
         end
     end
 
-    function GetTablePrevValue(tb, i)
+    function GetTablePrevIndex(tb, i)
         if i - 1 <= 0 then
             return #tb
         else

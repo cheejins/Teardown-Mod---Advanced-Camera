@@ -86,9 +86,9 @@ function cam_reset(self)
     end
 end
 
-function getCurrentCamera()
-    return CAMERA_OBJECTS[SELECTED_CAMERA]
-end
+-- function getCurrentCamera()
+--     return CAMERA_OBJECTS[SELECTED_CAMERA]
+-- end
 
 ---@param id number
 ---@return table tb - Camera object.

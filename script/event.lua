@@ -99,23 +99,23 @@ end
 
 
 
-function getNextEvent(addIndex)
-    if SELECTED_EVENT + 1 > #EVENT_OBJECTS then
-        return 1 + (addIndex or 0)
-    else
-        return SELECTED_EVENT + 1 + (addIndex or 0)
-    end
-end
-function getPrevEvent()
-    if SELECTED_EVENT - 1 <= 0 then
-        return #EVENT_OBJECTS
-    else
-        return SELECTED_EVENT - 1
-    end
-end
-function getCurrentEvent()
-    return EVENT_OBJECTS[SELECTED_EVENT]
-end
+-- function getNextEvent(addIndex)
+--     if SELECTED_EVENT + 1 > #EVENT_OBJECTS then
+--         return 1 + (addIndex or 0)
+--     else
+--         return SELECTED_EVENT + 1 + (addIndex or 0)
+--     end
+-- end
+-- function getPrevEvent()
+--     if SELECTED_EVENT - 1 <= 0 then
+--         return #EVENT_OBJECTS
+--     else
+--         return SELECTED_EVENT - 1
+--     end
+-- end
+-- function getCurrentEvent()
+--     return EVENT_OBJECTS[SELECTED_EVENT]
+-- end
 
 
 
