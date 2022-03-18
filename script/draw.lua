@@ -52,13 +52,13 @@ function drawCameraNumbers()
     end
 
 
-    if RUN_CAMERAS then
+    if RUN_ITEM_CHAIN then
         do UiPush()
             margin(UiCenter(), UiMiddle())
             UiColor(1,1,1,1)
             UiFont('regular.ttf', 24)
 
-            UiText('CAM: ' .. getCurrentCamera().id)
+            -- UiText('CAM: ' .. getCurrentCamera().id)
         UiPop() end
     end
 
@@ -75,22 +75,24 @@ function drawUi()
 
     do UiPush()
 
-        margin(UiCenter()+300, 0)
+        margin(UiCenter()+550, 0)
 
         UiAlign('left top')
-        UiFont('bold.ttf', 24)
+        UiFont('bold.ttf', 22)
         UiColor(0,0,0, 0.9)
 
         -- Background
-        UiRect(600, 600)
+        UiRect(400, 600)
 
         margin(20, 20)
         UiColor(1,1,1, 1)
-        UiText('Item Chain')
+        UiText('ITEM CHAIN')
+
+        UiColor(1,1,1, 0.5)
+        margin(0, 30)
+        UiText('Execution order')
 
         margin(0, 60)
-        UiColor(1,1,1, 0.5)
-
 
         do UiPush()
 
@@ -98,112 +100,72 @@ function drawUi()
 
                 do UiPush()
 
-                    UiText('['.. index ..'] ' .. item.type .. ' - ' .. item.id)
-                    margin(0, 28)
+                    if (item.type == 'camera' and item.item.id == SELECTED_CAMERA)
+                    or (item.type == 'event' and item.item.id == SELECTED_EVENT)
+                    then
+                        UiColor(0.5,1,0.5,1)
+                    end
+
+                    UiText('['.. index ..'] ' .. item.type)
+                    margin(120, 0)
+                    UiText('' .. item.id)
+                    margin(0, 24)
 
                 UiPop() end
 
-                margin(0, 60)
+                margin(0, 50)
 
             end
 
         UiPop() end
 
-        -- do UiPush()
+    UiPop() end
 
-        --     for index, item in ipairs(ITEM_OBJECTS) do
+    do UiPush()
 
-        --         do UiPush()
+        margin(UiCenter()+100, 0)
 
-        --             if item.item == getCurrentEvent() then
-        --                 UiColor(1,1,1, 1)
-        --             end
+        UiAlign('left top')
+        UiFont('bold.ttf', 22)
+        UiColor(0,0,0, 0.9)
 
-        --             if item.type == 'event' then
+        -- Background
+        UiRect(400, 600)
 
-        --                 UiText('['.. item.id ..']' .. ' Cam')
-        --                 UiPush()
-        --                     margin(100, 0)
-        --                     UiText('' .. item.item.link.camera.master)
-        --                 UiPop()
+        margin(20, 20)
+        UiColor(1,1,1, 1)
+        UiText('ITEM OBJECTS')
 
-        --                 margin(0, 28)
+        UiColor(1,1,1, 0.5)
+        margin(0, 30)
+        UiText('Orded by date created')
 
-        --                 UiText('['.. item.id ..']' .. ' Event')
-        --                 UiPush()
-        --                     margin(100, 0)
-        --                     UiText('' .. item.item.link.event.next)
-        --                     margin(50, 0)
-        --                     UiText('' .. item.item.type)
-        --                     margin(90, 0)
-        --                     UiText('' .. sfn(item.item.val.time))
-        --                 UiPop()
+        margin(0, 60)
 
-        --             end
+        do UiPush()
 
-        --         UiPop() end
+            for index, item in ipairs(ITEM_OBJECTS) do
 
-        --         if item.type == 'event' then
-        --             margin(0, 90)
-        --         end
+                do UiPush()
 
-        --     end
+                    if (item.type == 'camera' and item.item.id == SELECTED_CAMERA)
+                    or (item.type == 'event' and item.item.id == SELECTED_EVENT)
+                    then
+                        UiColor(0.5,1,0.5,1)
+                    end
 
-        -- UiPop() end
+                    UiText('['.. index ..'] ' .. item.type)
+                    margin(120, 0)
+                    UiText(item.item.id)
+                    margin(0, 24)
 
+                UiPop() end
 
-        -- for index, item in ipairs(ITEM_OBJECTS) do
+                margin(0, 50)
 
-        --     margin(0, 30)
+            end
 
-        --     do UiPush()
-
-        --         local nextEvent = getEventById(EVENT_OBJECTS[EVENT_SELECTED].link.event.next)
-
-        --         if item.item == EVENT_OBJECTS[EVENT_SELECTED]
-        --         or item.item == CAMERA_OBJECTS[SELECTED_CAMERA] then
-        --             UiColor(0.5,1,0.5, 1)
-        --         end
-
-        --         if item.type == 'event' then
-        --             if item.item == nextEvent then
-        --                 UiColor(1,0.5,0.2, 1)
-        --             end
-        --         end
-
-        --         if item.type == 'camera' then
-        --             if item.item == getCameraById(nextEvent.link.camera.master) and item.item ~= CAMERA_OBJECTS[SELECTED_CAMERA] then
-        --                 UiColor(1,0.5,0.2, 1)
-        --             end
-        --         end
-
-        --         local time = ''
-        --         if item.item.type == 'wait' then
-        --             time = 'Time = ' .. sfn(item.item.val.time)
-        --         end
-
-
-        --         UiText(item.item.type .. item.item.id..' - '  .. time .. '')
-
-
-        --     UiPop() end
-
-        -- end
-
-        -- margin(0, 60)
-
-        -- local event = EVENT_OBJECTS[EVENT_SELECTED]
-        -- local camera = CAMERA_OBJECTS[SELECTED_CAMERA]
-
-        -- local nextEvent = getEventById(event.link.event.next)
-        -- local nextCamera = getCameraById(nextEvent.link.camera.master)
-
-        -- UiColor(1,1,1, 1)
-        -- UiText(camera.type .. camera.id .. ' -> ' .. nextCamera.type .. nextCamera.id)
-
-        -- margin(0, 30)
-        -- UiText(event.type .. event.id .. '  ->  '.. nextEvent.type .. nextEvent.id)
-
+        UiPop() end
 
     UiPop() end
 

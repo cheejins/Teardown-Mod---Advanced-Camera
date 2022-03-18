@@ -299,6 +299,21 @@ do
         end
     end
 
+    function GetTableNextValue(tb, i)
+        if i + 1 > #tb then
+            return 1
+        else
+            return i + 1
+        end
+    end
+
+    function GetTablePrevValue(tb, i)
+        if i - 1 <= 0 then
+            return #tb
+        else
+            return i - 1
+        end
+    end
 
 
 end

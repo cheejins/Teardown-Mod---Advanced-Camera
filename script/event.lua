@@ -4,11 +4,6 @@
 EVENT_OBJECTS = {}
 EVENT_IDS = 0
 
-EVENT_SELECTED = 1
-
-EVENT_RUN = false
-
-
 
 function createEventObject(id, type)
 
@@ -64,33 +59,6 @@ function instantiateEvent()
 
 end
 
-
-
-function runEvents()
-
-    if EVENT_RUN then
-
-        local event = getCurrentEvent()
-        event.val.time = event.val.time - GetTimeStep()
-
-        local camObj, camIndex = getCameraById(event.link.camera.master)
-        SELECTED_CAMERA = camIndex
-
-        if event.val.time <= 0 or event.status.progress == 100 then
-
-            local event, eventIndex = getEventById(event.link.event.next)
-            EVENT_SELECTED = eventIndex
-
-            event_reset(event)
-
-        end
-
-    end
-
-end
-
-
-
 function event_reset(self)
     for key, value in pairs(self) do
         if key ~= 'def' then -- self.def does not have a def key.
@@ -104,92 +72,49 @@ end
 
 
 
-function event_link_resetLinks(self)
-    self.link = {
-        event = {
-            master = 0,
-            next = 0,
-        },
-        camera = {
-            master = 0,
-            next = 0,
-        },
-    }
-end
-function event_link_bindLinks(self, em_id, en_id, cm_id, cn_id)
-    self.link = {
-        event = {
-            master = em_id,
-            next = en_id,
-        },
-        camera = {
-            master = cm_id,
-            next = cn_id,
-        },
-    }
-end
-
-
-
-function event_set_wait(self, time)
-    self.val.time = time
-    self.type = 'Wait'
-    event_replaceDef(self)
-end
-
-function event_set_trigger(self, time)
-    self.type = 'Trigger'
-    event_replaceDef(self)
-end
-
---- Switch the camera immeadiatly.
-function event_set_cameraSwitch(self, time)
-    self.type = 'Switch'
-    event_replaceDef(self)
-end
-
---- Lerp camera at a constant speed regardless of time.
-function event_set_cameraLerp_const(self, speed)
-    self.type = 'LerpConst'
-    event_replaceDef(self)
-end
-
---- Lerp camera over a specific time period.
-function event_set_cameraLerp_timed(self, time)
-    self.type = 'LerpTimed'
-    event_replaceDef(self)
-end
-
-
-
-function event_setMasterEvent(self, eventId)   self.link.event.master = eventId end
-function event_setNextEvent(self, eventId)     self.link.event.next = eventId end
-function event_setMasterCamera(self, cameraId) self.link.camera.master = cameraId end
-function event_setNextCamera(self, cameraId)   self.link.camera.next = cameraId end
-
-function event_getMasterEvent(self)     return self.link.event.master end
-function event_getNextEvent(self)       return self.link.event.next end
-function event_getMasterCamera(self)    return self.link.camera.master end
-function event_getNextCamera(self)      return self.link.camera.next end
+-- function event_set_wait(self, time)
+--     self.val.time = time
+--     self.type = 'Wait'
+--     event_replaceDef(self)
+-- end
+-- function event_set_trigger(self, time)
+--     self.type = 'Trigger'
+--     event_replaceDef(self)
+-- end
+-- --- Switch the camera immeadiatly.
+-- function event_set_cameraSwitch(self, time)
+--     self.type = 'Switch'
+--     event_replaceDef(self)
+-- end
+-- --- Lerp camera at a constant speed regardless of time.
+-- function event_set_cameraLerp_const(self, speed)
+--     self.type = 'LerpConst'
+--     event_replaceDef(self)
+-- end
+-- --- Lerp camera over a specific time period.
+-- function event_set_cameraLerp_timed(self, time)
+--     self.type = 'LerpTimed'
+--     event_replaceDef(self)
+-- end
 
 
 
 function getNextEvent(addIndex)
-    if EVENT_SELECTED + 1 > #EVENT_OBJECTS then
+    if SELECTED_EVENT + 1 > #EVENT_OBJECTS then
         return 1 + (addIndex or 0)
     else
-        return EVENT_SELECTED + 1 + (addIndex or 0)
+        return SELECTED_EVENT + 1 + (addIndex or 0)
     end
 end
 function getPrevEvent()
-    if EVENT_SELECTED - 1 <= 0 then
+    if SELECTED_EVENT - 1 <= 0 then
         return #EVENT_OBJECTS
     else
-        return EVENT_SELECTED - 1
+        return SELECTED_EVENT - 1
     end
 end
 function getCurrentEvent()
-    return EVENT_OBJECTS[EVENT_SELECTED]
+    return EVENT_OBJECTS[SELECTED_EVENT]
 end
 
 
@@ -205,17 +130,3 @@ function getEventById(id)
     end
 end
 
-
-function getEventItemById(event_id)
-    for i = 1, #ITEM_OBJECTS do
-
-        local item = ITEM_OBJECTS[i]
-
-        if item.type == 'event' then
-            if item.item.id == event_id then
-                return item
-            end
-        end
-
-    end
-end

@@ -1,19 +1,12 @@
 function debugMod()
 
-    if #CAMERA_OBJECTS >= 1 then
-        local cam = CAMERA_OBJECTS[SELECTED_CAMERA]
-        dbw('CAM ID', cam.id)
-    end
-
     dbw('#ITEM_OBJECTS', #ITEM_OBJECTS)
     dbw('#CAMERA_OBJECTS', #CAMERA_OBJECTS)
     dbw('#EVENT_OBJECTS', #EVENT_OBJECTS)
 
+    dbw('RUN_ITEM_CHAIN', RUN_ITEM_CHAIN)
     dbw('SELECTED_CAMERA', SELECTED_CAMERA)
-    dbw('NEXT CAMERA', getNextCamera())
-    dbw('CAMERA_IDS', CAMERA_IDS)
-    dbw('RUN_CAMERAS', RUN_CAMERAS)
-    dbw('EVENT_RUN', EVENT_RUN)
+    dbw('SELECTED_EVENT', SELECTED_EVENT)
 
     for key, camera in pairs(CAMERA_OBJECTS) do
 

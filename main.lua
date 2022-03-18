@@ -11,17 +11,36 @@
 
 function init()
 
-    cam1 = instantiateCamera(Transform(Vec(5,5,5), QuatLookAt(Vec(5,5,5), Vec(0,0,0))))
-    cam2 = instantiateCamera(Transform(Vec(-5,5,-5), QuatLookAt(Vec(-5,5,-5), Vec(0,0,0))))
+    local x = 5
 
-    e1 = instantiateEvent('wait')
-    e2 = instantiateEvent('wait')
+    cam1 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
+    x = x + 5
 
-    table.insert(ITEM_CHAIN, getCameraItemById(cam1.id))
-    table.insert(ITEM_CHAIN, getEventItemById(e1.id))
+    cam2 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
+    x = x + 5
 
-    table.insert(ITEM_CHAIN, getCameraItemById(cam2.id))
-    table.insert(ITEM_CHAIN, getEventItemById(e2.id))
+    cam3 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
+    x = x + 5
+
+
+
+    e1 = instantiateEvent()
+    e2 = instantiateEvent()
+    e3 = instantiateEvent()
+    e4 = instantiateEvent()
+    e5 = instantiateEvent()
+
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam2.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e1.id))
+
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam1.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e2.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e3.id))
+
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam3.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e4.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e5.id))
+
 
 end
 
@@ -30,7 +49,23 @@ function tick()
     if toolSet == nil then SetString('game.player.tool', 'advancedCamera') toolSet = true end
 
     runCameraSystem()
-    runEvents()
+
+
+    if InputPressed('f1') then
+        initializeItemChain()
+    end
+    if InputPressed('f2') then
+        SELECTED_CAMERA = SELECTED_CAMERA + 1
+    end
+    if InputPressed('f3') then
+        SELECTED_EVENT = SELECTED_EVENT + 1
+    end
+
+
+    if RUN_ITEM_CHAIN then
+        runItemChain()
+    end
+
 
     manageDebugMode()
     debugMod()
@@ -116,16 +151,9 @@ function runCameraSystem()
         end
 
         if KEYS.runEvents:pressed() then -- Activate camera mode.
-            EVENT_RUN = not EVENT_RUN
+            RUN_ITEM_CHAIN = not RUN_ITEM_CHAIN
         end
 
-
-        if #CAMERA_OBJECTS >= 2 and RUN_AUTOLERP then -- Only run autoLerp if there are at least 2 cameras.
-            autoLerpCameras()
-        end
-
-    else
-        resetCameraSystem()
     end
 
 end

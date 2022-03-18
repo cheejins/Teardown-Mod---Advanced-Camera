@@ -4,7 +4,6 @@
 CAMERA_OBJECTS = {}
 CAMERA_IDS = 0
 
-SELECTED_CAMERA = 1
 RUN_CAMERAS = false
 
 
@@ -30,7 +29,6 @@ function createCameraObject(tr, id)
 
 end
 
-
 --- Create a camera in game.
 function instantiateCamera(tr)
 
@@ -49,35 +47,35 @@ function instantiateCamera(tr)
 end
 
 
-function autoLerpCameras()
+-- function autoLerpCameras()
 
-    local cam = CAMERA_OBJECTS[SELECTED_CAMERA] -- Current camera running.
+    -- local cam = CAMERA_OBJECTS[SELECTED_CAMERA] -- Current camera running.
 
-    local nextCam = CAMERA_OBJECTS[getNextCamera()] -- Next camera AKA the one being approached.
-    local prevCam = CAMERA_OBJECTS[getPrevCamera()]
+    -- local nextCam = CAMERA_OBJECTS[getNextCamera()] -- Next camera AKA the one being approached.
+    -- local prevCam = CAMERA_OBJECTS[getPrevCamera()]
 
-    cam_reset(nextCam)
-    cam_reset(prevCam)
+    -- cam_reset(nextCam)
+    -- cam_reset(prevCam)
 
-    if cam.time > 0 then -- Camera is still approaching the next camera.
-        cam.time = cam.time - GetTimeStep() -- Reduce time each tick the camera has time left.
+    -- if cam.time > 0 then -- Camera is still approaching the next camera.
+    --     cam.time = cam.time - GetTimeStep() -- Reduce time each tick the camera has time left.
 
-        local lerpFraction = (cam.def.time - gtZero(cam.time)) / cam.def.time
+    --     local lerpFraction = (cam.def.time - gtZero(cam.time)) / cam.def.time
 
-        cam.tr.pos = VecLerp(cam.def.tr.pos, nextCam.def.tr.pos, lerpFraction)
-        cam.tr.rot = QuatSlerp(cam.def.tr.rot, nextCam.def.tr.rot, lerpFraction)
+    --     cam.tr.pos = VecLerp(cam.def.tr.pos, nextCam.def.tr.pos, lerpFraction)
+    --     cam.tr.rot = QuatSlerp(cam.def.tr.rot, nextCam.def.tr.rot, lerpFraction)
 
-        dbl(cam.def.tr.pos, nextCam.def.tr.pos, 0,1,1, 1)
-        dbw('lerpFraction', lerpFraction)
+    --     dbl(cam.def.tr.pos, nextCam.def.tr.pos, 0,1,1, 1)
+    --     dbw('lerpFraction', lerpFraction)
 
-    elseif cam.time <= 0 then -- Camera is done approaching the next camera.
+    -- elseif cam.time <= 0 then -- Camera is done approaching the next camera.
 
-        cam_reset(cam)
-        SELECTED_CAMERA = getNextCamera() -- Change to the next camera.
+    --     cam_reset(cam)
+    --     SELECTED_CAMERA = getNextCamera() -- Change to the next camera.
 
-    end
+    -- end
 
-end
+-- end
 
 
 function cam_reset(self)
@@ -87,44 +85,10 @@ function cam_reset(self)
         end
     end
 end
-function resetCameraSystem()
-    SELECTED_CAMERA = 1
-    RUN_CAMERAS = false
-    RUN_AUTOLERP = false
-end
-function getNextCamera(addIndex)
-    if SELECTED_CAMERA + 1 > #CAMERA_OBJECTS then
-        return 1 + (addIndex or 0)
-    else
-        return SELECTED_CAMERA + 1 + (addIndex or 0)
-    end
-end
-function getPrevCamera()
-    if SELECTED_CAMERA - 1 <= 0 then
-        return #CAMERA_OBJECTS
-    else
-        return SELECTED_CAMERA - 1
-    end
-end
+
 function getCurrentCamera()
     return CAMERA_OBJECTS[SELECTED_CAMERA]
 end
-
-
-function getCameraItemById(camera_id)
-    for i = 1, #ITEM_OBJECTS do
-
-        local item = ITEM_OBJECTS[i]
-
-        if item.type == 'camera' then
-            if item.item.id == camera_id then
-                return item
-            end
-        end
-
-    end
-end
-
 
 ---@param id number
 ---@return table tb - Camera object.
