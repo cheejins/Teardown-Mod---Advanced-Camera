@@ -11,48 +11,49 @@
 
 function init()
 
-    local x = 5
+    -- local x = 2
 
-    cam1 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
-    x = x + 5
+    -- cam1 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
+    -- x = x + 2
 
-    cam2 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
-    x = x + 5
+    -- cam2 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
+    -- x = x + 2
 
-    cam3 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
-    x = x + 5
+    -- cam3 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
+    -- x = x + 2
 
-    cam4 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
-    x = x + 5
+    -- cam4 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
+    -- x = x + 2
 
-    cam5 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
-    x = x + 5
+    -- cam5 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
+    -- x = x + 2
 
+    -- e1 = instantiateEvent()
+    -- e2 = instantiateEvent()
+    -- e3 = instantiateEvent()
+    -- e4 = instantiateEvent()
+    -- e5 = instantiateEvent()
+    -- e6 = instantiateEvent()
+    -- e7 = instantiateEvent()
+    -- e8 = instantiateEvent()
 
-    e1 = instantiateEvent()
-    e2 = instantiateEvent()
-    e3 = instantiateEvent()
-    e4 = instantiateEvent()
-    e5 = instantiateEvent()
-    e6 = instantiateEvent()
-    e7 = instantiateEvent()
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam3.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e1.id))
 
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam3.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e1.id))
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam2.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e2.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e3.id))
 
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam2.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e2.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e3.id))
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam5.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e5.id))
 
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam5.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e5.id))
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam1.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e4.id))
 
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam1.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e4.id))
-
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e6.id))
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e6.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e8.id))
 
 end
 
@@ -74,10 +75,23 @@ function tick()
         SELECTED_EVENT = getNextEventItem().item.id
         dbp(SELECTED_EVENT .. ' >> ' .. getNextEventItem().item.id)
     end
-    if InputPressed('f9') then
+    if InputPressed('f4') then -- Run item chain.
         RUN_ITEM_CHAIN = not RUN_ITEM_CHAIN
         beep()
     end
+
+
+    if InputPressed('f5') then -- Create camera
+        local item = getItemByCameraId(instantiateCamera().id)
+        table.insert(ITEM_CHAIN, item)
+        beep()
+    end
+    if InputPressed('f6') then -- Create event
+        local item = getItemByEventId(instantiateEvent().id)
+        table.insert(ITEM_CHAIN, item)
+        beep()
+    end
+
 
 
     if RUN_ITEM_CHAIN then

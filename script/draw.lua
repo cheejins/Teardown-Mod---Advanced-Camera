@@ -66,6 +66,25 @@ end
 
 function drawUi()
 
+    UiAlign('center middle')
+    UiFont('bold.ttf', 24)
+    UiColor(0.75,0.75,0.75, 0.75)
+
+    -- do UiPush()
+
+    --     margin(UiCenter()-200, UiMiddle()+200)
+
+    --     UiRect(450, 400)
+    --     UiWordWrap(400)
+    --     UiColor(0,0,0, 1)
+
+    --     UiText('This video demonstrates how the item chain works.\n\nItems (events and cameras) can be arranged in the item chain regardless of when they were created. This makes it easy to insert new items into an existing chain or rearrange existing items. \n\nSo far there are only "wait" events. I\'m going to try and add the lerp events (smooth movement from camera to camera) and key trigger events now.')
+
+
+    -- UiPop() end
+
+
+
     UiTextShadow(0,0,0,0.5, 0.5,0)
 
 
@@ -82,7 +101,7 @@ function drawUi()
         UiColor(0,0,0, 0.9)
 
         -- Background
-        UiRect(400, 700)
+        UiRect(400, 750)
 
         margin(20, 20)
         UiColor(1,1,1, 1)
@@ -109,7 +128,11 @@ function drawUi()
                     UiText('['.. index ..'] ' .. item.type)
                     margin(120, 0)
                     UiText('' .. item.item.id)
-                    margin(0, 24)
+
+                    if item.type == 'event' then
+                        margin(40, 0)
+                        UiText(sfn(item.item.val.time))
+                    end
 
                 UiPop() end
 
@@ -130,7 +153,7 @@ function drawUi()
         UiColor(0,0,0, 0.9)
 
         -- Background
-        UiRect(400, 700)
+        UiRect(400, 750)
 
         margin(20, 20)
         UiColor(1,1,1, 1)
@@ -157,7 +180,11 @@ function drawUi()
                     UiText('['.. index ..'] ' .. item.type)
                     margin(120, 0)
                     UiText(item.item.id)
-                    margin(0, 24)
+
+                    if item.type == 'event' then
+                        margin(40, 0)
+                        UiText(sfn(item.item.val.time))
+                    end
 
                 UiPop() end
 

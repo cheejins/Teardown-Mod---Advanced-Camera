@@ -19,6 +19,7 @@ function createItemObject(id, type)
         item = {} -- Holds the actual item (event, camera, etc...)
     }
 end
+
 --- Used as a base container for events and cameras.
 function instantiateItem(type)
     ITEM_IDS = ITEM_IDS + 1
@@ -27,28 +28,32 @@ function instantiateItem(type)
 
     return ITEM_OBJECTS[#ITEM_OBJECTS]
 end
+
 function runItemChain()
-    -- Auto set camera and event order
+
+    local event = getEventById(SELECTED_EVENT)
+
+    event.val.time = event.val.time - GetTimeStep()
+
+    if event.val.time <= 0 then
+
+        local eventItem = getEventItemById(SELECTED_EVENT)
+        local eventItemIndex = getItemIndex(ITEM_CHAIN, eventItem)
+        local nextCamItem = getNextCameraItem(eventItemIndex)
+        local nextCamItemIndex = getItemIndex(ITEM_CHAIN, nextCamItem)
+
+        -- Switch to next camera if the next event is ahead of it.
+        if GetTableNextIndex(ITEM_CHAIN, eventItemIndex) == nextCamItemIndex then
+            SELECTED_CAMERA = nextCamItem.item.id
+        end
+
+        -- Switch to next event.
+        event_reset(event)
+        SELECTED_EVENT = getNextEventItem().item.id
+
+    end
+
 end
--- --- Return a table of every item with the specified properties
--- function getItems(type, subtype)
---     local items = {}
---     for key, item in pairs(ITEM_OBJECTS) do
---         if item.type == type then
-
---             if subtype ~= nil and item.subType == subtype then -- Evaluate subtype.
---                 table.insert(items, item)
---             else
---                 table.insert(items, item) -- subtype irrelevant, only evaluate type.
---             end
-
---         end
---     end
---     return items
--- end
-
-
-
 
 
 
@@ -67,12 +72,10 @@ function getItemByTypeId(type, id)
 
     end
 end
-function getItemByCameraId(camera_id) --- Find the item object based on the camera id.
-    return getItemByTypeId('camera', camera_id)
-end
-function getItemByEventId(event_id) --- Find the item object based on the event id.
-    return getItemByTypeId('event', event_id)
-end
+
+function getItemByCameraId(camera_id) return getItemByTypeId('camera', camera_id) end
+function getItemByEventId(event_id) return getItemByTypeId('event', event_id) end
+
 function getItemIndex(item_table, item)
     for index, it in ipairs(item_table) do
         if it == item then
@@ -87,10 +90,6 @@ function tableContainsItemType(table, type) -- Check if ITEM_CHAIN contains a ty
         end
     end
 end
-
-
-
-
 
 --- Set the selected camera and selected event to the first camera and first event in the item chain.
 function initializeItemChain()
@@ -114,31 +113,20 @@ function initializeItemChain()
 end
 
 
-
-
 -- Selected
-function getSelectedCameraItem()
-    return getItemByCameraId(SELECTED_CAMERA)
-end
-function getSelectedEventItem()
-    return getItemByEventId(SELECTED_EVENT)
-end
-function setSelectedCameraId(camera_id) -- item.item.id
-    SELECTED_CAMERA = camera_id
-end
-function setSelectedEventId(event_id) -- item.item.id
-    SELECTED_EVENT = event_id
-end
-
+function getSelectedCameraItem() return getItemByCameraId(SELECTED_CAMERA) end
+function getSelectedEventItem() return getItemByEventId(SELECTED_EVENT) end
+function setSelectedCameraId(camera_id) SELECTED_CAMERA = camera_id end -- item.item.id
+function setSelectedEventId(event_id) SELECTED_EVENT = event_id end -- item.item.id
 
 
 -- Next/Prev
-function getNextItem(type)
+function getNextItem(type, index)
 
-    local i = getItemIndex(ITEM_CHAIN, getItemByEventId(SELECTED_EVENT))
+    local i = index or getItemIndex(ITEM_CHAIN, getItemByEventId(SELECTED_EVENT))
 
     if type == 'camera' then
-        i = getItemIndex(ITEM_CHAIN, getItemByCameraId(SELECTED_CAMERA))
+        i = index or getItemIndex(ITEM_CHAIN, getItemByCameraId(SELECTED_CAMERA))
     end
 
     for _, value in ipairs(ITEM_CHAIN) do
@@ -155,17 +143,40 @@ end
 function getPrevItem()
 end
 
+function getNextCameraItem(index) return getNextItem('camera', index) end
+-- function getPrevCameraItem(index) end
+
+function getNextEventItem(index) return getNextItem('event', index) end
+-- function getPrevEventItem(index) end
 
 
-function getNextCameraItem()
-    return getNextItem('camera')
-end
--- function getPrevCameraItem(index)
+-- --- Return a table of every item with the specified properties
+-- function getItems(type, subtype)
+--     local items = {}
+--     for key, item in pairs(ITEM_OBJECTS) do
+--         if item.type == type then
+
+--             if subtype ~= nil and item.subType == subtype then -- Evaluate subtype.
+--                 table.insert(items, item)
+--             else
+--                 table.insert(items, item) -- subtype irrelevant, only evaluate type.
+--             end
+
+--         end
+--     end
+--     return items
 -- end
 
+function getEventItemById(event_id)
+    for i = 1, #ITEM_OBJECTS do
 
-function getNextEventItem()
-    return getNextItem('event')
+        local item = ITEM_OBJECTS[i]
+
+        if item.type == 'event' then
+            if item.item.id == event_id then
+                return item
+            end
+        end
+
+    end
 end
--- function getPrevEventItem(index)
--- end

@@ -29,6 +29,7 @@ function createCameraObject(tr, id)
 
 end
 
+
 --- Create a camera in game.
 function instantiateCamera(tr)
 
@@ -44,6 +45,27 @@ function instantiateCamera(tr)
 
     return CAMERA_OBJECTS[#CAMERA_OBJECTS]
 
+end
+
+
+function cam_reset(self)
+    for key, value in pairs(self) do
+        if key ~= 'def' then -- self.def does not have a def key.
+            self[key] = DeepCopy(self.def[key]) -- Replace all self values with default self values.
+        end
+    end
+end
+
+
+---@param id number
+---@return table tb - Camera object.
+---@return number i -- Index of the camera in the table.
+function getCameraById(id)
+    for i = 1, #CAMERA_OBJECTS do
+        if CAMERA_OBJECTS[i].id == id then
+            return CAMERA_OBJECTS[i], i
+        end
+    end
 end
 
 
@@ -76,27 +98,3 @@ end
     -- end
 
 -- end
-
-
-function cam_reset(self)
-    for key, value in pairs(self) do
-        if key ~= 'def' then -- self.def does not have a def key.
-            self[key] = DeepCopy(self.def[key]) -- Replace all self values with default self values.
-        end
-    end
-end
-
--- function getCurrentCamera()
---     return CAMERA_OBJECTS[SELECTED_CAMERA]
--- end
-
----@param id number
----@return table tb - Camera object.
----@return number i -- Index of the camera in the table.
-function getCameraById(id)
-    for i = 1, #CAMERA_OBJECTS do
-        if CAMERA_OBJECTS[i].id == id then
-            return CAMERA_OBJECTS[i], i
-        end
-    end
-end

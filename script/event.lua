@@ -44,6 +44,7 @@ function createEventObject(id, type)
 
 end
 
+
 function instantiateEvent()
 
     EVENT_IDS = EVENT_IDS + 1
@@ -59,6 +60,7 @@ function instantiateEvent()
 
 end
 
+
 function event_reset(self)
     for key, value in pairs(self) do
         if key ~= 'def' then -- self.def does not have a def key.
@@ -66,8 +68,22 @@ function event_reset(self)
         end
     end
 end
+
+
 function event_replaceDef(self) -- Replace the event.def with the current version of event.
     self.def = DeepCopy(self)
+end
+
+
+---@param id number
+---@return table tb - Camera object.
+---@return number i -- Index of the camera in the table.
+function getEventById(id)
+    for i = 1, #EVENT_OBJECTS do
+        if EVENT_OBJECTS[i].id == id then
+            return EVENT_OBJECTS[i], i
+        end
+    end
 end
 
 
@@ -116,17 +132,3 @@ end
 -- function getCurrentEvent()
 --     return EVENT_OBJECTS[SELECTED_EVENT]
 -- end
-
-
-
----@param id number
----@return table tb - Camera object.
----@return number i -- Index of the camera in the table.
-function getEventById(id)
-    for i = 1, #EVENT_OBJECTS do
-        if EVENT_OBJECTS[i].id == id then
-            return EVENT_OBJECTS[i], i
-        end
-    end
-end
-
