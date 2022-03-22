@@ -1,13 +1,33 @@
 UI_SHOW_OPTIONS = false
 
 
+function draw()
+
+    UiAlign('center middle')
+    UiFont('bold.ttf', 24)
+    UiColor(0,0,0,1)
+
+    if db then
+        drawCameraNumbers()
+    end
+
+    if TOOL:active() then
+        drawUi()
+        if db then
+            drawControls()
+        end
+    end
+
+end
+
+
 function drawControls()
 
     do UiPush()
 
         local yMargin = 30
 
-        margin(50, 350)
+        margin(50, 200)
         UiAlign('left top')
 
         UiColor(0,0,0, 0.7)
@@ -38,9 +58,9 @@ end
 function drawCameraNumbers()
     for key, camera in pairs(CAMERA_OBJECTS) do -- Draw camera numbers
 
-        if TransformToLocalPoint(GetCameraTransform(), camera.def.tr.pos)[3] < 0 then
+        if TransformToLocalPoint(GetCameraTransform(), camera.tr.pos)[3] < 0 then
 
-            local x,y = UiWorldToPixel(camera.def.tr.pos)
+            local x,y = UiWorldToPixel(camera.tr.pos)
 
             do UiPush()
                 margin(x,y)
@@ -66,19 +86,24 @@ end
 
 function drawUi()
 
-    UiAlign('center middle')
-    UiFont('bold.ttf', 24)
-    UiColor(0.75,0.75,0.75, 0.75)
+    -- UiAlign('center middle')
+    -- UiFont('bold.ttf', 24)
+    -- UiColor(0.75,0.75,0.75, 0.75)
 
     -- do UiPush()
 
-    --     margin(UiCenter()-200, UiMiddle()+200)
+    --     local rectW = 300
+    --     local rectH = 250
 
-    --     UiRect(450, 400)
-    --     UiWordWrap(400)
+    --     margin(UiCenter(), rectH/2)
+
+    --     UiColor(0.5,0.5,1, 0.5)
+
+    --     UiRect(rectW + 50, rectH)
+    --     UiWordWrap(rectW)
     --     UiColor(0,0,0, 1)
 
-    --     UiText('This video demonstrates how the item chain works.\n\nItems (events and cameras) can be arranged in the item chain regardless of when they were created. This makes it easy to insert new items into an existing chain or rearrange existing items. \n\nSo far there are only "wait" events. I\'m going to try and add the lerp events (smooth movement from camera to camera) and key trigger events now.')
+    --     UiText('This video demonstrates the way different types of events can be inserted into the item chain. The two events right now are "wait" and "lerp". Lerp is the event which move between the current and next camera. More events and event modifications are on the way')
 
 
     -- UiPop() end
@@ -129,9 +154,14 @@ function drawUi()
                     margin(120, 0)
                     UiText('' .. item.item.id)
 
+                    margin(40, 0)
                     if item.type == 'event' then
-                        margin(40, 0)
                         UiText(sfn(item.item.val.time))
+                    end
+
+                    margin(70, 0)
+                    if item.type == 'event' then
+                        UiText(item.item.type)
                     end
 
                 UiPop() end
@@ -144,57 +174,57 @@ function drawUi()
 
     UiPop() end
 
-    do UiPush()
+    -- do UiPush()
 
-        margin(UiCenter()+100, 0)
+    --     margin(UiCenter()+100, 0)
 
-        UiAlign('left top')
-        UiFont('bold.ttf', 22)
-        UiColor(0,0,0, 0.9)
+    --     UiAlign('left top')
+    --     UiFont('bold.ttf', 22)
+    --     UiColor(0,0,0, 0.9)
 
-        -- Background
-        UiRect(400, 750)
+    --     -- Background
+    --     UiRect(400, 750)
 
-        margin(20, 20)
-        UiColor(1,1,1, 1)
-        UiText('ITEM OBJECTS')
+    --     margin(20, 20)
+    --     UiColor(1,1,1, 1)
+    --     UiText('ITEM OBJECTS')
 
-        UiColor(1,1,1, 0.5)
-        margin(0, 30)
-        UiText('Orded by date created')
+    --     UiColor(1,1,1, 0.5)
+    --     margin(0, 30)
+    --     UiText('Orded by date created')
 
-        margin(0, 60)
+    --     margin(0, 60)
 
-        do UiPush()
+    --     do UiPush()
 
-            for index, item in ipairs(ITEM_OBJECTS) do
+    --         for index, item in ipairs(ITEM_OBJECTS) do
 
-                do UiPush()
+    --             do UiPush()
 
-                    if item.type == 'camera' and item.item.id == SELECTED_CAMERA then
-                        UiColor(0.5,1,0.5,1)
-                    elseif item.type == 'event' and item.item.id == SELECTED_EVENT then
-                        UiColor(1,1,0,1)
-                    end
+    --                 if item.type == 'camera' and item.item.id == SELECTED_CAMERA then
+    --                     UiColor(0.5,1,0.5,1)
+    --                 elseif item.type == 'event' and item.item.id == SELECTED_EVENT then
+    --                     UiColor(1,1,0,1)
+    --                 end
 
-                    UiText('['.. index ..'] ' .. item.type)
-                    margin(120, 0)
-                    UiText(item.item.id)
+    --                 UiText('['.. index ..'] ' .. item.type)
+    --                 margin(120, 0)
+    --                 UiText(item.item.id)
 
-                    if item.type == 'event' then
-                        margin(40, 0)
-                        UiText(sfn(item.item.val.time))
-                    end
+    --                 if item.type == 'event' then
+    --                     margin(40, 0)
+    --                     UiText(sfn(item.item.val.time))
+    --                 end
 
-                UiPop() end
+    --             UiPop() end
 
-                margin(0, 50)
+    --             margin(0, 50)
 
-            end
+    --         end
 
-        UiPop() end
+    --     UiPop() end
 
-    UiPop() end
+    -- UiPop() end
 
 end
 

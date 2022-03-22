@@ -4,6 +4,9 @@ Important features
         > Screen recorder
         > Photo mode
         > Look at camera to preview details
+    > Presets
+        > Save, load, delete
+        > Named.
 
 
 Menu

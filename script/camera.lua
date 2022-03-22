@@ -7,6 +7,10 @@ CAMERA_IDS = 0
 RUN_CAMERAS = false
 
 
+cameraTargetPos = Vec()
+cameraTargetRot = Quat()
+
+
 function createCameraObject(tr, id)
 
     local cam = {
@@ -28,8 +32,6 @@ function createCameraObject(tr, id)
     return DeepCopy(cam)
 
 end
-
-
 --- Create a camera in game.
 function instantiateCamera(tr)
 
@@ -48,6 +50,7 @@ function instantiateCamera(tr)
 end
 
 
+
 function cam_reset(self)
     for key, value in pairs(self) do
         if key ~= 'def' then -- self.def does not have a def key.
@@ -55,8 +58,9 @@ function cam_reset(self)
         end
     end
 end
-
-
+function cam_replaceDef(self) -- Replace the cam.def with the current version of cam.
+    self.def = DeepCopy(self)
+end
 ---@param id number
 ---@return table tb - Camera object.
 ---@return number i -- Index of the camera in the table.
@@ -69,32 +73,82 @@ function getCameraById(id)
 end
 
 
--- function autoLerpCameras()
 
-    -- local cam = CAMERA_OBJECTS[SELECTED_CAMERA] -- Current camera running.
+function lerpCameraTimed(event, camMaster, camNext)
 
-    -- local nextCam = CAMERA_OBJECTS[getNextCamera()] -- Next camera AKA the one being approached.
-    -- local prevCam = CAMERA_OBJECTS[getPrevCamera()]
+    local lerpFraction = (event.def.val.time - gtZero(event.val.time)) / event.def.val.time
 
-    -- cam_reset(nextCam)
-    -- cam_reset(prevCam)
+    camMaster.tr.pos = VecLerp(camMaster.def.tr.pos, camNext.def.tr.pos, lerpFraction)
+    camMaster.tr.rot = QuatSlerp(camMaster.def.tr.rot, camNext.def.tr.rot, lerpFraction)
 
-    -- if cam.time > 0 then -- Camera is still approaching the next camera.
-    --     cam.time = cam.time - GetTimeStep() -- Reduce time each tick the camera has time left.
+    dbw('lerpFraction', lerpFraction)
 
-    --     local lerpFraction = (cam.def.time - gtZero(cam.time)) / cam.def.time
+end
 
-    --     cam.tr.pos = VecLerp(cam.def.tr.pos, nextCam.def.tr.pos, lerpFraction)
-    --     cam.tr.rot = QuatSlerp(cam.def.tr.rot, nextCam.def.tr.rot, lerpFraction)
+function lerpCameraConst(event, camMaster, camNext)
 
-    --     dbl(cam.def.tr.pos, nextCam.def.tr.pos, 0,1,1, 1)
-    --     dbw('lerpFraction', lerpFraction)
+    local camDist = VecDist(camMaster.tr, camNext.tr)
+    local speed = event.val.speed
 
-    -- elseif cam.time <= 0 then -- Camera is done approaching the next camera.
+    local lerpFraction = (event.def.val.time - gtZero(event.val.time)) / event.def.val.time
 
-    --     cam_reset(cam)
-    --     SELECTED_CAMERA = getNextCamera() -- Change to the next camera.
+    camMaster.tr.pos = VecLerp(camMaster.def.tr.pos, camNext.def.tr.pos, lerpFraction)
+    camMaster.tr.rot = QuatSlerp(camMaster.def.tr.rot, camNext.def.tr.rot, lerpFraction)
 
-    -- end
+    dbw('lerpFraction', lerpFraction)
 
--- end
+end
+
+
+
+
+
+function GetCamAimPos()
+    local b = GetCameraTransform()
+    local dr = TransformToParentVec(b, {0, 0, -1})
+	local hit, dist, normal, shape = QueryRaycast(b.pos, dr, 10)
+
+    if hit then
+        local hitPoint = VecAdd(b.pos, VecScale(dr, dist))
+    end
+end
+
+-- Create a lookey camera
+function moveCamera()
+    CAMERA_IDS = CAMERA_IDS + 1
+
+    local hit, hitPoint, shape = RaycastFromTransform(GetCameraTransform(), 500)
+    local camObj = createCameraObject(Transform(hitPoint), CAMERA_IDS)
+    camObj.def = DeepCopy(camObj) -- Cloned camera used for the camera's default values.
+
+	camObj.shape = shape
+	camObj.relativePos = GetPointInsideShape(shape, GetCameraTransform().pos)
+	camObj.relativeTarget = GetPointInsideShape(shape, hitPoint)
+    table.insert(CAMERA_OBJECTS, camObj)
+
+    -- Wrap the camera in a new item object.
+    local item = instantiateItem('camera')
+    item.item = CAMERA_OBJECTS[#CAMERA_OBJECTS]
+
+    return CAMERA_OBJECTS[#CAMERA_OBJECTS]
+end
+
+-- Create a moveable camera
+function dynamicCamera()
+    CAMERA_IDS = CAMERA_IDS + 1
+
+    local hit, hitPoint, shape = RaycastFromTransform(GetCameraTransform(), 500)
+    local camObj = createCameraObject(Transform(hitPoint), CAMERA_IDS)
+    camObj.def = DeepCopy(camObj) -- Cloned camera used for the camera's default values.
+
+	camObj.shape = shape
+	camObj.relativePos = GetPointInsideShape(shape, GetCameraTransform().pos)
+	camObj.relativeTarget = GetPointInsideShape(shape, hitPoint)
+    table.insert(CAMERA_OBJECTS, camObj)
+
+    -- Wrap the camera in a new item object.
+    local item = instantiateItem('camera')
+    item.item = CAMERA_OBJECTS[#CAMERA_OBJECTS]
+
+    return CAMERA_OBJECTS[#CAMERA_OBJECTS]
+end

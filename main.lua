@@ -3,9 +3,11 @@
 #include "script/draw.lua"
 #include "script/event.lua"
 #include "script/item.lua"
+#include "script/itemChain.lua"
 #include "script/keys.lua"
 #include "script/tool.lua"
 #include "script/umf.lua"
+#include "script/util.lua"
 #include "script/utility.lua"
 
 
@@ -52,8 +54,10 @@ function init()
 
     -- table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
     -- table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
-    -- table.insert(ITEM_CHAIN, getItemByEventId(e6.id))
-    -- table.insert(ITEM_CHAIN, getItemByEventId(e8.id))
+
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
+
 
 end
 
@@ -61,33 +65,43 @@ function tick()
 
     if toolSet == nil then SetString('game.player.tool', 'advancedCamera') toolSet = true end
 
+
     runCameraSystem()
 
 
-    if InputPressed('f1') then
+    if KEYS.initChain:pressed() then
         initializeItemChain()
     end
-    if InputPressed('f2') then
-        SELECTED_CAMERA = getNextCameraItem().item.id
-        dbp(SELECTED_CAMERA .. ' >> ' .. getNextCameraItem().item.id)
-    end
-    if InputPressed('f3') then
-        SELECTED_EVENT = getNextEventItem().item.id
-        dbp(SELECTED_EVENT .. ' >> ' .. getNextEventItem().item.id)
-    end
-    if InputPressed('f4') then -- Run item chain.
+    if KEYS.toggleChain:pressed() then -- Run item chain.
         RUN_ITEM_CHAIN = not RUN_ITEM_CHAIN
         beep()
     end
 
 
-    if InputPressed('f5') then -- Create camera
+    if KEYS.createCameraStatic:pressed() then -- Create camera
         local item = getItemByCameraId(instantiateCamera().id)
         table.insert(ITEM_CHAIN, item)
         beep()
     end
-    if InputPressed('f6') then -- Create event
-        local item = getItemByEventId(instantiateEvent().id)
+    if KEYS.createCameraLookey:pressed() then -- Create camera
+        local item = getItemByCameraId(moveCamera().id)
+        table.insert(ITEM_CHAIN, item)
+        beep()
+    end
+    if KEYS.createCameraDynamic:pressed() then -- Create camera
+        local item = getItemByCameraId(dynamicCamera().id)
+        table.insert(ITEM_CHAIN, item)
+        beep()
+    end
+
+
+    if KEYS.createEventWait:pressed() then
+        local item = getItemByEventId(instantiateEvent('wait').id)
+        table.insert(ITEM_CHAIN, item)
+        beep()
+    end
+    if KEYS.createEventLerp:pressed() then
+        local item = getItemByEventId(instantiateEvent('lerp').id)
         table.insert(ITEM_CHAIN, item)
         beep()
     end
@@ -107,85 +121,33 @@ end
 function update()
 end
 
-function draw()
-
-    UiAlign('center middle')
-    UiFont('bold.ttf', 24)
-    UiColor(0,0,0,1)
-
-    if db then
-        drawCameraNumbers()
-    end
-
-    if TOOL:active() then
-        drawUi()
-        if db then
-            drawControls()
-        end
-    end
-
-
-end
 
 function runCameraSystem()
 
     local cam = CAMERA_OBJECTS[SELECTED_CAMERA]
     SELECTED_CAMERA_OBJECT = cam
 
-
-    -- Create camera
-    if KEYS.createCamera:pressed() then
-        instantiateCamera()
-        shine()
-    end
-
-
-    -- Toggle UI
-    if KEYS.showUi:pressed() then
-        UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
-    end
-
-
     -- If there is at least one camera.
     if #CAMERA_OBJECTS >= 1 then
+
+        for key, cam in pairs(CAMERA_OBJECTS) do
+
+            if cam.shape then
+                local camPos = GetPointOutOfShape(cam.shape, cam.relativePos)
+                local camRot = QuatLookAt(GetPointOutOfShape(cam.shape, cam.relativePos), GetPointOutOfShape(cam.shape, cam.relativeTarget))
+                cam.tr = Transform(camPos, camRot)
+            end
+
+        end
 
         if RUN_CAMERAS then
             SetCameraTransform(cam.tr) -- View the camera.
         end
 
-        -- -- Change camera
-        -- if KEYS.nextCamera:pressed() then -- Next camera.
-        --     cam_reset(cam)
-        --     SELECTED_CAMERA = getNextCamera()
-        -- elseif KEYS.prevCamera:pressed() then -- Previous camera.
-        --     cam_reset(cam)
-        --     SELECTED_CAMERA = getPrevCamera()
-        -- end
+    end
 
-        -- if KEYS.deleteAllCameras:pressed() then -- Delete all cameras
-        --     CAMERA_OBJECTS = {}
-        --     buzz()
-        -- end
-
-        -- if KEYS.deleteLastCamera:pressed() then -- Delete last camera created.
-
-        --     if SELECTED_CAMERA == #CAMERA_OBJECTS then
-        --         SELECTED_CAMERA = SELECTED_CAMERA - 1
-        --     end
-
-        --     CAMERA_OBJECTS[#CAMERA_OBJECTS] = nil
-
-        --     buzz()
-        -- end
-
-        -- if KEYS.toggleCameraMode:pressed() then -- Activate camera mode.
-        --     RUN_CAMERAS = not RUN_CAMERAS
-        -- end
-
-        -- if KEYS.runEvents:pressed() then -- Activate camera mode.
-        --     RUN_ITEM_CHAIN = not RUN_ITEM_CHAIN
-        -- end
-
+    if KEYS.cameraMode:pressed() then -- Activate camera mode.
+        RUN_CAMERAS = not RUN_CAMERAS
     end
 
 end

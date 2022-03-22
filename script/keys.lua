@@ -1,54 +1,69 @@
 KEYS = {
 
-    createCamera = {
-        key = 'c',
-        desc = 'create camera'
-    },
-
-    createEvent = {
-        key = 'b',
-        desc = 'create event'
-    },
-
-    runEvents = {
-        key = 'n',
-        desc = 'run events'
-    },
-
-    toggleCameraMode = {
+    cameraMode = {
         key = 'g',
-        desc = 'camera mode on/off'
+        desc = 'toggle view camera'
     },
 
-    nextCamera = {
-        key = 'e',
-        desc = 'next camera'
+    initChain = {
+        key = 'f1',
+        desc = 'chain init'
     },
 
-    prevCamera = {
-        key = 'q',
-        desc = 'previous camera'
+    -- f2 = {
+    --     key = 'f2',
+    --     desc = ''
+    -- },
+
+    -- f3 = {
+    --     key = 'f3',
+    --     desc = ''
+    -- },
+
+    toggleChain = {
+        key = 'f4',
+        desc = 'toggle chain'
     },
 
-    deleteAllCameras = {
-        key = 'r',
-        desc = 'delete all cameras'
+    createCameraStatic = {
+        key = 'f5',
+        desc = 'create statis camera'
     },
 
-    deleteLastCamera = {
-        key = 'z',
-        desc = 'delete last camera'
+    createCameraLookey = {
+        key = 'f6',
+        desc = 'create lookey camera'
     },
 
-    toggleAutoLerp = {
-        key = 't',
-        desc = 'auto lerp on/off'
+    createCameraDynamic = {
+        key = 'f7',
+        desc = 'create dynamic camera'
     },
 
-    showUi = {
-        key = 'u',
-        desc = 'auto lerp on/off'
+    -- f8 = {
+    --     key = 'f8',
+    --     desc = ''
+    -- },
+
+    createEventWait = {
+        key = 'f9',
+        desc = 'create event: wait'
     },
+
+    createEventLerp = {
+        key = 'f10',
+        desc = 'create event: lerp'
+    },
+
+    -- f11 = {
+    --     key = 'f11',
+    --     desc = ''
+    -- },
+
+    -- f12 = {
+    --     key = 'f12',
+    --     desc = ''
+    -- },
 
 }
 

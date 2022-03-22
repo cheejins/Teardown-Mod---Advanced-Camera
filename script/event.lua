@@ -10,7 +10,7 @@ function createEventObject(id, type)
     local event = {
 
         id = id,
-        type = 'wait',
+        type = type or 'wait',
 
         status = {
             active = false,
@@ -43,13 +43,11 @@ function createEventObject(id, type)
     return event
 
 end
-
-
-function instantiateEvent()
+function instantiateEvent(type)
 
     EVENT_IDS = EVENT_IDS + 1
 
-    local event = createEventObject(EVENT_IDS)
+    local event = createEventObject(EVENT_IDS, type)
     event.def = DeepCopy(event)
     table.insert(EVENT_OBJECTS, event)
 
@@ -61,6 +59,7 @@ function instantiateEvent()
 end
 
 
+
 function event_reset(self)
     for key, value in pairs(self) do
         if key ~= 'def' then -- self.def does not have a def key.
@@ -68,11 +67,10 @@ function event_reset(self)
         end
     end
 end
-
-
 function event_replaceDef(self) -- Replace the event.def with the current version of event.
     self.def = DeepCopy(self)
 end
+
 
 
 ---@param id number
@@ -111,24 +109,4 @@ end
 -- function event_set_cameraLerp_timed(self, time)
 --     self.type = 'LerpTimed'
 --     event_replaceDef(self)
--- end
-
-
-
--- function getNextEvent(addIndex)
---     if SELECTED_EVENT + 1 > #EVENT_OBJECTS then
---         return 1 + (addIndex or 0)
---     else
---         return SELECTED_EVENT + 1 + (addIndex or 0)
---     end
--- end
--- function getPrevEvent()
---     if SELECTED_EVENT - 1 <= 0 then
---         return #EVENT_OBJECTS
---     else
---         return SELECTED_EVENT - 1
---     end
--- end
--- function getCurrentEvent()
---     return EVENT_OBJECTS[SELECTED_EVENT]
 -- end

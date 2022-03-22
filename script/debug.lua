@@ -5,6 +5,7 @@ function debugMod()
     dbw('#EVENT_OBJECTS', #EVENT_OBJECTS)
 
     dbw('RUN_ITEM_CHAIN', RUN_ITEM_CHAIN)
+    dbw('RUN_CAMERAS', RUN_CAMERAS)
     dbw('SELECTED_CAMERA', SELECTED_CAMERA)
     dbw('SELECTED_EVENT', SELECTED_EVENT)
 
@@ -12,11 +13,11 @@ function debugMod()
 
         if camera == CAMERA_OBJECTS[SELECTED_CAMERA] then
             dbdd(camera.tr.pos, 0.5,0.5, 0,1,1, 1)
-            dbdd(camera.def.tr.pos, 0.5,0.5, 1,1,1, 1)
+            dbdd(camera.tr.pos, 0.5,0.5, 1,1,1, 1)
         else
             dbdd(camera.tr.pos, 0.5,0.5, 0,1,0, 1)
         end
-        dbcr(camera.def.tr.pos, 1,1,0, 1)
+        dbcr(camera.tr.pos, 1,1,0, 1)
 
         local dist = 5
         dbray(camera.tr, dist, 1,1,1, 1)
