@@ -4,6 +4,12 @@
 EVENT_OBJECTS = {}
 EVENT_IDS = 0
 
+--[[
+    EVENT TYPES
+        wait
+        lerpConst
+        lerpTimed
+]]
 
 function createEventObject(id, type)
 
@@ -34,7 +40,7 @@ function createEventObject(id, type)
 
         val = {
             time = 2 + math.random()*2,
-            speed = 0,
+            speed = ternary(type == 'lerpConst', 0.01, 0),
             dist = 0,
         },
 
@@ -82,6 +88,34 @@ function getEventById(id)
             return EVENT_OBJECTS[i], i
         end
     end
+end
+
+
+
+
+function lerpCameraTimed(event, camMaster, camNext)
+
+    local lerpFraction = (event.def.val.time - gtZero(event.val.time)) / event.def.val.time
+
+    camMaster.tr.pos = VecLerp(camMaster.def.tr.pos, camNext.def.tr.pos, lerpFraction)
+    camMaster.tr.rot = QuatSlerp(camMaster.def.tr.rot, camNext.def.tr.rot, lerpFraction)
+
+end
+
+function lerpCameraConst(event, camMaster, camNext)
+
+    local speed = event.val.speed
+
+    local camDist = VecDist(camMaster.tr.pos, camNext.tr.pos)
+    if camDist <= speed then
+        event.status.done = true
+    end
+
+    event.val.time = camDist / speed / 60
+
+    camMaster.tr.pos = VecApproach(camMaster.tr.pos, camNext.tr.pos, speed)
+    camMaster.tr.rot = QuatSlerp(camMaster.def.tr.rot, camNext.def.tr.rot, 0.5)
+
 end
 
 

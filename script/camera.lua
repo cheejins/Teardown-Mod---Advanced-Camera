@@ -11,12 +11,12 @@ cameraTargetPos = Vec()
 cameraTargetRot = Quat()
 
 
-function createCameraObject(tr, id)
+function createCameraObject(tr, id, type)
 
     local cam = {
 
         id = id,
-        type = 'camera',
+        type = type,
 
         tr = tr,
 
@@ -33,11 +33,11 @@ function createCameraObject(tr, id)
 
 end
 --- Create a camera in game.
-function instantiateCamera(tr)
+function instantiateCamera(tr, type)
 
     -- Instantiate a new camera.
     CAMERA_IDS = CAMERA_IDS + 1
-    local camera = createCameraObject(tr or GetCameraTransform(), CAMERA_IDS)
+    local camera = createCameraObject(tr or GetCameraTransform(), CAMERA_IDS, type)
     camera.def = DeepCopy(camera) -- Cloned camera used for the camera's default values.
     table.insert(CAMERA_OBJECTS, camera)
 
@@ -74,34 +74,6 @@ end
 
 
 
-function lerpCameraTimed(event, camMaster, camNext)
-
-    local lerpFraction = (event.def.val.time - gtZero(event.val.time)) / event.def.val.time
-
-    camMaster.tr.pos = VecLerp(camMaster.def.tr.pos, camNext.def.tr.pos, lerpFraction)
-    camMaster.tr.rot = QuatSlerp(camMaster.def.tr.rot, camNext.def.tr.rot, lerpFraction)
-
-    dbw('lerpFraction', lerpFraction)
-
-end
-
-function lerpCameraConst(event, camMaster, camNext)
-
-    local camDist = VecDist(camMaster.tr, camNext.tr)
-    local speed = event.val.speed
-
-    local lerpFraction = (event.def.val.time - gtZero(event.val.time)) / event.def.val.time
-
-    camMaster.tr.pos = VecLerp(camMaster.def.tr.pos, camNext.def.tr.pos, lerpFraction)
-    camMaster.tr.rot = QuatSlerp(camMaster.def.tr.rot, camNext.def.tr.rot, lerpFraction)
-
-    dbw('lerpFraction', lerpFraction)
-
-end
-
-
-
-
 
 function GetCamAimPos()
     local b = GetCameraTransform()
@@ -114,11 +86,11 @@ function GetCamAimPos()
 end
 
 -- Create a lookey camera
-function moveCamera()
+function moveCamera(type)
     CAMERA_IDS = CAMERA_IDS + 1
 
     local hit, hitPoint, shape = RaycastFromTransform(GetCameraTransform(), 500)
-    local camObj = createCameraObject(Transform(hitPoint), CAMERA_IDS)
+    local camObj = createCameraObject(Transform(hitPoint), CAMERA_IDS, type)
     camObj.def = DeepCopy(camObj) -- Cloned camera used for the camera's default values.
 
 	camObj.shape = shape
@@ -134,11 +106,11 @@ function moveCamera()
 end
 
 -- Create a moveable camera
-function dynamicCamera()
+function dynamicCamera(type)
     CAMERA_IDS = CAMERA_IDS + 1
 
     local hit, hitPoint, shape = RaycastFromTransform(GetCameraTransform(), 500)
-    local camObj = createCameraObject(Transform(hitPoint), CAMERA_IDS)
+    local camObj = createCameraObject(Transform(hitPoint), CAMERA_IDS, type)
     camObj.def = DeepCopy(camObj) -- Cloned camera used for the camera's default values.
 
 	camObj.shape = shape

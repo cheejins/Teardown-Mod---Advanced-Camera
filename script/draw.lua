@@ -119,7 +119,7 @@ function drawUi()
 
     do UiPush()
 
-        margin(UiCenter()+550, 0)
+        margin(UiCenter()+550, 10)
 
         UiAlign('left top')
         UiFont('bold.ttf', 22)
@@ -160,9 +160,7 @@ function drawUi()
                     end
 
                     margin(70, 0)
-                    if item.type == 'event' then
-                        UiText(item.item.type)
-                    end
+                    UiText(item.item.type)
 
                 UiPop() end
 

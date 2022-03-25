@@ -79,17 +79,17 @@ function tick()
 
 
     if KEYS.createCameraStatic:pressed() then -- Create camera
-        local item = getItemByCameraId(instantiateCamera().id)
+        local item = getItemByCameraId(instantiateCamera(nil, 'static').id)
         table.insert(ITEM_CHAIN, item)
         beep()
     end
     if KEYS.createCameraLookey:pressed() then -- Create camera
-        local item = getItemByCameraId(moveCamera().id)
+        local item = getItemByCameraId(moveCamera('orbit').id)
         table.insert(ITEM_CHAIN, item)
         beep()
     end
     if KEYS.createCameraDynamic:pressed() then -- Create camera
-        local item = getItemByCameraId(dynamicCamera().id)
+        local item = getItemByCameraId(dynamicCamera('relative').id)
         table.insert(ITEM_CHAIN, item)
         beep()
     end
@@ -100,8 +100,13 @@ function tick()
         table.insert(ITEM_CHAIN, item)
         beep()
     end
-    if KEYS.createEventLerp:pressed() then
-        local item = getItemByEventId(instantiateEvent('lerp').id)
+    if KEYS.createEventLerpTimed:pressed() then
+        local item = getItemByEventId(instantiateEvent('lerpTimed').id)
+        table.insert(ITEM_CHAIN, item)
+        beep()
+    end
+    if KEYS.createEventLerpConst:pressed() then
+        local item = getItemByEventId(instantiateEvent('lerpConst').id)
         table.insert(ITEM_CHAIN, item)
         beep()
     end

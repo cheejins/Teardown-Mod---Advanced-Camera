@@ -50,15 +50,15 @@ KEYS = {
         desc = 'create event: wait'
     },
 
-    createEventLerp = {
+    createEventLerpTimed = {
         key = 'f10',
-        desc = 'create event: lerp'
+        desc = 'create event: lerpTimed'
     },
 
-    -- f11 = {
-    --     key = 'f11',
-    --     desc = ''
-    -- },
+    createEventLerpConst = {
+        key = 'f11',
+        desc = 'create event: lerpConst'
+    },
 
     -- f12 = {
     --     key = 'f12',
