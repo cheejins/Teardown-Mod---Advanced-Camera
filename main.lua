@@ -1,11 +1,13 @@
 #include "script/camera.lua"
 #include "script/debug.lua"
 #include "script/draw.lua"
+#include "script/drawMisc.lua"
 #include "script/event.lua"
 #include "script/item.lua"
 #include "script/itemChain.lua"
 #include "script/keys.lua"
 #include "script/tool.lua"
+#include "script/ui.lua"
 #include "script/umf.lua"
 #include "script/util.lua"
 #include "script/utility.lua"
@@ -13,50 +15,50 @@
 
 function init()
 
-    -- local x = 2
+    local x = 2
 
-    -- cam1 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
-    -- x = x + 2
+    cam1 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
+    x = x + 2
 
-    -- cam2 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
-    -- x = x + 2
+    cam2 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
+    x = x + 2
 
-    -- cam3 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
-    -- x = x + 2
+    cam3 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
+    x = x + 2
 
-    -- cam4 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
-    -- x = x + 2
+    cam4 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
+    x = x + 2
 
-    -- cam5 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))))
-    -- x = x + 2
+    cam5 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
+    x = x + 2
 
-    -- e1 = instantiateEvent()
-    -- e2 = instantiateEvent()
-    -- e3 = instantiateEvent()
-    -- e4 = instantiateEvent()
-    -- e5 = instantiateEvent()
-    -- e6 = instantiateEvent()
-    -- e7 = instantiateEvent()
-    -- e8 = instantiateEvent()
+    e1 = instantiateEvent('wait')
+    e2 = instantiateEvent('lerpConst')
+    e3 = instantiateEvent('wait')
+    e4 = instantiateEvent('lerpConst')
+    e5 = instantiateEvent('lerpTimed')
+    e6 = instantiateEvent('wait')
+    e7 = instantiateEvent('lerpConst')
+    e8 = instantiateEvent('wait')
 
-    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam3.id))
-    -- table.insert(ITEM_CHAIN, getItemByEventId(e1.id))
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam3.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e1.id))
 
-    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam2.id))
-    -- table.insert(ITEM_CHAIN, getItemByEventId(e2.id))
-    -- table.insert(ITEM_CHAIN, getItemByEventId(e3.id))
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam2.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e2.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e3.id))
 
-    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam5.id))
-    -- table.insert(ITEM_CHAIN, getItemByEventId(e5.id))
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam5.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e5.id))
 
-    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam1.id))
-    -- table.insert(ITEM_CHAIN, getItemByEventId(e4.id))
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam1.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e4.id))
 
-    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
-    -- table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
 
-    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
-    -- table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
+    table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
+    table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
 
 
 end
@@ -78,17 +80,17 @@ function tick()
     end
 
 
-    if KEYS.createCameraStatic:pressed() then -- Create camera
+    if KEYS.createCameraStatic:pressed() then
         local item = getItemByCameraId(instantiateCamera(nil, 'static').id)
         table.insert(ITEM_CHAIN, item)
         beep()
     end
-    if KEYS.createCameraLookey:pressed() then -- Create camera
+    if KEYS.createCameraLookey:pressed() then
         local item = getItemByCameraId(moveCamera('orbit').id)
         table.insert(ITEM_CHAIN, item)
         beep()
     end
-    if KEYS.createCameraDynamic:pressed() then -- Create camera
+    if KEYS.createCameraDynamic:pressed() then
         local item = getItemByCameraId(dynamicCamera('relative').id)
         table.insert(ITEM_CHAIN, item)
         beep()
@@ -112,9 +114,39 @@ function tick()
     end
 
 
+    if InputPressed('r') then
+        ITEM_OBJECTS = {}
+        ITEM_CHAIN = {}
+        EVENT_OBJECTS = {}
+        CAMERA_OBJECTS = {}
+        beep()
+    end
+
+    if KEYS.cameraMode:pressed() then -- Activate camera mode.
+        RUN_CAMERAS = not RUN_CAMERAS
+    end
 
     if RUN_ITEM_CHAIN then
         runItemChain()
+    end
+
+    if TOOL:active() and InputPressed('rmb') then
+        UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
+        beep()
+    end
+
+
+    if InputPressed('n') then
+        local eventItem = getItemByEventId(SELECTED_EVENT)
+        local eventItemIndex = getItemIndex(ITEM_CHAIN, eventItem)
+        local nextCamItem = getNextCameraItem(eventItemIndex)
+        SELECTED_CAMERA = nextCamItem.item.id
+    end
+    if InputPressed('p') then
+        local eventItem = getItemByEventId(SELECTED_EVENT)
+        local eventItemIndex = getItemIndex(ITEM_CHAIN, eventItem)
+        local prevCamItem = getPrevCameraItem(eventItemIndex)
+        SELECTED_CAMERA = prevCamItem.item.id
     end
 
 
@@ -122,10 +154,6 @@ function tick()
     debugMod()
 
 end
-
-function update()
-end
-
 
 function runCameraSystem()
 
@@ -149,10 +177,6 @@ function runCameraSystem()
             SetCameraTransform(cam.tr) -- View the camera.
         end
 
-    end
-
-    if KEYS.cameraMode:pressed() then -- Activate camera mode.
-        RUN_CAMERAS = not RUN_CAMERAS
     end
 
 end

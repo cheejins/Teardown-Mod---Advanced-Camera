@@ -23,8 +23,6 @@ function createEventObject(id, type)
             started = false,
             running = false,
             done = false,
-            progress = 0, -- Universal value between 0.0 and 1.0 used to track exactly how far along the event is. 1.0 = done.
-                          -- For example: a dist lerp event which is 0.5m/s, 25m/75m would have progress of 0.33/1.0
         },
 
         link = {
@@ -105,16 +103,21 @@ end
 function lerpCameraConst(event, camMaster, camNext)
 
     local speed = event.val.speed
-
     local camDist = VecDist(camMaster.tr.pos, camNext.tr.pos)
+    local camDistDef = VecDist(camMaster.def.tr.pos, camNext.def.tr.pos)
+
+    event.val.time = camDist / speed / 60
+
     if camDist <= speed then
         event.status.done = true
     end
 
-    event.val.time = camDist / speed / 60
+    local lerpFraction = (camDistDef - camDist) / camDistDef
 
     camMaster.tr.pos = VecApproach(camMaster.tr.pos, camNext.tr.pos, speed)
-    camMaster.tr.rot = QuatSlerp(camMaster.def.tr.rot, camNext.def.tr.rot, 0.5)
+    camMaster.tr.rot = QuatSlerp(camMaster.def.tr.rot, camNext.tr.rot, lerpFraction)
+
+    -- Slerp 0.5 between def-tr and nextdef-nexttr
 
 end
 

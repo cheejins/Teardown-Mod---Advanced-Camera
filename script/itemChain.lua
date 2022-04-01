@@ -23,7 +23,7 @@ function runItemChain()
 
     elseif event.type == 'wait' then
 
-        -- event.val.time = event.val.time - GetTimeStep()
+        event.val.time = event.val.time - GetTimeStep()
 
     elseif event.type == 'lerpTimed' or event.type == 'lerpConst' then
 
@@ -35,6 +35,7 @@ function runItemChain()
             lerpCameraConst(eventItem.item, getCameraById(SELECTED_CAMERA), nextCamItem.item)
         else -- Time based lerp.
             lerpCameraTimed(eventItem.item, getCameraById(SELECTED_CAMERA), nextCamItem.item)
+            event.val.time = event.val.time - GetTimeStep()
         end
 
     end
@@ -62,4 +63,12 @@ function initializeItemChain()
         end
     end
 
+end
+
+
+function clearAllObjects()
+    ITEM_OBJECTS = {}
+    ITEM_CHAIN = {}
+    EVENT_OBJECTS = {}
+    CAMERA_OBJECTS = {}
 end
