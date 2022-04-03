@@ -216,11 +216,12 @@ end
 --[[TABLES]]
 do
     function TableSwapIndex(t, i1, i2)
-        local temp = t[i1]
+        local temp = DeepCopy(t[i1])
         t[i1] = t[i2]
         t[i2] = temp
         return t
     end
+
     function TableClone(tb)
         local tbc = {}
         for k,v in pairs(tb) do tbc[k] = DeepCopy(v) end
