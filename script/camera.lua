@@ -11,11 +11,13 @@ cameraTargetPos = Vec()
 cameraTargetRot = Quat()
 
 
-function createCameraObject(tr, id, type)
+function createCameraObject(tr, type)
+
+    CAMERA_IDS = CAMERA_IDS + 1
 
     local cam = {
 
-        id = id,
+        id = CAMERA_IDS,
         type = type,
 
         tr = tr,
@@ -36,8 +38,7 @@ end
 function instantiateCamera(tr, type)
 
     -- Instantiate a new camera.
-    CAMERA_IDS = CAMERA_IDS + 1
-    local camera = createCameraObject(tr or GetCameraTransform(), CAMERA_IDS, type)
+    local camera = createCameraObject(tr or GetCameraTransform(), type)
     camera.def = DeepCopy(camera) -- Cloned camera used for the camera's default values.
     table.insert(CAMERA_OBJECTS, camera)
 
@@ -87,10 +88,9 @@ end
 
 -- Create a lookey camera
 function moveCamera(type)
-    CAMERA_IDS = CAMERA_IDS + 1
 
     local hit, hitPoint, shape = RaycastFromTransform(GetCameraTransform(), 500)
-    local camObj = createCameraObject(Transform(hitPoint), CAMERA_IDS, type)
+    local camObj = createCameraObject(Transform(hitPoint), type)
     camObj.def = DeepCopy(camObj) -- Cloned camera used for the camera's default values.
 
 	camObj.shape = shape
@@ -107,10 +107,9 @@ end
 
 -- Create a moveable camera
 function dynamicCamera(type)
-    CAMERA_IDS = CAMERA_IDS + 1
 
     local hit, hitPoint, shape = RaycastFromTransform(GetCameraTransform(), 500)
-    local camObj = createCameraObject(Transform(hitPoint), CAMERA_IDS, type)
+    local camObj = createCameraObject(Transform(hitPoint), type)
     camObj.def = DeepCopy(camObj) -- Cloned camera used for the camera's default values.
 
 	camObj.shape = shape

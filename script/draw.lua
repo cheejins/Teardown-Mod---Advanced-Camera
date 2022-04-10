@@ -3,7 +3,7 @@ UI_SHOW_OPTIONS = true
 function draw()
 
     UiAlign('center middle')
-    UiFont('bold.ttf', 24)
+    UiFont('bold.ttf', 20)
     UiColor(0,0,0,1)
 
     -- Debug
@@ -12,8 +12,25 @@ function draw()
     -- Wielding tool
     if TOOL:active() then
         if db then
-            drawItemChain()
-            drawControls()
+
+            do UiPush()
+
+                drawControls()
+
+                margin(350, 10)
+                drawItemChain()
+
+                margin(400, 0)
+                drawItemObjects()
+
+                margin(400, 0)
+                drawCameraList()
+
+                margin(400, 0)
+                drawEventList()
+
+            UiPop() end
+
         end
     end
 
@@ -22,97 +39,103 @@ function draw()
         drawMainUI()
     end
 
-    local videoDesc = 'This video demonstrates the way different types of events can be inserted into the item chain. The two events right now are "wait" and "lerp". Lerp is the event which move between the current and next camera. More events and event modifications are on the way'
+    -- local videoDesc = 'This video demonstrates the way different types of events can be inserted into the item chain. The two events right now are "wait" and "lerp". Lerp is the event which move between the current and next camera. More events and event modifications are on the way'
 
     -- drawVideoDesc(videoDesc)
 
 end
 
+function drawMainUI()
 
-function drawCameraNumbers()
-    for key, camera in pairs(CAMERA_OBJECTS) do -- Draw camera numbers
+    UiMakeInteractive()
 
-        if TransformToLocalPoint(GetCameraTransform(), camera.tr.pos)[3] < 0 then
-
-            local x,y = UiWorldToPixel(camera.tr.pos)
-
-            do UiPush()
-                margin(x,y)
-                UiText(camera.id)
-            UiPop() end
-
-        end
-
-    end
-
-    if RUN_ITEM_CHAIN then
-        do UiPush()
-            margin(UiCenter(), UiMiddle())
-            UiColor(1,1,1,1)
-            UiFont('regular.ttf', 24)
-        UiPop() end
-    end
-
-end
-
-
-function drawItemChain()
-
-    UiTextShadow(0,0,0,0.5, 0.5,0)
+    pad = 20
+    pad2 = 40
 
     do UiPush()
 
-        margin(UiCenter()+550, 10)
+        do UiPush()
+        UiPop() end
 
         UiAlign('left top')
-        UiFont('bold.ttf', 22)
-        UiColor(0,0,0, 0.9)
+        UiColor(0,0,0, 0.8)
 
-        -- Background
-        UiRect(400, 750)
 
-        margin(20, 20)
-        UiColor(1,1,1, 1)
-        UiText('ITEM CHAIN')
-
-        UiColor(1,1,1, 0.5)
-        margin(0, 30)
-        UiText('Execution order')
-
-        margin(0, 60)
-
+        -- PANE 1
         do UiPush()
 
-            for index, item in ipairs(ITEM_CHAIN) do
+            margin(pad, pad)
+            UiRect(UiWidth()/3 - pad2, UiHeight() - pad2)
+            UiWindow(UiWidth()/3 - pad2, UiHeight() - pad2, true)
 
-                do UiPush()
+            UiColor(1,1,1, 0.8)
+            do UiPush()
+                UiAlign('center top')
+                UiFont('regular.ttf', 36)
+                margin(UiCenter(), pad)
+                UiText('OPTIONS')
+            UiPop() end
+            margin(pad/2,70)
 
-                    if item.type == 'camera' and item.item.id == SELECTED_CAMERA then
-                        UiColor(0.5,1,0.5,1)
-                    elseif item.type == 'event' and item.item.id == SELECTED_EVENT then
-                        UiColor(1,1,0,1)
-                    end
+        UiPop() end
+        margin(UiWidth()/3, 0)
 
-                    UiText('['.. index ..'] ' .. item.type)
-                    margin(120, 0)
-                    UiText('' .. item.item.id)
 
-                    margin(40, 0)
-                    if item.type == 'event' then
-                        UiText(sfn(item.item.val.time))
-                    end
+        -- PANE 2
+        do UiPush()
 
-                    margin(70, 0)
-                    UiText(item.item.type)
+            margin(pad, pad)
+            UiRect(UiWidth()/3 - pad2, UiHeight() - pad2)
+            UiWindow(UiWidth()/3 - pad2, UiHeight() - pad2, true)
 
-                UiPop() end
+            UiColor(1,1,1, 0.8)
+            do UiPush()
+                UiAlign('center top')
+                UiFont('regular.ttf', 36)
+                margin(UiCenter(), pad)
+                UiText('ITEMS')
+            UiPop() end
+            margin(pad/2,70)
 
-                margin(0, 50)
+            scrolly = scrolly + (InputValue('mousewheel') * -30)
+            scrolly = clamp(scrolly, 0, #ITEM_CHAIN * 50)
 
+            UiColor(0,0,0, 1)
+            UiWindow(UiWidth(), UiHeight() - 100, true)
+            margin(0, -scrolly)
+            drawItemListMenu()
+
+        UiPop() end
+        margin(UiWidth()/3, 0)
+
+
+        -- PANE 3
+        do UiPush()
+
+            margin(pad, pad)
+            UiRect(UiWidth()/3 - pad2, UiHeight() - pad2)
+            UiWindow(UiWidth()/3 - pad2, UiHeight() - pad2, true)
+            UiWindow(UiWidth() - pad/2, UiHeight() - pad, true)
+
+
+            UiColor(1,1,1, 0.8)
+            do UiPush()
+                UiAlign('center top')
+                UiFont('regular.ttf', 36)
+                margin(UiCenter(), pad)
+                UiText('MODIFY ITEM')
+            UiPop() end
+            margin(pad/2,70)
+
+            if #ITEM_CHAIN >= 1 then
+                local item = ITEM_CHAIN[UI_SELECTED_ITEM] or ITEM_CHAIN[1]
+                uiMod_Item(item)
             end
 
         UiPop() end
+        margin(UiWidth()/3, 0)
 
-    UiPop() end
+
+    end UiPop()
 
 end

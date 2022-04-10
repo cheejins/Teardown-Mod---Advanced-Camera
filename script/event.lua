@@ -11,11 +11,13 @@ EVENT_IDS = 0
         lerpTimed
 ]]
 
-function createEventObject(id, type)
+function createEventObject(type)
+
+    EVENT_IDS = EVENT_IDS + 1
 
     local event = {
 
-        id = id,
+        id = EVENT_IDS,
         type = type or 'wait',
 
         status = {
@@ -49,9 +51,7 @@ function createEventObject(id, type)
 end
 function instantiateEvent(type)
 
-    EVENT_IDS = EVENT_IDS + 1
-
-    local event = createEventObject(EVENT_IDS, type)
+    local event = createEventObject(type)
     event.def = DeepCopy(event)
     table.insert(EVENT_OBJECTS, event)
 

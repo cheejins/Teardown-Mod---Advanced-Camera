@@ -1,6 +1,6 @@
 function debugMod()
 
-    dbw('#ITEM_OBJECTS', #ITEM_OBJECTS)
+    -- dbw('#ITEM_OBJECTS', #ITEM_OBJECTS)
     dbw('#CAMERA_OBJECTS', #CAMERA_OBJECTS)
     dbw('#EVENT_OBJECTS', #EVENT_OBJECTS)
 

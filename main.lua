@@ -1,65 +1,83 @@
 #include "script/camera.lua"
 #include "script/debug.lua"
 #include "script/draw.lua"
-#include "script/drawMisc.lua"
+#include "script/drawDebug.lua"
 #include "script/event.lua"
 #include "script/item.lua"
 #include "script/itemChain.lua"
+#include "script/itemSelection.lua"
 #include "script/keys.lua"
 #include "script/tool.lua"
 #include "script/ui.lua"
+#include "script/uiTools.lua"
 #include "script/umf.lua"
 #include "script/util.lua"
 #include "script/utility.lua"
+
 
 
 function init()
 
     local x = 2
 
+    -- cam1 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
+    -- x = x + 2
+
+    -- cam2 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
+    -- x = x + 2
+
+    -- cam3 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
+    -- x = x + 2
+
+    -- cam4 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
+    -- x = x + 2
+
+    -- cam5 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
+    -- x = x + 2
+
+    -- e1 = instantiateEvent('wait')
+    -- e2 = instantiateEvent('lerpConst')
+    -- e3 = instantiateEvent('wait')
+    -- e4 = instantiateEvent('lerpConst')
+    -- e5 = instantiateEvent('lerpTimed')
+    -- e6 = instantiateEvent('wait')
+    -- e7 = instantiateEvent('lerpConst')
+    -- e8 = instantiateEvent('wait')
+
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam3.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e1.id))
+
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam2.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e2.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e3.id))
+
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam5.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e5.id))
+
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam1.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e4.id))
+
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
+
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
+
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam1.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e1.id))
+    -- table.insert(ITEM_CHAIN, getItemByCameraId(cam2.id))
+    -- table.insert(ITEM_CHAIN, getItemByEventId(e2.id))
+
+
     cam1 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
     x = x + 2
+
+    e1 = instantiateEvent('wait')
 
     cam2 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
     x = x + 2
 
-    cam3 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
-    x = x + 2
-
-    cam4 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
-    x = x + 2
-
-    cam5 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
-    x = x + 2
-
-    e1 = instantiateEvent('wait')
     e2 = instantiateEvent('lerpConst')
-    e3 = instantiateEvent('wait')
-    e4 = instantiateEvent('lerpConst')
-    e5 = instantiateEvent('lerpTimed')
-    e6 = instantiateEvent('wait')
-    e7 = instantiateEvent('lerpConst')
-    e8 = instantiateEvent('wait')
-
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam3.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e1.id))
-
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam2.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e2.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e3.id))
-
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam5.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e5.id))
-
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam1.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e4.id))
-
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
-
-    table.insert(ITEM_CHAIN, getItemByCameraId(cam4.id))
-    table.insert(ITEM_CHAIN, getItemByEventId(e7.id))
-
 
 end
 

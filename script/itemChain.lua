@@ -43,7 +43,6 @@ function runItemChain()
 end
 
 
-
 --- Set the selected camera and selected event to the first camera and first event in the item chain.
 function initializeItemChain()
 
