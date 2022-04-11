@@ -1,5 +1,8 @@
 UI_SHOW_OPTIONS = true
 
+pad = 20
+pad2 = 40
+
 function draw()
 
     UiAlign('center middle')
@@ -9,7 +12,7 @@ function draw()
     -- Debug
     if db then drawCameraNumbers() end
 
-    -- Wielding tool
+    -- Is wielding tool
     if TOOL:active() then
         if db then
 
@@ -49,9 +52,6 @@ function drawMainUI()
 
     UiMakeInteractive()
 
-    pad = 20
-    pad2 = 40
-
     do UiPush()
 
         do UiPush()
@@ -60,12 +60,15 @@ function drawMainUI()
         UiAlign('left top')
         UiColor(0,0,0, 0.8)
 
+        local mouseInUi = false
+
 
         -- PANE 1
         do UiPush()
 
             margin(pad, pad)
             UiRect(UiWidth()/3 - pad2, UiHeight() - pad2)
+            mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, UiHeight() - pad2)
             UiWindow(UiWidth()/3 - pad2, UiHeight() - pad2, true)
 
             UiColor(1,1,1, 0.8)
@@ -86,6 +89,7 @@ function drawMainUI()
 
             margin(pad, pad)
             UiRect(UiWidth()/3 - pad2, UiHeight() - pad2)
+            mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, UiHeight() - pad2)
             UiWindow(UiWidth()/3 - pad2, UiHeight() - pad2, true)
 
             UiColor(1,1,1, 0.8)
@@ -114,6 +118,7 @@ function drawMainUI()
 
             margin(pad, pad)
             UiRect(UiWidth()/3 - pad2, UiHeight() - pad2)
+            mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, UiHeight() - pad2)
             UiWindow(UiWidth()/3 - pad2, UiHeight() - pad2, true)
             UiWindow(UiWidth() - pad/2, UiHeight() - pad, true)
 
@@ -134,6 +139,12 @@ function drawMainUI()
 
         UiPop() end
         margin(UiWidth()/3, 0)
+
+
+        -- Close UI if mouse is clicked off of a panel.
+        if InputPressed('lmb') and not mouseInUi then
+            UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
+        end
 
 
     end UiPop()

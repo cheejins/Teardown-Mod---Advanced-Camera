@@ -1,4 +1,4 @@
--- Item objects are used as base containers for event and camera objects.
+-- Item objects are used as base containers for components (event and camera objects).
 
 
 ITEM_OBJECTS = {}
@@ -20,7 +20,7 @@ function createItemObject(type)
         item = {} -- Holds the actual item (event, camera, etc...)
     }
 end
---- Used as a base container for events and cameras.
+--- Used as a base container for components.
 function instantiateItem(type)
 
     local item = createItemObject(type)
@@ -29,7 +29,7 @@ function instantiateItem(type)
     return ITEM_CHAIN[#ITEM_CHAIN]
 end
 
-
+-- Delete an item and its component.
 function deleteItem(tb, index)
 
     local item = tb[index]

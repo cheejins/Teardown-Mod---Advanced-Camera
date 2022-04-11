@@ -83,12 +83,43 @@ end
 
 function tick()
 
-    if toolSet == nil then SetString('game.player.tool', 'advancedCamera') toolSet = true end
+    runMod()
+    manageInput()
 
+    manageDebugMode()
+    debugMod()
 
-    runCameraSystem()
+    startWithTool()
 
+end
 
+function runMod()
+
+    local cam = CAMERA_OBJECTS[SELECTED_CAMERA]
+    SELECTED_CAMERA_OBJECT = cam
+
+    -- If there is at least one camera.
+    if #CAMERA_OBJECTS >= 1 then
+
+        for key, cam in pairs(CAMERA_OBJECTS) do
+
+            if cam.shape then
+                local camPos = GetPointOutOfShape(cam.shape, cam.relativePos)
+                local camRot = QuatLookAt(GetPointOutOfShape(cam.shape, cam.relativePos), GetPointOutOfShape(cam.shape, cam.relativeTarget))
+                cam.tr = Transform(camPos, camRot)
+            end
+
+        end
+
+        if RUN_CAMERAS then
+            SetCameraTransform(cam.tr) -- View the camera.
+        end
+
+    end
+
+end
+
+function manageInput()
     if KEYS.initChain:pressed() then
         initializeItemChain()
     end
@@ -166,38 +197,10 @@ function tick()
         local prevCamItem = getPrevCameraItem(eventItemIndex)
         SELECTED_CAMERA = prevCamItem.item.id
     end
-
-
-    manageDebugMode()
-    debugMod()
-
 end
 
-function runCameraSystem()
-
-    local cam = CAMERA_OBJECTS[SELECTED_CAMERA]
-    SELECTED_CAMERA_OBJECT = cam
-
-    -- If there is at least one camera.
-    if #CAMERA_OBJECTS >= 1 then
-
-        for key, cam in pairs(CAMERA_OBJECTS) do
-
-            if cam.shape then
-                local camPos = GetPointOutOfShape(cam.shape, cam.relativePos)
-                local camRot = QuatLookAt(GetPointOutOfShape(cam.shape, cam.relativePos), GetPointOutOfShape(cam.shape, cam.relativeTarget))
-                cam.tr = Transform(camPos, camRot)
-            end
-
-        end
-
-        if RUN_CAMERAS then
-            SetCameraTransform(cam.tr) -- View the camera.
-        end
-
-    end
-
+function startWithTool()
+    if toolSet == nil then SetString('game.player.tool', 'advancedCamera') toolSet = true end
 end
-
 
 UpdateQuickloadPatch()

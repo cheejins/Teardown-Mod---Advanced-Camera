@@ -51,16 +51,25 @@ function uiListItem(text, itemChainIndex, item, listH)
 
         -- Uninitiazlied item.
         if item.type == 'uninitialized' then
-            r,g,b = 1 , 1 , 0.4
+            r,g,b =
+            1 - oscillate(1.5)/2,
+            1 - oscillate(1.5)/2,
+            0 - oscillate(1.5)/2
         end
+
+
         -- Invalid items
         local sequentialCameras =
             item.type == 'camera'
             and (ITEM_CHAIN[GetTableNextIndex(ITEM_CHAIN, itemChainIndex)].type == 'camera'
                 or ITEM_CHAIN[GetTablePrevIndex(ITEM_CHAIN, itemChainIndex)].type == 'camera')
-        if sequentialCameras then
+
+        local hasEvents = tableContainsComponentType(ITEM_CHAIN, 'event')
+
+        if sequentialCameras and hasEvents then
             r,g,b = oscillate(1.5)/2 + 0.5, 0.25, 0.25
         end
+
 
         -- Selected item.
         if itemChainIndex == UI_SELECTED_ITEM then
@@ -98,7 +107,7 @@ function uiListItem(text, itemChainIndex, item, listH)
             margin(bw*1.5, 0)
             UiText(item.item.type)
 
-            margin(150, 0)
+            margin(130, 0)
             UiText('Name')
 
         end UiPop()
@@ -118,7 +127,6 @@ function uiListItem(text, itemChainIndex, item, listH)
             end
             UiButtonImageBox('MOD/img/button_garbage.png', 0,0, 1,0,0, 1)
             if UiTextButton(' ', bw * mult, bh * mult) then
-                -- table.remove(ITEM_CHAIN, itemChainIndex)
                 deleteItem(ITEM_CHAIN, itemChainIndex)
             end
 
@@ -130,34 +138,25 @@ function uiListItem(text, itemChainIndex, item, listH)
 
             margin(w + 10, 5)
 
-            -- if itemChainIndex >= 2 then -- Not first item.
-
-                UiButtonImageBox('MOD/img/icon_arrow_up.png', 0,0, 1,1,1,0.8)
-                UiButtonHoverColor(0.5,0.5,0.5, 1)
-                if UiTextButton(' ', bw,bh) then
-                    local index = GetTablePrevIndex(ITEM_CHAIN, itemChainIndex)
-                    ITEM_CHAIN = TableSwapIndex(ITEM_CHAIN, itemChainIndex, index)
-                    UI_SELECTED_ITEM = index
-                end
-
-            -- end
+            UiButtonImageBox('MOD/img/icon_arrow_up.png', 0,0, 1,1,1,0.8)
+            UiButtonHoverColor(0.5,0.5,0.5, 1)
+            if UiTextButton(' ', bw,bh) then
+                local index = GetTablePrevIndex(ITEM_CHAIN, itemChainIndex)
+                ITEM_CHAIN = TableSwapIndex(ITEM_CHAIN, itemChainIndex, index)
+                UI_SELECTED_ITEM = index
+            end
 
             margin(0, bh/2+10)
 
-            -- if itemChainIndex < #ITEM_CHAIN then -- Not last item.
-
-                UiButtonImageBox('MOD/img/icon_arrow_down.png', 0,0, 1,1,1,0.8)
-                UiButtonHoverColor(0.5,0.5,0.5, 1)
-                if UiTextButton(' ', bw,bh) then
-                    local index = GetTableNextIndex(ITEM_CHAIN, itemChainIndex)
-                    ITEM_CHAIN = TableSwapIndex(ITEM_CHAIN, itemChainIndex, index)
-                    UI_SELECTED_ITEM = index
-                end
-
-            -- end
+            UiButtonImageBox('MOD/img/icon_arrow_down.png', 0,0, 1,1,1,0.8)
+            UiButtonHoverColor(0.5,0.5,0.5, 1)
+            if UiTextButton(' ', bw,bh) then
+                local index = GetTableNextIndex(ITEM_CHAIN, itemChainIndex)
+                ITEM_CHAIN = TableSwapIndex(ITEM_CHAIN, itemChainIndex, index)
+                UI_SELECTED_ITEM = index
+            end
 
         end UiPop()
-
 
         UiColor(ro,go,bo, ao)
         for i = 0, 4 do
