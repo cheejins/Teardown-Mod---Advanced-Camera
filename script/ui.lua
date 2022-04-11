@@ -10,28 +10,36 @@ scrolly = 0
 
 
 function drawItemListMenu()
-    local listH = 60
+
+    local listH = 50
     local w = UiWidth() - listH
     local h = listH
+
     if #ITEM_CHAIN >= 1 then
+
         do UiPush()
             for index, item in ipairs(ITEM_CHAIN) do
                 uiListItem(item.item.type, index, item, listH)
                 margin(0, listH)
             end
         end UiPop()
+
         do UiPush()
             for index, item in ipairs(ITEM_CHAIN) do
                 uiList_addItemDynamic(w,h, index)
                 margin(0, listH)
             end
         end UiPop()
+
     else
+
         do UiPush()
             margin(UiWidth()/2, h/2)
             uiList_addItem(1)
         end UiPop()
+
     end
+
 end
 
 function uiListItem(text, itemChainIndex, item, listH)
@@ -45,9 +53,14 @@ function uiListItem(text, itemChainIndex, item, listH)
         local bw = listH / 2
         local bh = listH / 2
 
-        local r,g,b,a = 1,1,1,0.75 -- Button solid color
+        local r,g,b,a = 0.6,0.6,0.6,1 -- Button solid color
         local ro,go,bo,ao = 1,1,1,0 -- Button outline color
 
+        -- Selected item.
+        if itemChainIndex == UI_SELECTED_ITEM then
+            ro,go,bo,ao = 1,1,1,1
+            r,g,b,a = 1,1,1,1
+        end
 
         -- Uninitiazlied item.
         if item.type == 'uninitialized' then
@@ -56,7 +69,6 @@ function uiListItem(text, itemChainIndex, item, listH)
             1 - oscillate(1.5)/2,
             0 - oscillate(1.5)/2
         end
-
 
         -- Invalid items
         local sequentialCameras =
@@ -71,12 +83,6 @@ function uiListItem(text, itemChainIndex, item, listH)
         end
 
 
-        -- Selected item.
-        if itemChainIndex == UI_SELECTED_ITEM then
-            ro,go,bo,ao = 0.5, 0.5, 1, 1
-        end
-
-
         -- Button base
         UiButtonImageBox('ui/common/box-solid-6.png', 10,10, r,g,b, a)
         if UiTextButton(' ', w,h) then
@@ -87,8 +93,9 @@ function uiListItem(text, itemChainIndex, item, listH)
         -- Left side
         do UiPush()
 
-            UiColor(0,0,0, 1)
             UiAlign('center middle')
+            UiColor(0,0,0, 1)
+
 
             margin(bw/1.5, bh)
             UiText(tostring(itemChainIndex)) -- Item number index.
@@ -96,12 +103,19 @@ function uiListItem(text, itemChainIndex, item, listH)
             margin(bw*1.5, 0)
             UiAlign('center middle')
 
+            if item.type == 'camera' and item.item.id == SELECTED_CAMERA then
+                UiColor(0.25,0.75,0.75, 1)
+            elseif item.type == 'event' and item.item.id == SELECTED_EVENT then
+                UiColor(0.25,0.75,0.75, 1)
+            end
             -- Icon: Item type
             if item.type == 'camera' then
                 UiImageBox('MOD/img/icon_camera.png', bw * 1.25, bh * 1.25, 0,0)
             elseif item.type == 'event' then
                 UiImageBox('MOD/img/icon_event.png', bw * 1.25, bh * 1.25, 0,0)
             end
+
+            UiColor(0,0,0, 1)
 
             UiAlign('left middle')
             margin(bw*1.5, 0)
@@ -121,7 +135,7 @@ function uiListItem(text, itemChainIndex, item, listH)
             UiAlign('center middle')
             UiColor(1,0,0, 1)
 
-            local mult = 1
+            local mult = 1.25
             if UiIsMouseInRect(bw*mult, bh*mult) then
                 mult = 1.25
             end
@@ -129,6 +143,17 @@ function uiListItem(text, itemChainIndex, item, listH)
             if UiTextButton(' ', bw * mult, bh * mult) then
                 deleteItem(ITEM_CHAIN, itemChainIndex)
             end
+
+            -- margin(-bw*1.5, 0)
+            -- local c = {0,0,0,1}
+            -- if UI_SELECTED_ITEM == itemChainIndex and RUN_CAMERAS then
+            --     c = {1,0,1,1}
+            -- end
+            -- UiButtonImageBox('MOD/img/icon_eye.png', 0,0, c[1],c[2],c[3],c[4])
+            -- if UiTextButton(' ', bw * mult, bh * mult) then
+            --     UI_SELECTED_ITEM = itemChainIndex
+            --     RUN_CAMERAS = not RUN_CAMERAS
+            -- end
 
         end UiPop()
 
@@ -178,7 +203,7 @@ function uiList_addItemDynamic(w,h, index)
 
             margin(0, h/3)
 
-            do UiPush()
+            do UiPush() -- Before selected item.
 
                 margin(w/2, 0)
                 uiList_addItem(index)
@@ -188,10 +213,10 @@ function uiList_addItemDynamic(w,h, index)
 
             end UiPop()
 
-            do UiPush()
+            do UiPush() -- After selected item.
 
                 margin(w/2,h)
-                uiList_addItem(index)
+                uiList_addItem(index + 1)
 
                 margin(45, 0)
                 uiList_duplicateItem(index)
@@ -212,6 +237,7 @@ function uiList_addItem(index)
         UiButtonImageBox('MOD/img/button_plus.png', 0,0, 1,1,1, 1)
         UiButtonHoverColor(1,1,1, 1)
         if UiTextButton('.', 40, 40) then
+            UI_SELECTED_ITEM = index
             createUninitializedItem(ITEM_CHAIN, index)
             UI_SELECTED_ITEM = index
         end
@@ -228,7 +254,9 @@ function uiList_duplicateItem(index)
         UiButtonImageBox('MOD/img/icon_duplicate.png', 0,0, 1,1,1, 1)
         UiButtonHoverColor(1,1,1, 1)
         if UiTextButton(' ', 40, 40) then
+            UI_SELECTED_ITEM = index
             duplicateItem(ITEM_CHAIN[index])
+            UI_SELECTED_ITEM = index
         end
 
     end UiPop()
@@ -248,6 +276,9 @@ function uiMod_Item(item)
         margin(0, 32)
         UiText(item.type .. ' type: ' .. item.item.type)
         margin(0, 32)
+        margin(0, 32)
+
+        ui_Mod_Camera(item)
 
     elseif item.type == 'event' then
 
@@ -255,6 +286,9 @@ function uiMod_Item(item)
         margin(0, 32)
         UiText(item.type .. ' type: ' .. item.item.type)
         margin(0, 32)
+        margin(0, 32)
+
+        ui_Mod_Event(item)
 
     end
 
@@ -375,12 +409,16 @@ function uiMod_UninitializedItem(tb, index)
 
                 local cam = createCameraObject(Transform(), itemSubType)
                 tb[index].item = cam
+                cam_replaceDef(tb[index].item)
+
                 table.insert(CAMERA_OBJECTS, tb[index].item)
 
             elseif itemType == 'event' then
 
                 local event = createEventObject(itemSubType)
                 tb[index].item = event
+                event_replaceDef(tb[index].item)
+
                 table.insert(EVENT_OBJECTS, tb[index].item)
 
             end
@@ -388,4 +426,107 @@ function uiMod_UninitializedItem(tb, index)
         end
 
     UiPop() end
+end
+
+
+function ui_Mod_Event(item)
+    do UiPush()
+
+        UiColor(0,0,0,1)
+
+        if createSlider('time', item.item.val, 'time', 's', 0, 100, UiWidth() - 200, 10, 1) then
+            event_replaceDef(item.item)
+        end
+        UiTranslate(0, 50)
+
+        if item.item.type == 'lerpConst' then
+
+            if createSlider('speed', item.item.val, 'speed', 'm/s', 0, 0.5, UiWidth() - 200, 10, 1) then
+                event_replaceDef(item.item)
+            end
+            UiTranslate(0, 50)
+
+        end
+
+    UiPop() end
+end
+
+
+function ui_Mod_Camera(item)
+    do UiPush()
+
+        UiColor(0,0,0,1)
+
+        local btnW = UiWidth()/3
+        local btnWPad = btnW - pad
+
+        UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
+        if UiTextButton('Set Camera View', btnWPad, 50) then
+        end
+        UiTranslate(btnW, 0)
+
+        UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
+        if UiTextButton(' ', btnWPad, 50) then
+        end
+        UiTranslate(btnW, 0)
+
+        UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
+        if UiTextButton(' ', btnWPad, 50) then
+        end
+        UiTranslate(btnW, 0)
+
+    UiPop() end
+end
+
+
+
+
+function createSlider(title, tb, key, valueText, min, max, w, h, round)
+
+    do UiPush()
+
+        local v = tb[key]
+
+        min = min or 0
+        max = max or 300
+
+        UiAlign('left middle')
+
+        -- Text header
+        UiColor(1,1,1, 1)
+        UiFont('regular.ttf', 24)
+        UiText(title)
+        UiTranslate(0, 24)
+
+        -- Slider BG
+        UiColor(0.4,0.4,0.4, 1)
+        local slW = w or 400
+        UiRect(slW, h or 10)
+
+        -- Convert to slider scale.
+        v = ((v-min) / (max-min)) * slW
+
+        -- Slider dot
+        UiColor(1,1,1, 1)
+        UiAlign('center middle')
+        -- v, done = UiSlider("ui/common/dot.png", "x", math.floor(v), 0, slW)
+        v, done = UiSlider("ui/common/dot.png", "x", v, 0, slW)
+
+        local val = (v/slW) * (max-min) + min -- Convert to true scale.
+        tb[key] = val
+
+        -- Slider value
+        do UiPush()
+            UiAlign('left middle')
+            UiTranslate(slW + 20, 0)
+            local decimals = ternary((v/slW) * (max-min) + min < 10, 3, 1)
+            UiText(sfn((v/slW) * (max-min) + min, decimals) .. ' ' .. (valueText or ''))
+        UiPop() end
+
+    UiPop() end
+
+    if done then
+        return true
+    end
+
 end

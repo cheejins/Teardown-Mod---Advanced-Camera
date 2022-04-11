@@ -69,13 +69,13 @@ function init()
     -- table.insert(ITEM_CHAIN, getItemByEventId(e2.id))
 
 
-    cam1 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
-    x = x + 2
+    cam1 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(0,0,0))), 'static')
+    x = x + 10
 
     e1 = instantiateEvent('wait')
 
-    cam2 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(x,0,0))), 'static')
-    x = x + 2
+    cam2 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(0,0,0))), 'static')
+    x = x + 10
 
     e2 = instantiateEvent('lerpConst')
 
@@ -95,13 +95,12 @@ end
 
 function runMod()
 
-    local cam = CAMERA_OBJECTS[SELECTED_CAMERA]
-    SELECTED_CAMERA_OBJECT = cam
-
     -- If there is at least one camera.
-    if #CAMERA_OBJECTS >= 1 then
+    if tableContainsComponentType(ITEM_CHAIN, 'camera') then
 
-        for key, cam in pairs(CAMERA_OBJECTS) do
+        local cam = getItemByCameraId(SELECTED_CAMERA).item
+
+        for key, cam in pairs(ITEM_CHAIN) do
 
             if cam.shape then
                 local camPos = GetPointOutOfShape(cam.shape, cam.relativePos)
@@ -120,6 +119,7 @@ function runMod()
 end
 
 function manageInput()
+
     if KEYS.initChain:pressed() then
         initializeItemChain()
     end
@@ -130,35 +130,29 @@ function manageInput()
 
 
     if KEYS.createCameraStatic:pressed() then
-        local item = getItemByCameraId(instantiateCamera(nil, 'static').id)
-        table.insert(ITEM_CHAIN, item)
+        getItemByCameraId(instantiateCamera(nil, 'static').id)
         beep()
     end
     if KEYS.createCameraLookey:pressed() then
-        local item = getItemByCameraId(moveCamera('orbit').id)
-        table.insert(ITEM_CHAIN, item)
+        getItemByCameraId(moveCamera('orbit').id)
         beep()
     end
     if KEYS.createCameraDynamic:pressed() then
-        local item = getItemByCameraId(dynamicCamera('relative').id)
-        table.insert(ITEM_CHAIN, item)
+        getItemByCameraId(dynamicCamera('relative').id)
         beep()
     end
 
 
     if KEYS.createEventWait:pressed() then
-        local item = getItemByEventId(instantiateEvent('wait').id)
-        table.insert(ITEM_CHAIN, item)
+        getItemByEventId(instantiateEvent('wait').id)
         beep()
     end
     if KEYS.createEventLerpTimed:pressed() then
-        local item = getItemByEventId(instantiateEvent('lerpTimed').id)
-        table.insert(ITEM_CHAIN, item)
+        getItemByEventId(instantiateEvent('lerpTimed').id)
         beep()
     end
     if KEYS.createEventLerpConst:pressed() then
-        local item = getItemByEventId(instantiateEvent('lerpConst').id)
-        table.insert(ITEM_CHAIN, item)
+        getItemByEventId(instantiateEvent('lerpConst').id)
         beep()
     end
 
@@ -184,19 +178,6 @@ function manageInput()
         beep()
     end
 
-
-    if InputPressed('n') then
-        local eventItem = getItemByEventId(SELECTED_EVENT)
-        local eventItemIndex = getItemIndex(ITEM_CHAIN, eventItem)
-        local nextCamItem = getNextCameraItem(eventItemIndex)
-        SELECTED_CAMERA = nextCamItem.item.id
-    end
-    if InputPressed('p') then
-        local eventItem = getItemByEventId(SELECTED_EVENT)
-        local eventItemIndex = getItemIndex(ITEM_CHAIN, eventItem)
-        local prevCamItem = getPrevCameraItem(eventItemIndex)
-        SELECTED_CAMERA = prevCamItem.item.id
-    end
 end
 
 function startWithTool()

@@ -10,7 +10,9 @@ function draw()
     UiColor(0,0,0,1)
 
     -- Debug
-    if db then drawCameraNumbers() end
+    -- if db then drawCameraNumbers() end
+    drawCameraNumbers()
+    debugCameraLines()
 
     -- Is wielding tool
     if TOOL:active() then
@@ -23,14 +25,14 @@ function draw()
                 margin(350, 10)
                 drawItemChain()
 
-                margin(400, 0)
-                drawItemObjects()
+                -- margin(400, 0)
+                -- drawItemObjects()
 
-                margin(400, 0)
-                drawCameraList()
+                -- margin(400, 0)
+                -- drawCameraList()
 
-                margin(400, 0)
-                drawEventList()
+                -- margin(400, 0)
+                -- drawEventList()
 
             UiPop() end
 
