@@ -1,14 +1,12 @@
 UI_SELECTED_ITEM = 1
 
--- typeTitles = {
---     lerpConst = 'Lerp Constant',
---     lerpTimed = 'Lerp Timed',
---     wait = 'Wait',
--- }
+UI_SET_CAMERA = false
+UI_SET_CAMERA_SHAPE = false
 
 scrolly = 0
 
 
+--- Draw the pane containing the list of items.
 function drawItemListMenu()
 
     local listH = 50
@@ -19,14 +17,14 @@ function drawItemListMenu()
 
         do UiPush()
             for index, item in ipairs(ITEM_CHAIN) do
-                uiListItem(item.item.type, index, item, listH)
+                uiList_Item(item.item.type, index, item, listH)
                 margin(0, listH)
             end
         end UiPop()
 
         do UiPush()
             for index, item in ipairs(ITEM_CHAIN) do
-                uiList_addItemDynamic(w,h, index)
+                uiList_dynamicButtons(w,h, index)
                 margin(0, listH)
             end
         end UiPop()
@@ -42,7 +40,8 @@ function drawItemListMenu()
 
 end
 
-function uiListItem(text, itemChainIndex, item, listH)
+-- Draw a single item in the list of items.
+function uiList_Item(text, itemChainIndex, item, listH)
     do UiPush()
 
         UiAlign('left top')
@@ -195,23 +194,26 @@ function uiListItem(text, itemChainIndex, item, listH)
     end UiPop()
 end
 
-function uiList_addItemDynamic(w,h, index)
+function uiList_dynamicButtons(w,h, index)
     do UiPush()
 
         margin(0, -h/3)
-        if UiIsMouseInRect(w, h * 1.5) then
+        UiColor(1,1,0, 0.5)
+        if UiIsMouseInRect(w, h * 1.75) then
 
             margin(0, h/3)
 
-            do UiPush() -- Before selected item.
+            if index == 1 then
+                do UiPush() -- Before selected item.
 
-                margin(w/2, 0)
-                uiList_addItem(index)
+                    margin(w/2, 0)
+                    uiList_addItem(index)
 
-                margin(45, 0)
-                uiList_duplicateItem(index)
+                    margin(45, 0)
+                    uiList_duplicateItem(index)
 
-            end UiPop()
+                end UiPop()
+            end
 
             do UiPush() -- After selected item.
 
@@ -222,7 +224,6 @@ function uiList_addItemDynamic(w,h, index)
                 uiList_duplicateItem(index)
 
             end UiPop()
-
         end
 
     end UiPop()
@@ -279,6 +280,10 @@ function uiMod_Item(item)
         margin(0, 32)
 
         ui_Mod_Camera(item)
+
+        DebugWatch('item.item.shape', item.item.shape)
+        DebugWatch('item.item.relativePos', item.item.relativePos)
+        DebugWatch('item.item.relativeTarget', item.item.relativeTarget)
 
     elseif item.type == 'event' then
 
@@ -407,7 +412,7 @@ function uiMod_UninitializedItem(tb, index)
 
             if itemType == 'camera' then
 
-                local cam = createCameraObject(Transform(), itemSubType)
+                local cam = createCameraObject(GetCameraTransform(), itemSubType)
                 tb[index].item = cam
                 cam_replaceDef(tb[index].item)
 
@@ -462,11 +467,13 @@ function ui_Mod_Camera(item)
 
         UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
         if UiTextButton('Set Camera View', btnWPad, 50) then
+            UI_SET_CAMERA = true
         end
         UiTranslate(btnW, 0)
 
         UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-        if UiTextButton(' ', btnWPad, 50) then
+        if UiTextButton('Set Sticky Object', btnWPad, 50) then
+            UI_SET_CAMERA_SHAPE = true
         end
         UiTranslate(btnW, 0)
 
@@ -478,55 +485,64 @@ function ui_Mod_Camera(item)
     UiPop() end
 end
 
-
-
-
-function createSlider(title, tb, key, valueText, min, max, w, h, round)
-
+function ui_Mod_Camera_Set(item)
     do UiPush()
 
-        local v = tb[key]
+        margin(UiCenter(), UiMiddle() + 200)
+        UiText('Left click to set camera position.')
+        margin(0,50)
+        UiText('Right click to cancel.')
 
-        min = min or 0
-        max = max or 300
-
-        UiAlign('left middle')
-
-        -- Text header
-        UiColor(1,1,1, 1)
-        UiFont('regular.ttf', 24)
-        UiText(title)
-        UiTranslate(0, 24)
-
-        -- Slider BG
-        UiColor(0.4,0.4,0.4, 1)
-        local slW = w or 400
-        UiRect(slW, h or 10)
-
-        -- Convert to slider scale.
-        v = ((v-min) / (max-min)) * slW
-
-        -- Slider dot
-        UiColor(1,1,1, 1)
-        UiAlign('center middle')
-        -- v, done = UiSlider("ui/common/dot.png", "x", math.floor(v), 0, slW)
-        v, done = UiSlider("ui/common/dot.png", "x", v, 0, slW)
-
-        local val = (v/slW) * (max-min) + min -- Convert to true scale.
-        tb[key] = val
-
-        -- Slider value
-        do UiPush()
-            UiAlign('left middle')
-            UiTranslate(slW + 20, 0)
-            local decimals = ternary((v/slW) * (max-min) + min < 10, 3, 1)
-            UiText(sfn((v/slW) * (max-min) + min, decimals) .. ' ' .. (valueText or ''))
-        UiPop() end
+        if InputPressed('lmb') then
+            item.item.tr = GetCameraTransform()
+            cam_replaceDef(item.item)
+            UI_SHOW_OPTIONS = true
+            UI_SET_CAMERA = false
+        elseif InputPressed('rmb') then
+            UI_SHOW_OPTIONS = true
+            UI_SET_CAMERA = false
+        else
+            UI_SHOW_OPTIONS = false
+        end
 
     UiPop() end
+end
 
-    if done then
-        return true
-    end
+function ui_Mod_Camera_SetShape(item)
+    do UiPush()
 
+        margin(UiCenter(), UiMiddle() + 200)
+        UiText('Left click to set object.')
+        margin(0,50)
+        UiText('Right click to cancel.')
+
+        local h, p, s = RaycastFromTransform(GetCameraTransform(), 400)
+        if h then
+            DrawShapeOutline(s, 1,1,1, 1)
+            DrawShapeHighlight(s, 0.25)
+        end
+
+        if h and InputPressed('lmb') then
+
+            item.item.shape = s
+            item.item.relativePos = GetPointInsideShape(s, GetCameraTransform().pos)
+            item.item.relativeTarget = GetPointInsideShape(s, p)
+
+            cam_replaceDef(item.item)
+
+            UI_SHOW_OPTIONS = true
+            UI_SET_CAMERA_SHAPE = false
+
+        elseif InputPressed('rmb') then
+
+            UI_SHOW_OPTIONS = true
+            UI_SET_CAMERA_SHAPE = false
+
+        else
+
+            UI_SHOW_OPTIONS = false
+
+        end
+
+    UiPop() end
 end

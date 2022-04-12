@@ -41,8 +41,8 @@ function createEventObject(type)
         val = {
             time = 2 + math.random()*2,
             -- speed = ternary(type == 'lerpConst', 0.01, 0),
-            speed = 0.05,
-            dist = 1,
+            speed = 0,
+            dist = 0,
         },
 
     }

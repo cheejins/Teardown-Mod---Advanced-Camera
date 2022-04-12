@@ -65,14 +65,24 @@ end
 function duplicateItem(_item)
 
     local item = instantiateItem(_item.type)
-
     item.item = DeepCopy(_item.item)
+
     if item.type == 'camera' then
+
         CAMERA_IDS = CAMERA_IDS + 1
         item.item.id = CAMERA_IDS
+        cam_replaceDef(item.item)
+
+        table.insert(CAMERA_OBJECTS, item.item)
+
     elseif item.type == 'event' then
+
         EVENT_IDS = EVENT_IDS + 1
         item.item.id = EVENT_IDS
+        event_replaceDef(item.item)
+
+        table.insert(EVENT_OBJECTS, item.item)
+
     end
 
 end

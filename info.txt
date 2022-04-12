@@ -1,7 +1,7 @@
-name = Adv Cam
-author =
-description = Informative description here
-tags=
+name = Advanced Camera
+author = Cheejins and GGProGaming
+description = [noupload] Set up cameras and create transitions between them. Made for YouTubers.
+tags= Tool, Gameplay
 
 # If description contains [noupload] the description on Steam workshop will not be overwritten.
 # Available tags (comma-separated):

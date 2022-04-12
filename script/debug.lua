@@ -9,6 +9,9 @@ function debugMod()
     dbw('SELECTED_CAMERA', SELECTED_CAMERA)
     dbw('SELECTED_EVENT', SELECTED_EVENT)
 
+    dbw('UI_SHOW_OPTIONS', UI_SHOW_OPTIONS)
+    dbw('UI_SET_CAMERA', UI_SET_CAMERA)
+
 end
 
 function debugCameraLines()

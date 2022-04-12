@@ -25,14 +25,14 @@ function draw()
                 margin(350, 10)
                 drawItemChain()
 
-                -- margin(400, 0)
-                -- drawItemObjects()
+                margin(400, 0)
+                drawItemObjects()
 
-                -- margin(400, 0)
-                -- drawCameraList()
+                margin(400, 0)
+                drawCameraList()
 
-                -- margin(400, 0)
-                -- drawEventList()
+                margin(400, 0)
+                drawEventList()
 
             UiPop() end
 
@@ -44,8 +44,16 @@ function draw()
         drawMainUI()
     end
 
-    -- local videoDesc = 'This video demonstrates the way different types of events can be inserted into the item chain. The two events right now are "wait" and "lerp". Lerp is the event which move between the current and next camera. More events and event modifications are on the way'
+    -- Update component properties.
+    uiSetFont(48)
+    if UI_SET_CAMERA then
+        ui_Mod_Camera_Set(getUiSelectedItem())
+    elseif UI_SET_CAMERA_SHAPE then
+        ui_Mod_Camera_SetShape(getUiSelectedItem())
+    end
 
+
+    -- local videoDesc = 'This video demonstrates the way different types of events can be inserted into the item chain. The two events right now are "wait" and "lerp". Lerp is the event which move between the current and next camera. More events and event modifications are on the way'
     -- drawVideoDesc(videoDesc)
 
 end
@@ -107,7 +115,8 @@ function drawMainUI()
             scrolly = clamp(scrolly, 0, #ITEM_CHAIN * 50)
 
             UiColor(0,0,0, 1)
-            UiWindow(UiWidth(), UiHeight() - 100, true)
+            -- UiWindow(UiWidth(), UiHeight() - 100, true)
+            UiWindow(UiWidth(), UiHeight() - 100)
             margin(0, -scrolly)
             drawItemListMenu()
 

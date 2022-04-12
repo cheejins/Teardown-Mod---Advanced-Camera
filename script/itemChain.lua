@@ -71,3 +71,11 @@ function clearAllObjects()
     EVENT_OBJECTS = {}
     CAMERA_OBJECTS = {}
 end
+
+function setUiSelectedItem(item)
+    UI_SELECTED_ITEM = getItemIndex(ITEM_CHAIN, item)
+end
+
+function getUiSelectedItem()
+    return ITEM_CHAIN[UI_SELECTED_ITEM]
+end

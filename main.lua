@@ -98,7 +98,7 @@ function runMod()
     -- If there is at least one camera.
     if tableContainsComponentType(ITEM_CHAIN, 'camera') then
 
-        local cam = getItemByCameraId(SELECTED_CAMERA).item
+        local cam = getCameraById(SELECTED_CAMERA)
 
         for key, cam in pairs(ITEM_CHAIN) do
 
