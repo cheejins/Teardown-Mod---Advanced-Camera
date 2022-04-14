@@ -32,32 +32,6 @@ function drawControls()
 
 end
 
-function drawCameraNumbers()
-    for key, camera in pairs(CAMERA_OBJECTS) do -- Draw camera numbers
-
-        if TransformToLocalPoint(GetCameraTransform(), camera.tr.pos)[3] < 0 then
-
-            local x,y = UiWorldToPixel(camera.tr.pos)
-
-            do UiPush()
-                margin(x,y)
-                UiText(camera.id)
-            UiPop() end
-
-        end
-
-    end
-
-    if RUN_ITEM_CHAIN then
-        do UiPush()
-            margin(UiCenter(), UiMiddle())
-            UiColor(1,1,1,1)
-            UiFont('regular.ttf', 24)
-        UiPop() end
-    end
-
-end
-
 function drawVideoDesc(text)
 
     if not text then
@@ -65,21 +39,21 @@ function drawVideoDesc(text)
     end
 
     UiAlign('center middle')
-    UiFont('bold.ttf', 24)
+    UiFont('bold.ttf', 30)
     UiColor(0.75,0.75,0.75, 0.75)
+
     do UiPush()
-        local rectW = 300
-        local rectH = 250
-        margin(UiCenter(), rectH/2)
+        local rectW = 400
+        local rectH = 350
+        margin(rectW/1.5, UiHeight() - rectH/1.5)
         UiColor(0.5,0.5,1, 0.5)
         UiRect(rectW + 50, rectH)
         UiWordWrap(rectW)
-        UiColor(0,0,0, 1)
+        UiColor(1,1,1, 1)
         UiText(text)
     UiPop() end
+
 end
-
-
 
 function drawItemChain()
 
@@ -92,7 +66,7 @@ function drawItemChain()
         UiColor(0,0,0, 0.9)
 
         -- Background
-        UiRect(350, 750)
+        UiRect(400, 750)
 
         margin(20, 20)
         UiColor(1,1,1, 1)

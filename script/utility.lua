@@ -390,7 +390,10 @@ do
         orange = Vec(1,0.5,0),
     }
     function DrawDot(pos, l, w, r, g, b, a, dt)
-        local dot = LoadSprite("ui/hud/dot-small.png")
+        DrawImage("ui/hud/dot-small.png", pos, l, w, r, g, b, a, dt)
+    end
+    function DrawImage(path, pos, l, w, r, g, b, a, dt)
+        local dot = LoadSprite(path)
         local spriteRot = QuatLookAt(pos, GetCameraTransform().pos)
         local spriteTr = Transform(pos, spriteRot)
         if dt == nil then dt = true end

@@ -50,21 +50,9 @@ function deleteItem(tb, index)
     table.remove(tb, index)
 end
 
+function duplicateItem(_item, index)
 
-function createUninitializedItem(tb, index)
-
-    local event = instantiateEvent('uninitialized')
-    local item = getItemByEventId(event.id)
-    item.type = 'uninitialized'
-
-    table.insert(tb, index, item)
-    table.remove(tb, #tb)
-
-end
-
-function duplicateItem(_item)
-
-    local item = instantiateItem(_item.type)
+    local item = createItemObject(_item.type)
     item.item = DeepCopy(_item.item)
 
     if item.type == 'camera' then
@@ -82,6 +70,55 @@ function duplicateItem(_item)
         event_replaceDef(item.item)
 
         table.insert(EVENT_OBJECTS, item.item)
+
+    end
+
+    table.insert(ITEM_CHAIN, index, item)
+
+end
+
+
+function createUninitializedItem(tb, index)
+
+    local event = instantiateEvent('uninitialized')
+    local item = getItemByEventId(event.id)
+    item.type = 'uninitialized'
+
+    table.insert(tb, index, item)
+    table.remove(tb, #tb)
+
+end
+
+function convertUninitializedItem(tb, index, itemType, itemSubType)
+
+    local eventId = tb[index].item.id -- Delete temp event.
+    local e, i = getEventById(eventId)
+    table.remove(EVENT_OBJECTS, i) -- Delete temp event.
+
+    tb[index].type = itemType
+
+    if itemType == 'camera' then
+
+        local cam = createCameraObject(GetCameraTransform(), itemSubType)
+        tb[index].item = cam
+
+        cam_replaceDef(tb[index].item)
+
+        table.insert(CAMERA_OBJECTS, tb[index].item)
+
+    elseif itemType == 'event' then
+
+        local event = createEventObject(itemSubType)
+        tb[index].item = event
+
+
+        if itemSubType == 'lerpConst' then
+            event.val.speed = 0.1
+        end
+
+        event_replaceDef(tb[index].item)
+
+        table.insert(EVENT_OBJECTS, tb[index].item)
 
     end
 

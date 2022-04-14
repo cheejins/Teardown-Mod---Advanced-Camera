@@ -63,3 +63,20 @@ function uiSetFont(fs)
     UiTextShadow(0,0,0,1, 0.5,0.5)
     UiColor(1,1,1, 1)
 end
+
+function uiShowMessage(stringsTable)
+    do UiPush()
+
+        margin(UiCenter(), UiMiddle() + 200)
+
+        for index, str in ipairs(stringsTable) do
+            UiText(str)
+            margin(0,50)
+        end
+
+    UiPop() end
+end
+
+function UiSetColor(c, a)
+    UiColor(c[1], c[2], c[3], a or 1)
+end

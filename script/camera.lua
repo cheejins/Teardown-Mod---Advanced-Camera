@@ -6,7 +6,6 @@ CAMERA_IDS = 0
 
 RUN_CAMERAS = false
 
-
 cameraTargetPos = Vec()
 cameraTargetRot = Quat()
 
@@ -16,19 +15,11 @@ function createCameraObject(tr, type)
     CAMERA_IDS = CAMERA_IDS + 1
 
     local cam = {
-
         id = CAMERA_IDS,
         type = type,
 
         tr = tr,
-
-        entity = {
-            body = nil,
-            relTr = nil
-        },
-
-        zoom = 0, -- Meters
-
+        viewTr = tr,
     }
 
     return DeepCopy(cam)
@@ -51,7 +42,6 @@ function instantiateCamera(tr, type)
 end
 
 
-
 function cam_reset(self)
     for key, value in pairs(self) do
         if key ~= 'def' then -- self.def does not have a def key.
@@ -62,64 +52,40 @@ end
 function cam_replaceDef(self) -- Replace the cam.def with the current version of cam.
     self.def = DeepCopy(self)
 end
----@param id number
----@return table tb - Camera object.
----@return number i -- Index of the camera in the table.
-function getCameraById(id)
-    for i = 1, #CAMERA_OBJECTS do
-        if CAMERA_OBJECTS[i].id == id then
-            return CAMERA_OBJECTS[i], i
+
+
+
+function setCameraRelativeShape(cam, shape)
+    cam.shape = shape
+    cam.relativeTr = TransformToLocalTransform(GetShapeWorldTransform(shape), cam.tr)
+end
+
+function manageCameras()
+
+    if tableContainsComponentType(ITEM_CHAIN, 'camera') then -- If there is at least one camera.
+
+        local camera = getCameraById(SELECTED_CAMERA)
+
+        for index, item in ipairs(ITEM_CHAIN) do
+
+            local cam = item.item
+
+            if isUsingTool then
+                if item.item.shape and item.id == UI_SELECTED_ITEM then
+                    drawShape(item.item.shape)
+                end
+            end
+
+            if cam.shape then
+                cam.tr = TransformToParentTransform(GetShapeWorldTransform(cam.shape), cam.relativeTr) -- Keep the tr relative to the shape's tr.
+            end
+
+            if cam ~= camera then
+                cam.viewTr = TransformCopy(cam.tr) -- Adhere viewTr to tr. The item chain is called after this and uses viewTr how it needs.
+            end
+
         end
+
     end
-end
 
-
-
-
-function GetCamAimPos()
-    local b = GetCameraTransform()
-    local dr = TransformToParentVec(b, {0, 0, -1})
-	local hit, dist, normal, shape = QueryRaycast(b.pos, dr, 10)
-
-    if hit then
-        local hitPoint = VecAdd(b.pos, VecScale(dr, dist))
-    end
-end
-
--- Create a lookey camera
-function moveCamera(type)
-
-    local hit, hitPoint, shape = RaycastFromTransform(GetCameraTransform(), 500)
-    local camObj = createCameraObject(Transform(hitPoint), type)
-    camObj.def = DeepCopy(camObj) -- Cloned camera used for the camera's default values.
-
-	camObj.shape = shape
-	camObj.relativePos = GetPointInsideShape(shape, GetCameraTransform().pos)
-	camObj.relativeTarget = GetPointInsideShape(shape, hitPoint)
-    table.insert(CAMERA_OBJECTS, camObj)
-
-    -- Wrap the camera in a new item object.
-    local item = instantiateItem('camera')
-    item.item = CAMERA_OBJECTS[#CAMERA_OBJECTS]
-
-    return CAMERA_OBJECTS[#CAMERA_OBJECTS]
-end
-
--- Create a moveable camera
-function dynamicCamera(type)
-
-    local hit, hitPoint, shape = RaycastFromTransform(GetCameraTransform(), 500)
-    local camObj = createCameraObject(Transform(hitPoint), type)
-    camObj.def = DeepCopy(camObj) -- Cloned camera used for the camera's default values.
-
-	camObj.shape = shape
-	camObj.relativePos = GetPointInsideShape(shape, GetCameraTransform().pos)
-	camObj.relativeTarget = GetPointInsideShape(shape, hitPoint)
-    table.insert(CAMERA_OBJECTS, camObj)
-
-    -- Wrap the camera in a new item object.
-    local item = instantiateItem('camera')
-    item.item = CAMERA_OBJECTS[#CAMERA_OBJECTS]
-
-    return CAMERA_OBJECTS[#CAMERA_OBJECTS]
 end

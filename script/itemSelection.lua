@@ -1,8 +1,4 @@
----Get an item based on its component type and component id.
----@param type string 'camera' or 'event'
----@param id integer ID number of a camera or event.
----@return table -- Item object
-function getItemByTypeId(type, id)
+function getItemByComponentId(type, id)
     for i = 1, #ITEM_CHAIN do
 
         local item = ITEM_CHAIN[i]
@@ -13,8 +9,8 @@ function getItemByTypeId(type, id)
 
     end
 end
-function getItemByCameraId(camera_id) return getItemByTypeId('camera', camera_id) end
-function getItemByEventId(event_id) return getItemByTypeId('event', event_id) end
+function getItemByCameraId(camera_id) return getItemByComponentId('camera', camera_id) end
+function getItemByEventId(event_id) return getItemByComponentId('event', event_id) end
 
 
 
@@ -23,6 +19,21 @@ function getSelectedCameraItem() return getItemByCameraId(SELECTED_CAMERA) end
 function getSelectedEventItem() return getItemByEventId(SELECTED_EVENT) end
 function setSelectedCameraId(camera_id) SELECTED_CAMERA = camera_id end
 function setSelectedEventId(event_id) SELECTED_EVENT = event_id end
+
+function getCameraById(id)
+    for i = 1, #CAMERA_OBJECTS do
+        if CAMERA_OBJECTS[i].id == id then
+            return CAMERA_OBJECTS[i], i
+        end
+    end
+end
+function getEventById(id)
+    for i = 1, #EVENT_OBJECTS do
+        if EVENT_OBJECTS[i].id == id then
+            return EVENT_OBJECTS[i], i
+        end
+    end
+end
 
 
 
@@ -92,4 +103,12 @@ function tableContainsComponentType(table, type) -- Check if ITEM_CHAIN contains
         end
     end
     return false
+end
+
+
+function setUiSelectedItem(item)
+    UI_SELECTED_ITEM = getItemIndex(ITEM_CHAIN, item)
+end
+function getUiSelectedItem()
+    return ITEM_CHAIN[UI_SELECTED_ITEM]
 end

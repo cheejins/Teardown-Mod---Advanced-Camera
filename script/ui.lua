@@ -15,6 +15,7 @@ function drawItemListMenu()
 
     if #ITEM_CHAIN >= 1 then
 
+        -- List items
         do UiPush()
             for index, item in ipairs(ITEM_CHAIN) do
                 uiList_Item(item.item.type, index, item, listH)
@@ -22,6 +23,7 @@ function drawItemListMenu()
             end
         end UiPop()
 
+        -- Draw dynamic list buttons.
         do UiPush()
             for index, item in ipairs(ITEM_CHAIN) do
                 uiList_dynamicButtons(w,h, index)
@@ -31,6 +33,7 @@ function drawItemListMenu()
 
     else
 
+        -- No items = draw add button.
         do UiPush()
             margin(UiWidth()/2, h/2)
             uiList_addItem(1)
@@ -39,6 +42,7 @@ function drawItemListMenu()
     end
 
 end
+
 
 -- Draw a single item in the list of items.
 function uiList_Item(text, itemChainIndex, item, listH)
@@ -103,9 +107,9 @@ function uiList_Item(text, itemChainIndex, item, listH)
             UiAlign('center middle')
 
             if item.type == 'camera' and item.item.id == SELECTED_CAMERA then
-                UiColor(0.25,0.75,0.75, 1)
+                UiColor(0,0,1, 1)
             elseif item.type == 'event' and item.item.id == SELECTED_EVENT then
-                UiColor(0.25,0.75,0.75, 1)
+                UiColor(0,0,1, 1)
             end
             -- Icon: Item type
             if item.type == 'camera' then
@@ -190,7 +194,6 @@ function uiList_Item(text, itemChainIndex, item, listH)
             end UiPop()
         end
 
-
     end UiPop()
 end
 
@@ -256,293 +259,9 @@ function uiList_duplicateItem(index)
         UiButtonHoverColor(1,1,1, 1)
         if UiTextButton(' ', 40, 40) then
             UI_SELECTED_ITEM = index
-            duplicateItem(ITEM_CHAIN[index])
+            duplicateItem(ITEM_CHAIN[index], index)
             UI_SELECTED_ITEM = index
         end
 
     end UiPop()
-end
-
-
-
-function uiMod_Item(item)
-
-    if item.type == 'uninitialized' then
-
-        uiMod_UninitializedItem(ITEM_CHAIN, UI_SELECTED_ITEM)
-
-    elseif item.type == 'camera' then
-
-        UiText('type: ' .. item.type)
-        margin(0, 32)
-        UiText(item.type .. ' type: ' .. item.item.type)
-        margin(0, 32)
-        margin(0, 32)
-
-        ui_Mod_Camera(item)
-
-        DebugWatch('item.item.shape', item.item.shape)
-        DebugWatch('item.item.relativePos', item.item.relativePos)
-        DebugWatch('item.item.relativeTarget', item.item.relativeTarget)
-
-    elseif item.type == 'event' then
-
-        UiText('type: ' .. item.type)
-        margin(0, 32)
-        UiText(item.type .. ' type: ' .. item.item.type)
-        margin(0, 32)
-        margin(0, 32)
-
-        ui_Mod_Event(item)
-
-    end
-
-end
-
-function uiMod_UninitializedItem(tb, index)
-    do UiPush()
-
-        local fs = 24
-        local btnW = UiCenter()
-        local btnH = 80
-
-        itemType = nil
-        itemSubType = nil
-
-        UiFont('regular.ttf', fs)
-        UiAlign('left top')
-
-        do UiPush()
-            margin(UiCenter(), fs*3)
-            UiAlign('center top')
-            UiFont('regular.ttf', fs*1.25)
-            UiText('Select an item to create...')
-        UiPop() end
-
-
-        margin(0, fs*4)
-        do UiPush()
-            margin(0, fs)
-            UiText('Cameras:')
-
-            UiColor(0,0,0, 1)
-
-            do UiPush()
-                margin(pad/4, fs*1.5)
-                UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-                if UiTextButton('Static', btnW - pad, btnH - pad) then
-                    itemType = 'camera'
-                    itemSubType = 'static'
-                end
-                margin(btnW, 0)
-                UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-                if UiTextButton('Relative', btnW - pad, btnH - pad) then
-                    itemType = 'camera'
-                    itemSubType = 'relative'
-                end
-            UiPop() end
-
-            margin(0, fs*3)
-            do UiPush()
-                margin(pad/4, fs*1.5)
-                UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-                if UiTextButton('Orbit', btnW - pad, btnH - pad) then
-                    itemType = 'camera'
-                    itemSubType = 'orbit'
-                end
-                -- margin(btnW, 0)
-                -- UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-                -- if UiTextButton(' ', btnW - pad, btnH - pad) then
-                --     itemType = 'camera'
-                --     itemSubType = ''
-                -- end
-            UiPop() end
-
-        UiPop() end
-
-
-        margin(0, fs*2 + btnH*2)
-        do UiPush()
-            margin(0, fs*1.5)
-            UiText('Event:')
-
-            UiColor(0,0,0, 1)
-
-
-            margin(pad/4, fs*1.5)
-            do UiPush()
-                UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-                if UiTextButton('Wait', btnW - pad, btnH - pad) then
-                    itemType = 'event'
-                    itemSubType = 'wait'
-                end
-                -- margin(btnW, 0)
-                -- UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-                -- if UiTextButton('idk yet', btnW - pad, btnH - pad) then
-                --     -- itemType = 'event'
-                --     -- itemSubType = ''
-                -- end
-            UiPop() end
-
-
-            margin(0, fs*3)
-            do UiPush()
-                UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-                if UiTextButton('Lerp Timed', btnW - pad, btnH - pad) then
-                    itemType = 'event'
-                    itemSubType = 'lerpTimed'
-                end
-                margin(btnW, 0)
-                UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-                if UiTextButton('Lerp Const', btnW - pad, btnH - pad) then
-                    itemType = 'event'
-                    itemSubType = 'lerpConst'
-                end
-            UiPop() end
-
-        UiPop() end
-
-        if itemType then
-
-            local eventId = tb[index].item.id -- Delete temp event.
-            local e, i = getEventById(eventId)
-            table.remove(EVENT_OBJECTS, i) -- Delete temp event.
-
-            tb[index].type = itemType
-
-            if itemType == 'camera' then
-
-                local cam = createCameraObject(GetCameraTransform(), itemSubType)
-                tb[index].item = cam
-                cam_replaceDef(tb[index].item)
-
-                table.insert(CAMERA_OBJECTS, tb[index].item)
-
-            elseif itemType == 'event' then
-
-                local event = createEventObject(itemSubType)
-                tb[index].item = event
-                event_replaceDef(tb[index].item)
-
-                table.insert(EVENT_OBJECTS, tb[index].item)
-
-            end
-
-        end
-
-    UiPop() end
-end
-
-
-function ui_Mod_Event(item)
-    do UiPush()
-
-        UiColor(0,0,0,1)
-
-        if createSlider('time', item.item.val, 'time', 's', 0, 100, UiWidth() - 200, 10, 1) then
-            event_replaceDef(item.item)
-        end
-        UiTranslate(0, 50)
-
-        if item.item.type == 'lerpConst' then
-
-            if createSlider('speed', item.item.val, 'speed', 'm/s', 0, 0.5, UiWidth() - 200, 10, 1) then
-                event_replaceDef(item.item)
-            end
-            UiTranslate(0, 50)
-
-        end
-
-    UiPop() end
-end
-
-
-function ui_Mod_Camera(item)
-    do UiPush()
-
-        UiColor(0,0,0,1)
-
-        local btnW = UiWidth()/3
-        local btnWPad = btnW - pad
-
-        UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-        if UiTextButton('Set Camera View', btnWPad, 50) then
-            UI_SET_CAMERA = true
-        end
-        UiTranslate(btnW, 0)
-
-        UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-        if UiTextButton('Set Sticky Object', btnWPad, 50) then
-            UI_SET_CAMERA_SHAPE = true
-        end
-        UiTranslate(btnW, 0)
-
-        UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 1,1,1, 1)
-        if UiTextButton(' ', btnWPad, 50) then
-        end
-        UiTranslate(btnW, 0)
-
-    UiPop() end
-end
-
-function ui_Mod_Camera_Set(item)
-    do UiPush()
-
-        margin(UiCenter(), UiMiddle() + 200)
-        UiText('Left click to set camera position.')
-        margin(0,50)
-        UiText('Right click to cancel.')
-
-        if InputPressed('lmb') then
-            item.item.tr = GetCameraTransform()
-            cam_replaceDef(item.item)
-            UI_SHOW_OPTIONS = true
-            UI_SET_CAMERA = false
-        elseif InputPressed('rmb') then
-            UI_SHOW_OPTIONS = true
-            UI_SET_CAMERA = false
-        else
-            UI_SHOW_OPTIONS = false
-        end
-
-    UiPop() end
-end
-
-function ui_Mod_Camera_SetShape(item)
-    do UiPush()
-
-        margin(UiCenter(), UiMiddle() + 200)
-        UiText('Left click to set object.')
-        margin(0,50)
-        UiText('Right click to cancel.')
-
-        local h, p, s = RaycastFromTransform(GetCameraTransform(), 400)
-        if h then
-            DrawShapeOutline(s, 1,1,1, 1)
-            DrawShapeHighlight(s, 0.25)
-        end
-
-        if h and InputPressed('lmb') then
-
-            item.item.shape = s
-            item.item.relativePos = GetPointInsideShape(s, GetCameraTransform().pos)
-            item.item.relativeTarget = GetPointInsideShape(s, p)
-
-            cam_replaceDef(item.item)
-
-            UI_SHOW_OPTIONS = true
-            UI_SET_CAMERA_SHAPE = false
-
-        elseif InputPressed('rmb') then
-
-            UI_SHOW_OPTIONS = true
-            UI_SET_CAMERA_SHAPE = false
-
-        else
-
-            UI_SHOW_OPTIONS = false
-
-        end
-
-    UiPop() end
 end

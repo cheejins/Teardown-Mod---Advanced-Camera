@@ -4,12 +4,6 @@
 EVENT_OBJECTS = {}
 EVENT_IDS = 0
 
---[[
-    EVENT TYPES
-        wait
-        lerpConst
-        lerpTimed
-]]
 
 function createEventObject(type)
 
@@ -78,73 +72,44 @@ end
 
 
 
----@param id number
----@return table tb - Camera object.
----@return number i -- Index of the camera in the table.
-function getEventById(id)
-    for i = 1, #EVENT_OBJECTS do
-        if EVENT_OBJECTS[i].id == id then
-            return EVENT_OBJECTS[i], i
-        end
+function waitCamera(cam)
+    if cam.shape then
+        cam.viewTr = TransformToParentTransform(GetShapeWorldTransform(cam.shape), cam.relativeTr) -- Keep the tr relative to the shape's tr.
     end
 end
-
-
-
-
-function lerpCameraTimed(event, camMaster, camNext)
+function lerpCamera(event, camMaster, camNext)
 
     local lerpFraction = (event.def.val.time - gtZero(event.val.time)) / event.def.val.time
 
-    camMaster.tr.pos = VecLerp(camMaster.def.tr.pos, camNext.def.tr.pos, lerpFraction)
-    camMaster.tr.rot = QuatSlerp(camMaster.def.tr.rot, camNext.def.tr.rot, lerpFraction)
-
-end
-
-function lerpCameraConst(event, camMaster, camNext)
-
-    local speed = event.val.speed
-    local camDist = VecDist(camMaster.tr.pos, camNext.tr.pos)
-    local camDistDef = VecDist(camMaster.def.tr.pos, camNext.def.tr.pos)
-
-    event.val.time = camDist / speed / 60
-
-    if camDist <= speed then
-        event.status.done = true
+    if event.val.time <= 0 then
+        event.status.done = true -- Camera has reached its target
     end
 
-    local lerpFraction = (camDistDef - camDist) / camDistDef
+    if event.type == 'lerpTimed' then
 
-    camMaster.tr.pos = VecApproach(camMaster.tr.pos, camNext.tr.pos, speed)
-    camMaster.tr.rot = QuatSlerp(camMaster.def.tr.rot, camNext.tr.rot, lerpFraction)
+        event.val.time = event.val.time - GetTimeStep()
 
-    -- Slerp 0.5 between def-tr and nextdef-nexttr
+        camMaster.viewTr.pos = VecLerp(camMaster.tr.pos, camNext.tr.pos, lerpFraction)
+        camMaster.viewTr.rot = QuatSlerp(camMaster.tr.rot, camNext.tr.rot, lerpFraction)
+
+    elseif event.type == 'lerpConst' then
+
+        local speed = event.val.speed
+        local dist = VecDist(camMaster.viewTr.pos, camNext.tr.pos)
+
+        local time = dist / speed / 60
+        event.val.time = time
+
+        local defDist = VecDist(camMaster.tr.pos, camNext.tr.pos)
+        local lerpFraction = (defDist - dist) / defDist
+
+        camMaster.viewTr.pos = VecApproach(camMaster.viewTr.pos, camNext.tr.pos, event.val.speed)
+        camMaster.viewTr.rot = QuatSlerp(camMaster.tr.rot, camNext.tr.rot, lerpFraction)
+
+        if dist <= speed then
+            event.status.done = true -- Camera has reached its target
+        end
+
+    end
 
 end
-
-
-
--- function event_set_wait(self, time)
---     self.val.time = time
---     self.type = 'Wait'
---     event_replaceDef(self)
--- end
--- function event_set_trigger(self, time)
---     self.type = 'Trigger'
---     event_replaceDef(self)
--- end
--- --- Switch the camera immeadiatly.
--- function event_set_cameraSwitch(self, time)
---     self.type = 'Switch'
---     event_replaceDef(self)
--- end
--- --- Lerp camera at a constant speed regardless of time.
--- function event_set_cameraLerp_const(self, speed)
---     self.type = 'LerpConst'
---     event_replaceDef(self)
--- end
--- --- Lerp camera over a specific time period.
--- function event_set_cameraLerp_timed(self, time)
---     self.type = 'LerpTimed'
---     event_replaceDef(self)
--- end

@@ -1,6 +1,5 @@
 function debugMod()
 
-    -- dbw('#ITEM_OBJECTS', #ITEM_OBJECTS)
     dbw('#CAMERA_OBJECTS', #CAMERA_OBJECTS)
     dbw('#EVENT_OBJECTS', #EVENT_OBJECTS)
 
@@ -14,35 +13,15 @@ function debugMod()
 
 end
 
-function debugCameraLines()
-    for key, camera in pairs(CAMERA_OBJECTS) do
-
-        if camera == CAMERA_OBJECTS[SELECTED_CAMERA] then
-            DrawDot(camera.tr.pos, 0.5,0.5, 0,1,1, 1)
-            DrawDot(camera.tr.pos, 0.5,0.5, 1,1,1, 1)
-        else
-            DrawDot(camera.tr.pos, 0.5,0.5, 0,1,0, 1)
-        end
-        DebugCross(camera.tr.pos, 1,1,0, 1)
-
-        local dist = 5
-        DebugRay(camera.tr, dist, 1,1,1, 1)
-
-        DrawDot(TransformToParentPoint(camera.tr, Vec(0,0,-dist)), 0.5,0.5, 1,0,0, 1)
-
-    end
-end
-
 function manageDebugMode()
-
     db = not GetBool('savegame.mod.debugMode')
     if InputDown('ctrl') and InputPressed('d')  then
         SetBool('savegame.mod.debugMode', not GetBool('savegame.mod.debugMode'))
         db = GetBool('savegame.mod.debugMode')
         beep()
     end
-
 end
+
 function db_func(func) if db then func() end end -- debug function call
 
 function dbw(str, value) if db then DebugWatch(str, value) end end -- debug watch
