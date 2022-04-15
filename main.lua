@@ -19,23 +19,14 @@
 
 function init()
 
-    -- local x = 2
-
-    -- cam1 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(0,0,0))), 'static')
-    -- x = x + 10
-
-    -- e1 = instantiateEvent('wait')
-
-    -- cam2 = instantiateCamera(Transform(Vec(x,5,5), QuatLookAt(Vec(x,5,5), Vec(0,0,0))), 'static')
-    -- x = x + 10
-
-    -- e2 = instantiateEvent('lerpConst')
+    playerRelCamPos = TransformToLocalPoint(GetPlayerTransform(), GetCameraTransform().pos)
 
 end
 
 function tick()
 
     isUsingTool = TOOL:active()
+    osc = oscillate(1.5)/2
 
     startWithTool()
     manageInput()
@@ -51,7 +42,7 @@ function tick()
 
 end
 
-
+-- Control center for the mod.
 function runMod()
 
     manageCameras()
@@ -66,7 +57,7 @@ function runMod()
 
 end
 
-
+-- Manages user input.
 function manageInput()
 
     if InputPressed('f1') then
@@ -79,10 +70,7 @@ function manageInput()
     end
 
     if isUsingTool and InputPressed('r') then
-        ITEM_OBJECTS = {}
-        ITEM_CHAIN = {}
-        EVENT_OBJECTS = {}
-        CAMERA_OBJECTS = {}
+        clearAllObjects()
         beep()
     end
 
@@ -97,10 +85,11 @@ function manageInput()
 
 end
 
-
+-- Draw the outline and highlight of a shape
 function drawShape(s)
     DrawShapeOutline(s, 1,1,1, 1)
     DrawShapeHighlight(s, 0.25)
 end
+
 
 UpdateQuickloadPatch()

@@ -6,8 +6,6 @@ CAMERA_IDS = 0
 
 RUN_CAMERAS = false
 
-cameraTargetPos = Vec()
-cameraTargetRot = Quat()
 
 
 function createCameraObject(tr, type)
@@ -49,7 +47,8 @@ function cam_reset(self)
         end
     end
 end
-function cam_replaceDef(self) -- Replace the cam.def with the current version of cam.
+-- Replace the cam.def with the current version of cam.
+function cam_replaceDef(self)
     self.def = DeepCopy(self)
 end
 

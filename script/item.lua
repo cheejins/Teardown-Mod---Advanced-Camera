@@ -52,26 +52,37 @@ end
 
 function duplicateItem(_item, index)
 
-    local item = createItemObject(_item.type)
-    item.item = DeepCopy(_item.item)
 
-    if item.type == 'camera' then
+    local comp = DeepCopy(_item.item)
+
+    if _item.type == 'camera' then
+
+        cam_reset(comp)
 
         CAMERA_IDS = CAMERA_IDS + 1
-        item.item.id = CAMERA_IDS
-        cam_replaceDef(item.item)
+        comp.id = CAMERA_IDS
+        cam_replaceDef(comp)
 
-        table.insert(CAMERA_OBJECTS, item.item)
+        table.insert(CAMERA_OBJECTS, comp)
 
-    elseif item.type == 'event' then
+    elseif _item.type == 'event' then
+
+        event_reset(comp)
 
         EVENT_IDS = EVENT_IDS + 1
-        item.item.id = EVENT_IDS
-        event_replaceDef(item.item)
+        comp.id = EVENT_IDS
+        event_replaceDef(comp)
 
-        table.insert(EVENT_OBJECTS, item.item)
+        table.insert(EVENT_OBJECTS, comp)
 
     end
+
+    local item = DeepCopy(_item)
+
+    ITEM_IDS = ITEM_IDS + 1
+    item.id = ITEM_IDS
+
+    item.item = comp
 
     table.insert(ITEM_CHAIN, index, item)
 

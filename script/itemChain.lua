@@ -5,6 +5,7 @@ function initializeItemChain()
     for index, item in ipairs(ITEM_CHAIN) do
         if item.type == 'camera' then
             setSelectedCameraId(item.item.id)
+            cam_reset(item.item)
             break
         end
     end
@@ -13,6 +14,7 @@ function initializeItemChain()
     for index, item in ipairs(ITEM_CHAIN) do
         if item.type == 'event' then
             setSelectedEventId(item.item.id)
+            event_reset(item.item)
             break
         end
     end
@@ -45,6 +47,8 @@ function runItemChain()
         -- Switch to next event.
         event_reset(event)
         SELECTED_EVENT = getNextEventItem().item.id
+
+        PrintTable(event, 2)
 
     elseif event.type == 'wait' then -- Wait until timer is 100% consumed.
 

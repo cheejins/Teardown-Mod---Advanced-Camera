@@ -9,14 +9,13 @@ function draw()
     UiFont('bold.ttf', 20)
     UiColor(0,0,0,1)
 
-    -- Debug
 
-    -- if isUsingTool then
-    drawCameras()
-    -- end
+    if not RUN_ITEM_CHAIN then
+        drawCameras()
+    end
 
     -- Is wielding tool
-    if TOOL:active() then
+    -- if TOOL:active() then
         if db then
 
             do UiPush()
@@ -38,7 +37,7 @@ function draw()
             UiPop() end
 
         end
-    end
+    -- end
 
     -- Main UI
     if UI_SHOW_OPTIONS then
@@ -55,8 +54,8 @@ function draw()
         end
     UiPop() end
 
-    local videoDesc = 'The user can now create, delete, update, duplicate and re-order items in the chain. The option to set a sticky object will keep a camera relative to that object. The lerp events work to smoothly move between cameras. There is a time based lerp and a speed based lerp.'
-    drawVideoDesc(videoDesc)
+    -- local videoDesc = 'The user can now create, delete, update, duplicate and re-order items in the chain. The option to set a sticky object will keep a camera relative to that object. The lerp events work to smoothly move between cameras. There is a time based lerp and a speed based lerp.'
+    -- drawVideoDesc(videoDesc)
 
 end
 
@@ -163,33 +162,38 @@ function ui_Panes()
 
 end
 
+
 function drawCameras()
     for key, cam in pairs(CAMERA_OBJECTS) do
 
         local item = getItemByCameraId(cam.id)
+        local camItemIndex = getItemIndex(ITEM_CHAIN, getItemByCameraId(cam.id))
 
-        local a = 1
-        if item.id == UI_SELECTED_ITEM then
-            a = oscillate(1)/1.5 + 0.3
-        end
+        local isSelectedCamera = cam.id == SELECTED_CAMERA
+        local isSelectedItem = item == ITEM_CHAIN[UI_SELECTED_ITEM]
 
-        local fs = 25
+        -- Selected item flashes.
+        local a = ternary(isSelectedItem, osc, 1)
+
+
+        local fs = 25 -- Font size.
         UiFont('bold.ttf', fs)
 
-        DebugLine(cam.viewTr.pos, TransformToParentPoint(cam.viewTr, Vec(0,0,-5)), 1,1,1, a) -- Line from camera to camera target.
 
+        -- Line from camera to camera target.
+        DebugLine(cam.viewTr.pos, TransformToParentPoint(cam.viewTr, Vec(0,0,-5)), 1,1,1, a)
+
+        -- Line from camera to camera target.
         if cam.shape then
-            DebugLine(cam.tr.pos, AabbGetShapeCenterPos(cam.shape), 1,1,1, a) -- Line from camera to camera target.
+            DebugLine(cam.tr.pos, AabbGetShapeCenterPos(cam.shape), 1,1,1, a)
         end
 
-        if TransformToLocalPoint(GetCameraTransform(), cam.viewTr.pos)[3] < 0 then -- If the camera is infront of the player cam.
+        -- If the camera is infront of the player cam.
+        if TransformToLocalPoint(GetCameraTransform(), cam.viewTr.pos)[3] < 0 then
 
-            -- Camera target dot.
+            -- Draw camera direction dot.
             do UiPush()
                 local pos = TransformToParentPoint(cam.viewTr, Vec(0,0,-5))
-                -- DrawDot(pos, 0.6,0.6, 0,0,0, a)
-                -- DrawDot(VecApproach(pos, GetCameraTransform().pos, 0.1), 0.5,0.5, 1,1,1, a)
-                -- local pos = cam.viewTr.pos
                 local x,y = UiWorldToPixel(pos)
                 margin(x,y)
 
@@ -200,7 +204,7 @@ function drawCameras()
                 UiImageBox('ui/hud/dot-small.png', 32,32, 0,0)
             UiPop() end
 
-            -- Image for viewTr.
+            -- Draw camera viewTr icon.
             do UiPush()
                 local pos = cam.viewTr.pos
                 local x,y = UiWorldToPixel(pos)
@@ -215,9 +219,10 @@ function drawCameras()
 
         end
 
-        if TransformToLocalPoint(GetCameraTransform(), cam.tr.pos)[3] < 0 then -- If the camera is infront of the player cam.
+        -- If the camera is infront of the player cam.
+        if TransformToLocalPoint(GetCameraTransform(), cam.tr.pos)[3] < 0 then
 
-            -- Camera icon
+            -- Draw camera tr icon
             do UiPush()
                 local pos = cam.tr.pos
                 local x,y = UiWorldToPixel(pos)
@@ -227,16 +232,22 @@ function drawCameras()
                 UiImageBox('MOD/img/icon_camera_classic.png', 45,45, 0,0)
 
                 UiColor(0.4,0.4,0.4, 1)
-                if cam.id == SELECTED_CAMERA then
+                if isSelectedCamera then
+
                     UiColor(0,0,1, 1)
-                elseif item == ITEM_CHAIN[UI_SELECTED_ITEM] then
+
+                    if isSelectedItem then
+                        UiColor(0,0,1, a)
+                    end
+
+                elseif isSelectedItem then
                     UiColor(1,1,1, a)
                 end
 
                 UiImageBox('MOD/img/icon_camera_classic.png', 40,40, 0,0)
             UiPop() end
 
-            -- Camera number
+            -- Draw camera number
             do UiPush()
                 local x,y = UiWorldToPixel(cam.tr.pos)
                 margin(x,y-35)
@@ -245,7 +256,7 @@ function drawCameras()
                 UiRect(fs, fs)
 
                 UiColor(1,1,1, 1)
-                UiText(getItemIndex(ITEM_CHAIN, getItemByCameraId(cam.id)))
+                UiText(camItemIndex)
             UiPop() end
 
         end

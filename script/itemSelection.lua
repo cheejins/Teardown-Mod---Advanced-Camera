@@ -13,12 +13,12 @@ function getItemByCameraId(camera_id) return getItemByComponentId('camera', came
 function getItemByEventId(event_id) return getItemByComponentId('event', event_id) end
 
 
-
 -- Selected component
-function getSelectedCameraItem() return getItemByCameraId(SELECTED_CAMERA) end
 function getSelectedEventItem() return getItemByEventId(SELECTED_EVENT) end
-function setSelectedCameraId(camera_id) SELECTED_CAMERA = camera_id end
 function setSelectedEventId(event_id) SELECTED_EVENT = event_id end
+function getSelectedCameraItem() return getItemByCameraId(SELECTED_CAMERA) end
+function setSelectedCameraId(camera_id) SELECTED_CAMERA = camera_id end
+
 
 function getCameraById(id)
     for i = 1, #CAMERA_OBJECTS do
@@ -34,7 +34,6 @@ function getEventById(id)
         end
     end
 end
-
 
 
 -- Next Item
@@ -61,7 +60,6 @@ function getNextCameraItem(index) return getNextItem('camera', index) end
 function getNextEventItem(index) return getNextItem('event', index) end
 
 
-
 -- Prev Item
 function getPrevItem(type, index)
 
@@ -83,7 +81,6 @@ function getPrevItem(type, index)
 end
 function getPrevCameraItem(index) return getPrevItem('camera', index) end
 function getPrevEventItem(index) return getPrevItem('event', index) end
-
 
 
 -- Get index of the item in a table based on the item id.

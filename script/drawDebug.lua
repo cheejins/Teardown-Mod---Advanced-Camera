@@ -55,6 +55,7 @@ function drawVideoDesc(text)
 
 end
 
+
 function drawItemChain()
 
     UiTextShadow(0,0,0,0.5, 0.5,0)
@@ -249,7 +250,7 @@ function drawEventList()
 
                 do UiPush()
 
-                    UiText('['.. index ..'] ' .. item.type)
+                    UiText('['.. index ..'] ' .. item.type .. ' id:' .. item.id)
                     margin(120, 0)
 
                     margin(40, 0)

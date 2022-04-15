@@ -43,7 +43,6 @@ function drawItemListMenu()
 
 end
 
-
 -- Draw a single item in the list of items.
 function uiList_Item(text, itemChainIndex, item, listH)
     do UiPush()
@@ -62,7 +61,7 @@ function uiList_Item(text, itemChainIndex, item, listH)
         -- Selected item.
         if itemChainIndex == UI_SELECTED_ITEM then
             ro,go,bo,ao = 1,1,1,1
-            r,g,b,a = 1,1,1,1
+            r,g,b,a = osc + 0.5 ,osc + 0.5 ,osc + 0.5 ,1
         end
 
         -- Uninitiazlied item.
@@ -147,16 +146,20 @@ function uiList_Item(text, itemChainIndex, item, listH)
                 deleteItem(ITEM_CHAIN, itemChainIndex)
             end
 
-            -- margin(-bw*1.5, 0)
-            -- local c = {0,0,0,1}
+            margin(-bw*1.5, 0)
+            local c = {0,0,0,1}
             -- if UI_SELECTED_ITEM == itemChainIndex and RUN_CAMERAS then
-            --     c = {1,0,1,1}
+            --     c = {0,1,0,1}
             -- end
-            -- UiButtonImageBox('MOD/img/icon_eye.png', 0,0, c[1],c[2],c[3],c[4])
-            -- if UiTextButton(' ', bw * mult, bh * mult) then
-            --     UI_SELECTED_ITEM = itemChainIndex
-            --     RUN_CAMERAS = not RUN_CAMERAS
-            -- end
+            UiButtonImageBox('MOD/img/icon_eye.png', 0,0, c[1],c[2],c[3],c[4])
+            if UiTextButton(' ', bw * mult, bh * mult) then
+                UI_SELECTED_ITEM = itemChainIndex
+
+                local tr = TransformCopy(ITEM_CHAIN[UI_SELECTED_ITEM].item.tr)
+                tr.pos = VecSub(tr.pos, playerRelCamPos) -- Compensate for player tr to cam tr
+
+                SetPlayerTransform(tr)
+            end
 
         end UiPop()
 
@@ -197,6 +200,7 @@ function uiList_Item(text, itemChainIndex, item, listH)
     end UiPop()
 end
 
+-- Dynamic buttons.
 function uiList_dynamicButtons(w,h, index)
     do UiPush()
 
@@ -232,6 +236,7 @@ function uiList_dynamicButtons(w,h, index)
     end UiPop()
 end
 
+-- Add item.
 function uiList_addItem(index)
     do UiPush()
 
@@ -243,12 +248,12 @@ function uiList_addItem(index)
         if UiTextButton('.', 40, 40) then
             UI_SELECTED_ITEM = index
             createUninitializedItem(ITEM_CHAIN, index)
-            UI_SELECTED_ITEM = index
         end
 
     end UiPop()
 end
 
+-- Duplicate item.
 function uiList_duplicateItem(index)
     do UiPush()
 
@@ -260,7 +265,6 @@ function uiList_duplicateItem(index)
         if UiTextButton(' ', 40, 40) then
             UI_SELECTED_ITEM = index
             duplicateItem(ITEM_CHAIN[index], index)
-            UI_SELECTED_ITEM = index
         end
 
     end UiPop()
