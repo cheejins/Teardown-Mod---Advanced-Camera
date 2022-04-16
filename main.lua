@@ -10,6 +10,7 @@
 #include "script/tool.lua"
 #include "script/ui.lua"
 #include "script/uiModItem.lua"
+#include "script/uiControlPanel.lua"
 #include "script/uiTools.lua"
 #include "script/umf.lua"
 #include "script/util.lua"
@@ -18,9 +19,8 @@
 
 
 function init()
-
     playerRelCamPos = TransformToLocalPoint(GetPlayerTransform(), GetCameraTransform().pos)
-
+    initUiControlPanel()
 end
 
 function tick()

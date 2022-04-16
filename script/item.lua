@@ -52,7 +52,6 @@ end
 
 function duplicateItem(_item, index)
 
-
     local comp = DeepCopy(_item.item)
 
     if _item.type == 'camera' then

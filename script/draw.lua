@@ -61,6 +61,13 @@ end
 
 function ui_Panes()
 
+    local fs_title = 32
+
+    local marginControlPanelY = 200
+
+    local paneAH = UiHeight() - marginControlPanelY
+    local paneBH = 150
+
     UiMakeInteractive()
 
     do UiPush()
@@ -73,83 +80,118 @@ function ui_Panes()
 
         local mouseInUi = false
 
-
-        -- PANE 1
         do UiPush()
 
-            margin(pad, pad)
-            UiRect(UiWidth()/3 - pad2, UiHeight() - pad2)
-            mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, UiHeight() - pad2)
-            UiWindow(UiWidth()/3 - pad2, UiHeight() - pad2, true)
-
-            UiColor(1,1,1, 0.8)
+            -- PANE 1
             do UiPush()
-                UiAlign('center top')
-                UiFont('regular.ttf', 36)
-                margin(UiCenter(), pad)
-                UiText('OPTIONS')
+
+                margin(pad, pad)
+                UiRect(UiWidth()/3 - pad2, paneAH - pad2)
+                mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, paneAH - pad2)
+                UiWindow(UiWidth()/3 - pad2, paneAH - pad2, true)
+
+                UiColor(1,1,1, 0.8)
+                do UiPush()
+                    UiAlign('center top')
+                    UiFont('regular.ttf', fs_title)
+                    margin(UiCenter(), pad)
+                    UiText('OPTIONS')
+                UiPop() end
+                margin(pad/2,70)
+
             UiPop() end
-            margin(pad/2,70)
+            margin(UiWidth()/3, 0)
 
+
+            -- PANE 2
+            do UiPush()
+
+                do UiPush()
+                    margin(pad, pad)
+                    UiRect(UiWidth()/3 - pad2, paneAH - pad2)
+                    mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, paneAH - pad2)
+                    UiWindow(UiWidth()/3 - pad2, paneAH - pad2, true)
+
+                    UiColor(1,1,1, 0.8)
+                    do UiPush()
+                        UiAlign('center top')
+                        UiFont('regular.ttf', fs_title)
+                        margin(UiCenter(), pad)
+                        UiText('ITEMS')
+                    UiPop() end
+                    margin(pad/2,70)
+
+                    scrolly = scrolly + (InputValue('mousewheel') * -30)
+                    scrolly = clamp(scrolly, 0, #ITEM_CHAIN * 40)
+
+                    UiColor(0,0,0, 1)
+                    UiWindow(UiWidth(), UiHeight() - 100, true)
+                    margin(0, -scrolly)
+                    drawItemListMenu()
+                UiPop() end
+
+            UiPop() end
+
+            margin(UiWidth()/3, 0)
+
+
+
+            -- PANE 3
+            do UiPush()
+
+                margin(pad, pad)
+                UiRect(UiWidth()/3 - pad2, paneAH - pad2)
+                mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, paneAH - pad2)
+                UiWindow(UiWidth()/3 - pad2, paneAH - pad2, true)
+                UiWindow(UiWidth() - pad/2, UiHeight() - pad, true)
+
+
+                UiColor(1,1,1, 0.8)
+                do UiPush()
+                    UiAlign('center top')
+                    UiFont('regular.ttf', fs_title)
+                    margin(UiCenter(), pad)
+                    UiText('MODIFY ITEM')
+                UiPop() end
+                margin(pad/2,70)
+
+                if #ITEM_CHAIN >= 1 then
+                    local item = ITEM_CHAIN[UI_SELECTED_ITEM] or ITEM_CHAIN[1]
+                    uiMod_Item(item)
+                end
+
+            UiPop() end
+            -- margin(UiWidth()/3, 0)
         UiPop() end
-        margin(UiWidth()/3, 0)
 
 
-        -- PANE 2
+
+        -- PANE 2B
         do UiPush()
 
-            margin(pad, pad)
-            UiRect(UiWidth()/3 - pad2, UiHeight() - pad2)
-            mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, UiHeight() - pad2)
-            UiWindow(UiWidth()/3 - pad2, UiHeight() - pad2, true)
 
-            UiColor(1,1,1, 0.8)
-            do UiPush()
-                UiAlign('center top')
-                UiFont('regular.ttf', 36)
-                margin(UiCenter(), pad)
-                UiText('ITEMS')
-            UiPop() end
-            margin(pad/2,70)
+            local w = UiWidth()/1.5
 
-            scrolly = scrolly + (InputValue('mousewheel') * -30)
-            scrolly = clamp(scrolly, 0, #ITEM_CHAIN * 40)
-
-            UiColor(0,0,0, 1)
-            UiWindow(UiWidth(), UiHeight() - 100, true)
-            margin(0, -scrolly)
-            drawItemListMenu()
-
-        UiPop() end
-        margin(UiWidth()/3, 0)
+            margin(UiCenter() - w/2, paneAH + pad)
+            UiRect(w, paneBH)
+            mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, paneBH - pad2)
+            UiWindow(w + pad2, paneBH, true)
 
 
-        -- PANE 3
-        do UiPush()
+            -- UiColor(1,1,1, 0.8)
+            -- do UiPush()
+            --     UiAlign('center top')
+            --     UiFont('regular.ttf', fs_title)
+            --     margin(w/2, pad)
+            --     UiText('CONTROL PANEL')
+            -- UiPop() end
+            -- margin(0,70)
 
-            margin(pad, pad)
-            UiRect(UiWidth()/3 - pad2, UiHeight() - pad2)
-            mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, UiHeight() - pad2)
-            UiWindow(UiWidth()/3 - pad2, UiHeight() - pad2, true)
-            UiWindow(UiWidth() - pad/2, UiHeight() - pad, true)
 
-
-            UiColor(1,1,1, 0.8)
-            do UiPush()
-                UiAlign('center top')
-                UiFont('regular.ttf', 36)
-                margin(UiCenter(), pad)
-                UiText('MODIFY ITEM')
-            UiPop() end
-            margin(pad/2,70)
-
-            if #ITEM_CHAIN >= 1 then
-                local item = ITEM_CHAIN[UI_SELECTED_ITEM] or ITEM_CHAIN[1]
-                uiMod_Item(item)
-            end
+            local rowsPerItem = 10
+            uiDrawControlPanel(UiWidth()-pad2, 80, rowsPerItem)
 
         UiPop() end
-        margin(UiWidth()/3, 0)
 
 
         -- Close UI if mouse is clicked off of a panel.

@@ -269,3 +269,42 @@ function uiList_duplicateItem(index)
 
     end UiPop()
 end
+
+function uiDrawControlPanel(_w, _h, rowsPerItem)
+
+    local w = _w/#UiControls
+    local h = _h
+
+    for i = 1, #UiControls do
+
+        local control = UiControls[i]
+
+        UiColor(1,1,1, 1)
+
+        do UiPush()
+
+            UiColor(0.25, 0.25, 0.25, 1)
+
+            do UiPush()
+                margin(w/2, h/2)
+                UiAlign('center middle')
+                UiImageBox(control.icon, h/2, h/2)
+            UiPop() end
+
+            margin(w/2, h)
+
+            UiAlign('center top')
+            UiText(control.title)
+
+            margin(0, 32)
+
+            UiFont('bold.ttf', 28)
+            UiText(control.keybind)
+
+        UiPop() end
+
+        margin(w, 0)
+
+    end
+
+end
