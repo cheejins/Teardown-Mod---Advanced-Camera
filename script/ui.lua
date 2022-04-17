@@ -270,20 +270,29 @@ function uiList_duplicateItem(index)
     end UiPop()
 end
 
-function uiDrawControlPanel(_w, _h, rowsPerItem)
+function uiDrawControlPanel(_w, _h, rectH)
 
     local w = _w/#UiControls
     local h = _h
+
+    UiWindow(_w, rectH)
 
     for i = 1, #UiControls do
 
         local control = UiControls[i]
 
+        UiColor(0,0,0, 0.5)
+        UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 0,0,0, 0.5)
+        UiButtonHoverColor(0,0,0, 0.5)
+        if UiTextButton(' ', w, rectH) then
+            control.func()
+        end
+
+        UiColor(0,0,0, 0.5)
+        UiImageBox('ui/common/box-outline-6.png', w, rectH, 10,10)
+
         UiColor(1,1,1, 1)
-
         do UiPush()
-
-            UiColor(0.25, 0.25, 0.25, 1)
 
             do UiPush()
                 margin(w/2, h/2)

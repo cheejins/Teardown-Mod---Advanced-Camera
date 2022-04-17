@@ -48,8 +48,6 @@ function runItemChain()
         event_reset(event)
         SELECTED_EVENT = getNextEventItem().item.id
 
-        PrintTable(event, 2)
-
     elseif event.type == 'wait' then -- Wait until timer is 100% consumed.
 
         waitCamera(cam)
@@ -74,4 +72,9 @@ function clearAllObjects()
     ITEM_CHAIN = {}
     EVENT_OBJECTS = {}
     CAMERA_OBJECTS = {}
+end
+
+
+function toggleRunChain()
+    RUN_ITEM_CHAIN = not RUN_ITEM_CHAIN
 end
