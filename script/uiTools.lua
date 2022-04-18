@@ -97,3 +97,9 @@ end
 function UiSetColor(c, a)
     UiColor(c[1], c[2], c[3], a or 1)
 end
+
+-- Draw the outline and highlight of a shape
+function drawShape(s)
+    DrawShapeOutline(s, 1,1,1, 1)
+    DrawShapeHighlight(s, 0.25)
+end

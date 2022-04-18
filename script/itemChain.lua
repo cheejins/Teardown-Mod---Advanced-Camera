@@ -1,3 +1,10 @@
+ITEM_CHAIN = {}
+RUN_ITEM_CHAIN = false
+
+SELECTED_CAMERA = 1 -- camera id
+SELECTED_EVENT = 1 -- event id
+
+
 --- Set the selected camera and selected event to the first camera and first event in the item chain.
 function initializeItemChain()
 

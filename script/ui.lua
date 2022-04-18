@@ -1,8 +1,3 @@
-UI_SELECTED_ITEM = 1
-
-UI_SET_CAMERA = false
-UI_SET_CAMERA_SHAPE = false
-
 scrolly = 0
 
 
@@ -281,18 +276,31 @@ function uiDrawControlPanel(_w, _h, rectH)
 
         local control = UiControls[i]
 
+
         UiColor(0,0,0, 0.5)
         UiButtonImageBox('ui/common/box-solid-6.png', 10,10, 0,0,0, 0.5)
         UiButtonHoverColor(0,0,0, 0.5)
         if UiTextButton(' ', w, rectH) then
-            control.func()
+            _G[control.func]()
         end
 
-        UiColor(0,0,0, 0.5)
-        UiImageBox('ui/common/box-outline-6.png', w, rectH, 10,10)
 
-        UiColor(1,1,1, 1)
+        UiColor(0,0,0, 0.5)
+        if _G[control.bool] then
+            UiColor(0,1,0, 0.5)
+        end
+
         do UiPush()
+            for m = 0, 2 do
+                margin(m/2,m/2)
+                UiImageBox('ui/common/box-outline-6.png', w-m, rectH-m, 10,10)
+            end
+        UiPop() end
+
+
+        do UiPush()
+
+            UiColor(1,1,1, 1)
 
             do UiPush()
                 margin(w/2, h/2)
@@ -308,7 +316,7 @@ function uiDrawControlPanel(_w, _h, rectH)
             margin(0, 32)
 
             UiFont('bold.ttf', 28)
-            UiText(control.keybind)
+            UiText(string.upper(control.keybind))
 
         UiPop() end
 

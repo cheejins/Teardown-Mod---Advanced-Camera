@@ -4,8 +4,6 @@
 CAMERA_OBJECTS = {}
 CAMERA_IDS = 0
 
-RUN_CAMERAS = false
-
 
 
 function createCameraObject(tr, type)

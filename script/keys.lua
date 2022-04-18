@@ -1,69 +1,49 @@
 KEYS = {
 
-    cameraMode = {
-        key = 'g',
-        desc = 'toggle view camera'
-    },
-
-    initChain = {
+    runChain = {
         key = 'f1',
-        desc = 'chain init'
+        desc = 'Run the item chain of cameras and events.'
     },
 
-    -- f2 = {
-    --     key = 'f2',
-    --     desc = ''
-    -- },
+    camView = {
+        key = 'v',
+        desc = 'View the current camera.'
+    },
 
-    -- f3 = {
-    --     key = 'f3',
-    --     desc = ''
-    -- },
+    restartChain = {
+        key = 'r',
+        desc = 'Restart the item chain.'
+    },
 
-    toggleChain = {
+    nextEvent = {
         key = 'f4',
-        desc = 'toggle chain'
+        desc = ''
     },
 
-    createCameraStatic = {
-        key = 'f5',
-        desc = 'create statis camera'
+    prevEvent = {
+        key = 'f4',
+        desc = ''
     },
 
-    createCameraLookey = {
-        key = 'f6',
-        desc = 'create lookey camera'
+    detailedMode = {
+        key = 'i',
+        desc = 'Show extra item details.'
     },
 
-    createCameraDynamic = {
-        key = 'f7',
-        desc = 'create dynamic camera'
+    drawCameras = {
+        key = 'o',
+        desc = 'Show the location and direction of each camera.'
     },
 
-    -- f8 = {
-    --     key = 'f8',
-    --     desc = ''
-    -- },
-
-    createEventWait = {
-        key = 'f9',
-        desc = 'create event: wait'
+    deleteAll = {
+        key = 'x',
+        desc = 'Delete all items.'
     },
 
-    createEventLerpTimed = {
-        key = 'f10',
-        desc = 'create event: lerpTimed'
+    pinPanel = {
+        key = 'p',
+        desc = 'Pin the control panel (always show)'
     },
-
-    createEventLerpConst = {
-        key = 'f11',
-        desc = 'create event: lerpConst'
-    },
-
-    -- f12 = {
-    --     key = 'f12',
-    --     desc = ''
-    -- },
 
 }
 

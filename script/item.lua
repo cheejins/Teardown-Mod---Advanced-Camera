@@ -1,15 +1,5 @@
--- Item objects are used as base containers for components (event and camera objects).
-
-
 ITEM_OBJECTS = {}
 ITEM_IDS = 0
-
-ITEM_CHAIN = {}
-RUN_ITEM_CHAIN = false
-
-SELECTED_CAMERA = 1 -- camera id
-SELECTED_EVENT = 1 -- event id
-
 
 
 function createItemObject(type)

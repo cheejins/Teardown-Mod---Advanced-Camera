@@ -13,8 +13,8 @@ function debugMod()
 
 end
 
-function manageDebugMode()
-    db = not GetBool('savegame.mod.debugMode')
+function manageDebugMode(override)
+    db = not GetBool('savegame.mod.debugMode') or override
     if InputDown('ctrl') and InputPressed('d')  then
         SetBool('savegame.mod.debugMode', not GetBool('savegame.mod.debugMode'))
         db = GetBool('savegame.mod.debugMode')

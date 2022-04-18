@@ -1,6 +1,3 @@
-UI_SHOW_OPTIONS = true
-DRAW_CAMERAS = true
-
 pad = 20
 pad2 = 40
 
@@ -17,23 +14,25 @@ function draw()
 
     -- Is wielding tool
     -- if TOOL:active() then
-        if db then
+        if UI_SHOW_DETAILS then
 
             do UiPush()
 
                 drawControls()
 
                 margin(350, 10)
-                drawItemChain()
+                -- drawItemChain()
 
-                margin(400, 0)
+                margin(350, 0)
                 -- drawItemObjects()
 
                 margin(400, 0)
-                drawCameraList()
+                -- drawCameraList()
 
                 margin(400, 0)
-                drawEventList()
+                -- drawEventList()
+
+                drawItemChain()
 
             UiPop() end
 
@@ -64,17 +63,17 @@ function ui_Panes()
 
     local marginControlPanelY = 200
     local paneAH = UiHeight() - marginControlPanelY
-    local paneBH = 150
+    local paneBH = 130
 
+    local mouseInUi = false
 
+    UiAlign('left top')
+    UiColor(0,0,0, 0.8)
+
+    -- Draw main UI
     if UI_SHOW_OPTIONS then
 
         UiMakeInteractive()
-
-        UiAlign('left top')
-        UiColor(0,0,0, 0.8)
-
-        local mouseInUi = false
 
         do UiPush()
 
@@ -158,6 +157,11 @@ function ui_Panes()
 
         UiPop() end
 
+    end
+
+
+    -- Draw control panel.
+    if UI_SHOW_OPTIONS or UI_PIN_CONTROL_PANEL and isUsingTool then
         do UiPush()
 
             -- PANE 2B
@@ -173,17 +177,14 @@ function ui_Panes()
 
             UiPop() end
 
-            -- Close UI if mouse is clicked off of a panel.
-            if InputPressed('lmb') and not mouseInUi then
-                UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
-            end
-
         end UiPop()
-
     end
 
 
-
+    -- Close UI if mouse is clicked off of a panel.
+    if InputPressed('lmb') and not mouseInUi then
+        UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
+    end
 
 end
 
@@ -296,3 +297,16 @@ end
 function toggleDrawCameras()
     DRAW_CAMERAS = not DRAW_CAMERAS
 end
+
+function togglePinControlPanel()
+    UI_PIN_CONTROL_PANEL = not UI_PIN_CONTROL_PANEL
+end
+
+function toggleDetails()
+    UI_SHOW_DETAILS = not UI_SHOW_DETAILS
+end
+
+function toggleViewCamera()
+    RUN_CAMERAS = not RUN_CAMERAS
+end
+

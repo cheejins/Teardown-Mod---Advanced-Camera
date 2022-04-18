@@ -23,13 +23,6 @@ function drawControls()
 
     UiPop() end
 
-    do UiPush()
-
-        margin(UiCenter(), UiHeight() - 50)
-        UiText('Press ctrl+d to enable/disable adv cam debug mode')
-
-    UiPop() end
-
 end
 
 function drawVideoDesc(text)

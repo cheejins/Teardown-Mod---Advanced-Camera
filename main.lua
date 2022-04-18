@@ -17,6 +17,22 @@
 #include "script/utility.lua"
 
 
+-- Item objects are used as base containers for components (event and camera objects).
+
+
+-- UI middle pane.
+UI_SELECTED_ITEM = 1
+UI_SET_CAMERA = false
+UI_SET_CAMERA_SHAPE = false
+
+-- Control panel.
+UI_SHOW_OPTIONS = true
+UI_PIN_CONTROL_PANEL = true
+UI_SHOW_DETAILS = false
+DRAW_CAMERAS = true
+RUN_CAMERAS = false
+
+
 
 function init()
     playerRelCamPos = TransformToLocalPoint(GetPlayerTransform(), GetCameraTransform().pos)
@@ -27,13 +43,11 @@ function tick()
 
     isUsingTool = TOOL:active()
     osc = oscillate(1.5)/2
-
     startWithTool()
-    manageInput()
 
     runMod()
 
-    manageDebugMode()
+    manageDebugMode(UI_SHOW_DETAILS)
     debugMod()
 
 
@@ -45,6 +59,7 @@ end
 -- Control center for the mod.
 function runMod()
 
+    manageInput()
     manageCameras()
 
     if RUN_ITEM_CHAIN then
@@ -60,35 +75,16 @@ end
 -- Manages user input.
 function manageInput()
 
-    if InputPressed('f1') then
-        initializeItemChain()
+    for i = 1, #UiControls do
+
+        local control = UiControls[i]
+
+        if InputPressed(control.keybind) then
+            _G[control.func]()
+        end
+
     end
 
-    if InputPressed('f4') then -- Run item chain.
-        RUN_ITEM_CHAIN = not RUN_ITEM_CHAIN
-        beep()
-    end
-
-    if isUsingTool and InputPressed('r') then
-        clearAllObjects()
-        beep()
-    end
-
-    if InputPressed('g') then -- Activate camera mode.
-        RUN_CAMERAS = not RUN_CAMERAS
-    end
-
-    if isUsingTool and InputPressed('rmb') then
-        UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
-        beep()
-    end
-
-end
-
--- Draw the outline and highlight of a shape
-function drawShape(s)
-    DrawShapeOutline(s, 1,1,1, 1)
-    DrawShapeHighlight(s, 0.25)
 end
 
 

@@ -4,14 +4,15 @@ function getImgPath(str)
     return 'MOD/img/icon_' .. str .. '.png'
 end
 
-function createUiControl(name, keybind, title, icon, func)
+function createUiControl(name, title, icon, func, gb_key)
 
     local co = {
         name = name,
-        keybind = keybind,
+        keybind = KEYS[name].key,
         title = title,
         icon = getImgPath(icon),
-        func = func
+        func = func,
+        bool = gb_key
     }
 
     table.insert(UiControls, co)
@@ -21,67 +22,75 @@ end
 function initUiControlPanel()
 
     createUiControl(
-        '',
-        'G',
+        'runChain',
         'Run Chain',
         'play',
-        toggleRunChain
+        'toggleRunChain',
+        'RUN_ITEM_CHAIN'
     )
 
     createUiControl(
-        '',
-        'B',
-        'Prev Event',
-        'prev',
-        nil
+        'camView',
+        'Camera View',
+        'eye_frame',
+        'toggleViewCamera',
+        'RUN_CAMERAS'
     )
 
     createUiControl(
-        '',
-        'N',
-        'Next Event',
-        'next',
-        nil
-    )
-
-    createUiControl(
-        '',
-        'T',
+        'restartChain',
         'Restart Chain',
         'restart',
-        initializeItemChain
+        'initializeItemChain',
+        ''
     )
 
     createUiControl(
-        '',
-        'I',
+        'prevEvent',
+        'Prev Event',
+        'prev',
+        nil,
+        ''
+    )
+
+    createUiControl(
+        'nextEvent',
+        'Next Event',
+        'next',
+        nil,
+        ''
+    )
+
+    createUiControl(
+        'detailedMode',
         'Detailed Mode',
         'info',
-        nil
+        'toggleDetails',
+        'UI_SHOW_DETAILS'
     )
 
     createUiControl(
-        '',
-        'O',
+        'drawCameras',
         'Draw Cameras',
         'camera_classic',
-        toggleDrawCameras
+        'toggleDrawCameras',
+        'DRAW_CAMERAS'
     )
 
     createUiControl(
-        '',
-        'R',
+        'deleteAll',
         'Delete All',
         'deleteAll',
-        clearAllObjects
+        'clearAllObjects',
+        ''
     )
 
     createUiControl(
-        '',
-        'P',
+        'pinPanel',
         'Pin Panel',
         'pin',
-        nil
+        'togglePinControlPanel',
+        'UI_PIN_CONTROL_PANEL'
     )
 
 end
