@@ -1,17 +1,17 @@
-#include "script/camera.lua"
 #include "script/debug.lua"
-#include "script/draw.lua"
-#include "script/drawDebug.lua"
-#include "script/event.lua"
-#include "script/item.lua"
-#include "script/itemChain.lua"
-#include "script/itemSelection.lua"
+#include "script/ui/draw.lua"
+#include "script/ui/drawDebug.lua"
+#include "script/item/camera.lua"
+#include "script/item/event.lua"
+#include "script/item/item.lua"
+#include "script/item/itemChain.lua"
+#include "script/item/itemSelection.lua"
 #include "script/keys.lua"
 #include "script/tool.lua"
-#include "script/ui.lua"
-#include "script/uiModItem.lua"
-#include "script/uiControlPanel.lua"
-#include "script/uiTools.lua"
+#include "script/ui/ui.lua"
+#include "script/ui/uiControlPanel.lua"
+#include "script/ui/uiModItem.lua"
+#include "script/ui/uiTools.lua"
 #include "script/umf.lua"
 #include "script/util.lua"
 #include "script/utility.lua"
@@ -19,6 +19,7 @@
 
 -- Item objects are used as base containers for components (event and camera objects).
 
+OPTIONS = false
 
 -- UI middle pane.
 UI_SELECTED_ITEM = 1
@@ -35,11 +36,24 @@ RUN_CAMERAS = false
 
 
 function init()
-    playerRelCamPos = TransformToLocalPoint(GetPlayerTransform(), GetCameraTransform().pos)
+
+    InitKeys()
     initUiControlPanel()
+
+    if OPTIONS then -- Do not run mod for options.lua.
+        return
+    end
+
+    playerRelCamPos = TransformToLocalPoint(GetPlayerTransform(), GetCameraTransform().pos)
+
 end
 
+
 function tick()
+
+    if OPTIONS then -- Do not run mod for options.lua.
+        return
+    end
 
     isUsingTool = TOOL:active()
     osc = oscillate(1.5)/2
@@ -53,6 +67,17 @@ function tick()
 
     local spinner = FindJoint('spinner', true)
     SetJointMotor(spinner, 0.5, 50)
+
+end
+
+
+function draw()
+
+    if OPTIONS then -- Do not run mod for options.lua.
+        return
+    end
+
+    drawUi()
 
 end
 
@@ -83,6 +108,10 @@ function manageInput()
             _G[control.func]()
         end
 
+    end
+
+    if InputPressed('rmb') and isUsingTool then
+        UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
     end
 
 end

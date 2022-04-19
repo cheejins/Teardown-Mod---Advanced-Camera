@@ -1,62 +1,69 @@
-KEYS = {
+function InitKeys()
 
-    runChain = {
-        key = 'f1',
-        desc = 'Run the item chain of cameras and events.'
-    },
+    KEYS = util.structured_table("savegame.mod.keys",
 
-    camView = {
-        key = 'v',
-        desc = 'View the current camera.'
-    },
+        {
+            runChain = {
+                key =       {'string', 'f1'},
+                title =     {'string', 'Run Chain'},
+                desc =      {'string', 'Run the item chain of cameras and events.'}
+            },
+            camView = {
+                key =       {'string', 'v'},
+                title =     {'string', 'Camera View'},
+                desc =      {'string', 'View the current camera.'}
+            },
+            restartChain = {
+                key =       {'string', 'r'},
+                title =     {'string', 'Restart Chain'},
+                desc =      {'string', 'Restart the item chain.'}
+            },
 
-    restartChain = {
-        key = 'r',
-        desc = 'Restart the item chain.'
-    },
 
-    nextEvent = {
-        key = 'f4',
-        desc = ''
-    },
+            nextCamera = {
+                key =       {'string', 'f5'},
+                title =     {'string', 'Prev Camera'},
+                desc =      {'string', ''}
+            },
+            prevCamera = {
+                key =       {'string', 'f6'},
+                title =     {'string', 'Next Camera'},
+                desc =      {'string', ''}
+            },
+            nextEvent = {
+                key =       {'string', 'f5'},
+                title =     {'string', 'Prev Event'},
+                desc =      {'string', ''}
+            },
+            prevEvent = {
+                key =       {'string', 'f6'},
+                title =     {'string', 'Next Event'},
+                desc =      {'string', ''}
+            },
 
-    prevEvent = {
-        key = 'f4',
-        desc = ''
-    },
 
-    detailedMode = {
-        key = 'i',
-        desc = 'Show extra item details.'
-    },
+            detailedMode = {
+                key =       {'string', 'i'},
+                title =     {'string', 'Detailed Mode'},
+                desc =      {'string', 'Show extra item details.'}
+            },
+            drawCameras = {
+                key =       {'string', 'o'},
+                title =     {'string', 'Draw Cameras'},
+                desc =      {'string', 'Show the location and direction of each camera.'}
+            },
+            deleteAll = {
+                key =       {'string', 'x'},
+                title =     {'string', 'Delete All'},
+                desc =      {'string', 'Delete all items.'}
+            },
+            pinPanel = {
+                key =       {'string', 'p'},
+                title =     {'string', 'Pin Panel'},
+                desc =      {'string', 'Pin the control panel (always show)'}
+            },
+        }
 
-    drawCameras = {
-        key = 'o',
-        desc = 'Show the location and direction of each camera.'
-    },
+    )
 
-    deleteAll = {
-        key = 'x',
-        desc = 'Delete all items.'
-    },
-
-    pinPanel = {
-        key = 'p',
-        desc = 'Pin the control panel (always show)'
-    },
-
-}
-
-function keyPressed(self)
-    return InputPressed(self.key)
-end
-
-function keyDown(self)
-    return InputDown(self.key)
-end
-
--- KEYS table functions
-for i, k in pairs(KEYS) do
-    k.pressed = keyPressed
-    k.down = keyDown
 end
