@@ -119,7 +119,7 @@ function uiList_Item(text, itemChainIndex, item, listH)
             UiText(item.item.type)
 
             margin(130, 0)
-            UiText('Name')
+            UiText('Name: ' .. item.item.name)
 
         end UiPop()
 
@@ -314,7 +314,7 @@ function uiDrawControlPanel(_w, _h, rectH)
 
             margin(0, 32)
             UiFont('bold.ttf', 28)
-            local keybind = control.keybind.key2
+            local keybind = convertKeyTitle(control.keybind.key2)
             if control.keybind.key1 ~= '-' then
                 keybind = control.keybind.key1 .. ' + ' ..  keybind
             end

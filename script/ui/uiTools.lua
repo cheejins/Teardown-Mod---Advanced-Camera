@@ -1,3 +1,5 @@
+function margin(x,y) UiTranslate(x,y) end
+
 function drawSquare()
     do UiPush()
         UiAlign('center middle')
@@ -6,7 +8,35 @@ function drawSquare()
     UiPop() end
 end
 
-function margin(x,y) UiTranslate(x,y) end
+function uiShowMessage(stringsTable)
+    do UiPush()
+
+        margin(UiCenter(), UiMiddle() + 200)
+
+        for index, str in ipairs(stringsTable) do
+            UiText(str)
+            margin(0,50)
+        end
+
+    UiPop() end
+end
+
+function UiSetColor(c, a)
+    UiColor(c[1], c[2], c[3], a or 1)
+end
+
+function uiSetFont(fs)
+    UiFont('regular.ttf', fs or 32)
+    UiTextShadow(0,0,0,1, 0.5,0.5)
+    UiColor(1,1,1, 1)
+end
+
+-- Draw the outline and highlight of a shape
+function drawShape(s)
+    DrawShapeOutline(s, 1,1,1, 1)
+    DrawShapeHighlight(s, 0.25)
+end
+
 
 function createSlider(title, tb, key, valueText, min, max, w, h, fs)
 
@@ -73,33 +103,4 @@ function createSlider(title, tb, key, valueText, min, max, w, h, fs)
         return true
     end
 
-end
-
-function uiSetFont(fs)
-    UiFont('regular.ttf', fs or 32)
-    UiTextShadow(0,0,0,1, 0.5,0.5)
-    UiColor(1,1,1, 1)
-end
-
-function uiShowMessage(stringsTable)
-    do UiPush()
-
-        margin(UiCenter(), UiMiddle() + 200)
-
-        for index, str in ipairs(stringsTable) do
-            UiText(str)
-            margin(0,50)
-        end
-
-    UiPop() end
-end
-
-function UiSetColor(c, a)
-    UiColor(c[1], c[2], c[3], a or 1)
-end
-
--- Draw the outline and highlight of a shape
-function drawShape(s)
-    DrawShapeOutline(s, 1,1,1, 1)
-    DrawShapeHighlight(s, 0.25)
 end

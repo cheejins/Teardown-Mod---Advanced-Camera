@@ -13,6 +13,7 @@ function createEventObject(type)
 
         id = EVENT_IDS,
         type = type or 'wait',
+        name = '',
 
         status = {
             active = false,

@@ -13,6 +13,7 @@ function createCameraObject(tr, type)
     local cam = {
         id = CAMERA_IDS,
         type = type,
+        name = '',
 
         tr = tr,
         viewTr = tr,

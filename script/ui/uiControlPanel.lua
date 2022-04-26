@@ -8,7 +8,7 @@ function createUiControl(name, icon, func, gb_key)
 
     local co = {
         name = name,
-        keybind = {key1 = KEYS[name].key, key2 = KEYS[name].key2},
+        keybind = {key1 = KEYS[name].key1, key2 = KEYS[name].key2},
         title = KEYS[name].title,
         icon = getImgPath(icon),
         func = func,

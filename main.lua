@@ -9,9 +9,12 @@
 #include "script/keys.lua"
 #include "script/tool.lua"
 #include "script/ui/ui.lua"
+#include "script/ui/uiBinding.lua"
+#include "script/ui/uiPresetSystem.lua"
 #include "script/ui/uiControlPanel.lua"
 #include "script/ui/uiModItem.lua"
 #include "script/ui/uiTools.lua"
+#include "script/input.lua"
 #include "script/umf.lua"
 #include "script/util.lua"
 #include "script/utility.lua"
@@ -39,6 +42,7 @@ function init()
 
     InitKeys()
     initUiControlPanel()
+    initPresets()
 
     if OPTIONS then -- Do not run mod for options.lua.
         return
@@ -86,6 +90,7 @@ function runMod()
 
     manageInput()
     manageCameras()
+    manageUiBinding()
 
     if RUN_ITEM_CHAIN then
         runItemChain()
@@ -104,7 +109,9 @@ function manageInput()
 
         local control = UiControls[i]
 
-        if InputPressed(control.keybind) then
+        local comboKey = ternary(KEYS[control.name].key1 == '-', '', KEYS[control.name].key1)
+
+        if InputDown(comboKey) and InputPressed(KEYS[control.name].key2) then
             _G[control.func]()
         end
 

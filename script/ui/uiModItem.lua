@@ -1,17 +1,39 @@
+--- Modify item pane.
 function uiMod_Item(item)
 
     do UiPush()
 
-        UiFont('regular.ttf', 32)
-        UiAlign('center top')
+        UiFont('regular.ttf', 28)
+        UiAlign('left top')
 
-        margin(UiWidth()/2 -pad/2, 0)
-        -- local text = tostring(item.type):upper() .. ' : ' .. tostring(item.item.type):upper()
-        local text = tostring(item.type) .. ' : ' .. tostring(item.item.type)
-        UiText(text)
+
+        do UiPush()
+            UiText('Item: ')
+            margin(100, 0)
+            UiText(tostring(item.type))
+        UiPop() end
+        margin(0, 32)
+
+        do UiPush()
+            UiText('Type: ')
+            margin(100, 0)
+            UiText(tostring(item.item.type))
+        UiPop() end
+        margin(0, 32)
+
+        if item.type ~= 'uninitialized' then
+            do UiPush()
+                UiText('Name: ')
+                margin(100, 0)
+                uiTextField(300, 32, item.item, 'name')
+            UiPop() end
+            margin(0, 32)
+        end
 
     UiPop() end
 
+
+    margin(0, 32)
     margin(0, 32)
     margin(0, 32)
     margin(0, 32)

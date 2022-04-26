@@ -38,8 +38,9 @@ function drawVideoDesc(text)
     do UiPush()
         local rectW = 400
         local rectH = 350
-        margin(rectW/1.5, UiHeight() - rectH/1.5)
-        UiColor(0.5,0.5,1, 0.5)
+        margin(rectW/2, rectH/2)
+        margin(80, 80)
+        UiColor(0.5,0.5,1, 0.75)
         UiRect(rectW + 50, rectH)
         UiWordWrap(rectW)
         UiColor(1,1,1, 1)

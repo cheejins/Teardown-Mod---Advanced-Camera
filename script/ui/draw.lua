@@ -52,7 +52,7 @@ function drawUi()
         end
     UiPop() end
 
-    -- local videoDesc = 'The user can now create, delete, update, duplicate and re-order items in the chain. The option to set a sticky object will keep a camera relative to that object. The lerp events work to smoothly move between cameras. There is a time based lerp and a speed based lerp.'
+    -- local videoDesc = '(Mod has not been released yet)\n\nThe mod now features a UI control panel which lets the user control the mod through buttons and keybinds. The keybinds for the mod can be easily configured with combo keys such as CTRL+C, SHIFT+C and so on.'
     -- drawVideoDesc(videoDesc)
 
 end
@@ -73,7 +73,9 @@ function ui_Panes()
     -- Draw main UI
     if UI_SHOW_OPTIONS then
 
-        UiMakeInteractive()
+        -- if not InputDown('any') then
+            UiMakeInteractive()
+        -- end
 
         do UiPush()
 
@@ -81,7 +83,7 @@ function ui_Panes()
             do UiPush()
 
                 margin(pad, pad)
-                UiRect(UiWidth()/3 - pad2, paneAH - pad2)
+                UiImageBox('ui/common/box-solid-6.png', UiWidth()/3 - pad2, paneAH - pad2, 10,10)
                 mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, paneAH - pad2)
                 UiWindow(UiWidth()/3 - pad2, paneAH - pad2, true)
 
@@ -90,9 +92,12 @@ function ui_Panes()
                     UiAlign('center top')
                     UiFont('regular.ttf', fs_title)
                     margin(UiCenter(), pad)
-                    UiText('OPTIONS')
+                    UiText('ADVANCED CAMERA')
                 UiPop() end
                 margin(pad/2,70)
+
+                UiWindow(UiWidth() - pad, paneAH - 120)
+                drawPresetCanvas(UiWidth(), UiHeight())
 
             UiPop() end
             margin(UiWidth()/3, 0)
@@ -103,7 +108,7 @@ function ui_Panes()
 
                 do UiPush()
                     margin(pad, pad)
-                    UiRect(UiWidth()/3 - pad2, paneAH - pad2)
+                    UiImageBox('ui/common/box-solid-6.png', UiWidth()/3 - pad2, paneAH - pad2, 10,10)
                     mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, paneAH - pad2)
                     UiWindow(UiWidth()/3 - pad2, paneAH - pad2, true)
 
@@ -133,11 +138,10 @@ function ui_Panes()
             do UiPush()
 
                 margin(pad, pad)
-                UiRect(UiWidth()/3 - pad2, paneAH - pad2)
+                UiImageBox('ui/common/box-solid-6.png', UiWidth()/3 - pad2, paneAH - pad2, 10,10)
                 mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, paneAH - pad2)
                 UiWindow(UiWidth()/3 - pad2, paneAH - pad2, true)
                 UiWindow(UiWidth() - pad/2, UiHeight() - pad, true)
-
 
                 UiColor(1,1,1, 0.8)
                 do UiPush()
@@ -187,7 +191,6 @@ function ui_Panes()
     end
 
 end
-
 
 function drawCameras()
     do UiPush()

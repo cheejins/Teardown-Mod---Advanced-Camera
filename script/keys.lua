@@ -4,19 +4,19 @@ function InitKeys()
 
         {
             runChain = {
-                key =      {'string', '-'},
-                key2 =     {'string', 'f1'},
+                key1 =     {'string', 'ctrl'},
+                key2 =     {'string', 'x'},
                 title =    {'string', 'Run Chain'},
                 desc =     {'string', 'Run the item chain of cameras and events.'}
             },
             camView = {
-                key =      {'string', '-'},
-                key2 =     {'string', 'v'},
+                key1 =     {'string', 'ctrl'},
+                key2 =     {'string', 'c'},
                 title =    {'string', 'Camera View'},
                 desc =     {'string', 'View the current camera.'}
             },
             restartChain = {
-                key =      {'string', '-'},
+                key1 =     {'string', 'ctrl'},
                 key2 =     {'string', 'r'},
                 title =    {'string', 'Restart Chain'},
                 desc =     {'string', 'Restart the item chain.'}
@@ -24,52 +24,52 @@ function InitKeys()
 
 
             prevCamera = {
-                key =      {'string', '-'},
-                key2 =     {'string', 'f6'},
+                key1 =     {'string', '-'},
+                key2 =     {'string', 'leftarrow'},
                 title =    {'string', 'Prev Camera'},
                 desc =     {'string', ''}
             },
             nextCamera = {
-                key =      {'string', '-'},
-                key2 =     {'string', 'f5'},
+                key1 =     {'string', '-'},
+                key2 =     {'string', 'rightarrow'},
                 title =    {'string', 'Next Camera'},
                 desc =     {'string', ''}
             },
             prevEvent = {
-                key =      {'string', '-'},
-                key2 =     {'string', 'f6'},
+                key1 =     {'string', '-'},
+                key2 =     {'string', 'uparrow'},
                 title =    {'string', 'Prev Event'},
                 desc =     {'string', ''}
             },
             nextEvent = {
-                key =      {'string', '-'},
-                key2 =     {'string', 'f5'},
+                key1 =     {'string', '-'},
+                key2 =     {'string', 'downarrow'},
                 title =    {'string', 'Next Event'},
                 desc =     {'string', ''}
             },
 
 
             detailedMode = {
-                key =      {'string', '-'},
+                key1 =     {'string', '-'},
                 key2 =     {'string', 'i'},
                 title =    {'string', 'Detailed Mode'},
                 desc =     {'string', 'Show extra item details.'}
             },
             drawCameras = {
-                key =      {'string', '-'},
-                key2 =     {'string', 'o'},
+                key1 =     {'string', 'ctrl'},
+                key2 =     {'string', 'f'},
                 title =    {'string', 'Draw Cameras'},
                 desc =     {'string', 'Show the location and direction of each camera.'}
             },
             deleteAll = {
-                key =      {'string', '-'},
-                key2 =     {'string', 'x'},
+                key1 =     {'string', 'ctrl'},
+                key2 =     {'string', 'q'},
                 title =    {'string', 'Delete All'},
                 desc =     {'string', 'Delete all items.'}
             },
             pinPanel = {
-                key =      {'string', '-'},
-                key2 =     {'string', 'p'},
+                key1 =     {'string', 'ctrl'},
+                key2 =     {'string', 'z'},
                 title =    {'string', 'Pin Panel'},
                 desc =     {'string', 'Pin the control panel (always show)'}
             },
