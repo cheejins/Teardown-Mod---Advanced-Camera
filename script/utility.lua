@@ -260,7 +260,7 @@ do
     ---@param n number @Do NOT manually set this. This controls formatting through recursion.
     function PrintTable(tbl, depth, n)
         n = n or 0;
-        depth = depth or 5;
+        depth = depth or 10;
 
         if (depth == 0) then
             print(string.rep(' ', n).."...");
@@ -300,6 +300,7 @@ do
         end
     end
 
+
     function GetTableNextIndex(tb, i)
         if i + 1 > #tb then
             return 1
@@ -307,13 +308,82 @@ do
             return i + 1
         end
     end
-
     function GetTablePrevIndex(tb, i)
         if i - 1 <= 0 then
             return #tb
         else
             return i - 1
         end
+    end
+
+
+    function ConvertSharedTable(_path)
+
+        local tb = {}
+
+        local keys = ListKeys(_path)
+
+        for index, key in ipairs(keys) do
+            BuildSharedTableValue(tb, key, _path)
+        end
+
+        return tb
+
+    end
+    function BuildSharedTableValue(tb, key, _path)
+
+        local pathConc = conc(_path, {key})
+        local pathConcType = conc(pathConc, {'type'})
+        local pathConcVal = conc(pathConc, {'val'})
+
+
+        -- Get value type.
+        local type = GetString(pathConcType)
+
+
+        -- Assign simple value to tb key.
+        if     type == 'boolean' then tb[key] = GetBool(pathConcVal)
+        elseif type == 'number'  then tb[key] = GetFloat(pathConcVal)
+        elseif type == 'integer'  then tb[key] = GetInt(pathConcVal)
+        elseif type == 'string'  then tb[key] = GetString(pathConcVal)
+        end
+
+
+        -- Build nested table.
+        if type == 'table' then
+
+            tb[key] = {}
+
+            local keys = ListKeys(pathConcVal)
+
+            -- Check if all keys are integers.
+            local indexes = false
+            for i, k in ipairs(keys) do
+
+                if IsStringInteger(k) then
+
+                    indexes = true
+
+                end
+
+            end
+
+            if indexes then
+
+                for i, k in ipairs(keys) do
+                    BuildSharedTableValue(tb[key], tonumber(k), pathConcVal)
+                end
+
+            else
+
+                for i, k in ipairs(keys) do
+                    BuildSharedTableValue(tb[key], k, pathConcVal)
+                end
+
+            end
+
+        end
+
     end
 
 
@@ -474,6 +544,20 @@ do
     function ternary ( cond , T , F )
         if cond then return T else return F end
     end
+
+    function IsStringInteger(data)
+        for i = 1, #data do
+
+            byte = string.byte(string.sub(data, i, i))
+
+            if not (byte >= 48 and byte <= 57) then
+                return false
+            end
+
+        end
+        return true
+    end
+
 end
 
 
@@ -491,6 +575,22 @@ do
         return tostring(math.floor(dec)):reverse():gsub("(%d%d%d)","%1,"):gsub(",(%-?)$","%1"):reverse()
         -- https://stackoverflow.com/questions/10989788/format-integer-in-lua
     end
+
+    --- Concat reg path and key.
+    function conc(path, k)
+
+        if type(k) == 'table' then
+            local str = path
+            for index, s in ipairs(k) do
+                str = str .. '.' .. tostring(s)
+            end
+            return str
+        end
+
+        return path .. '.' .. tostring(k)
+
+    end
+
 end
 
 

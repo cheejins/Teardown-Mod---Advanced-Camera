@@ -3,6 +3,8 @@
         "lowercase-global",
         "lowercase-global",
         "missing-parameter",
-        "missing-parameter"
+        "missing-parameter",
+        "undefined-field",
+        "undefined-field"
     ]
 }

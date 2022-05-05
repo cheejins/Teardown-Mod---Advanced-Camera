@@ -1,27 +1,84 @@
-Presets = {}
+Preset_temp = {}
 PRESET_ID = 0
+
+SAVE_NAME = false
 
 
 function initPresets()
-    -- Presets = util.structured_table("savegame.mod.presets", {})
+
+    -- ClearKey('savegame.mod.presets')
+
+    Presets = util.shared_table('savegame.mod.presets')
+
+    -- Presets = {}
+
 end
+
+
 
 function drawPresetCanvas(w,h, listItemH)
 
     UiWindow(w, h)
     UiAlign('left top')
 
-    local contH = UiHeight() * 0.9
-    local buttonsH = UiHeight() * 0.1
+    local contH = UiHeight() - 100
+    local buttonsH = 100
 
     -- List
     do UiPush()
 
+        local rowH = listItemH * 0.7
+        uiSetFont(24)
+
         UiWindow(w, contH)
         UiImageBox('ui/common/box-outline-6.png', UiWidth(), UiHeight(), 10,10)
 
-        for index, preset in ipairs(Presets) do
-            UiText(preset.id)
+
+        local keys = ListKeys("savegame.mod.presets")
+
+        for index, k in ipairs(keys) do
+
+            local preset = Presets[k]
+
+            do UiPush()
+
+                UiImageBox('ui/common/box-outline-6.png', w, listItemH, 10,10)
+
+                UiAlign('left middle')
+
+                margin(0, listItemH/2)
+                do UiPush()
+
+                    margin(10, 0)
+                    UiButtonImageBox('MOD/img/icon_deleteAll.png', 0,0)
+                    if UiTextButton(' ', rowH, rowH) then
+                        preset_Delete(preset) -- Delete preset
+                    end
+
+                    margin(rowH + 10, 0)
+                    UiText(preset.id)
+
+                    margin(rowH + 10, 0)
+                    UiText(preset.name)
+
+                UiPop() end
+
+                do UiPush()
+
+                    UiAlign('right middle')
+
+                    margin(w-10, 0)
+                    UiButtonImageBox('ui/common/box-outline-6.png', 10,10, 1,1,1, 1)
+                    if UiTextButton('Load', 80, rowH) then
+                        preset_Load(k) -- Load preset
+                    end
+
+                UiPop() end
+
+            UiPop() end
+
+            margin(0, listItemH)
+
         end
 
     UiPop() end
@@ -31,7 +88,12 @@ function drawPresetCanvas(w,h, listItemH)
 
         margin(0, contH)
         UiWindow(w, buttonsH)
-        drawPresetButtons(w, buttonsH)
+
+        if SAVE_NAME then
+            preset_save_window(w, buttonsH, Preset_temp)
+        else
+            drawPresetButtons(w, buttonsH)
+        end
 
     UiPop() end
 
@@ -39,92 +101,143 @@ end
 
 function drawPresetButtons(w, h)
 
-    local btnTexts = {'Delete', 'Save', 'Load'}
-
     do UiPush()
 
         UiWindow(w, h)
 
         local btnW = w/3
 
-        for i = 0, 2 do
+        do UiPush()
 
-            do UiPush()
+            margin(w/2, 0)
 
-                margin(i * btnW, 0)
-                UiWindow(btnW, h)
+            UiAlign('center top')
+            UiButtonImageBox('ui/common/box-outline-6.png', 10,10, 1,1,1, 1)
+            if UiTextButton('Save Preset', btnW, UiHeight()) then
+                preset_Save()
+            end
 
-                UiButtonImageBox('ui/common/box-outline-6.png', 10,10, 1,1,1, 1)
-                if UiTextButton(btnTexts[i+1], w/3, UiHeight()) then
-
-                    local globalKey = 'preset_'..btnTexts[i+1]
-                    _G[globalKey](ITEM_CHAIN)
-                    print(globalKey)
-
-                end
-
-            UiPop() end
-
-        end
+        UiPop() end
 
     UiPop() end
 
 end
 
 
+function preset_Save()
+    SAVE_NAME = true
+    Preset_temp = createPreset('', ITEM_CHAIN, EVENT_OBJECTS, CAMERA_OBJECTS)
+    enableTextField(Preset_temp, 'name')
+end
+function preset_Load(key)
 
-function preset_Load(preset)
+    local preset_path = 'savegame.mod.presets'
 
-    ITEM_CHAIN = preset
+    print(preset_path)
 
-    PrintTable(ITEM_CHAIN)
+
+    local tb = ConvertSharedTable(preset_path)[key]
+
+    PrintTable(tb)
+
+    ITEM_CHAIN = tb.ic
+    CAMERA_OBJECTS = tb.co
+    EVENT_OBJECTS = tb.eo
+
+end
+function preset_Delete(preset)
+    ClearKey('savegame.mod.presets.'..preset.name)
+    -- Presets[preset.name] = nil
 end
 
-function preset_Save(name, tb)
 
-    local preset = createPreset(name, tb)
-    table.insert(Presets, preset)
+function preset_save_window(w, h, preset)
 
-    PrintTable(Presets, 2)
+    local presetValid = isPresetValid(preset)
+
+
+    local labelW = 80
+    local textW = w - labelW
+
+    local saveW = 100
+    local cancelW = 100
+
+    -- Name text field
+    do UiPush()
+
+        UiAlign('left middle')
+        uiSetFont(28)
+
+        do UiPush()
+            margin(0, h/4)
+            UiText('Name: ')
+        UiPop() end
+
+        margin(labelW, 2)
+
+        uiTextField(textW, h/2, preset, 'name')
+
+    UiPop() end
+
+    margin(w/2 - 100, 0)
+    UiAlign('left bottom')
+    UiButtonHoverColor(1,1,1,1)
+
+    -- Save button
+    margin(0, h)
+    if presetValid then
+        UiButtonImageBox('ui/common/box-outline-6.png', 10,10, 0,1,0, 1)
+    else
+        UiButtonImageBox('ui/common/box-outline-6.png', 10,10, 1,0,0, 1)
+    end
+    if UiTextButton('Save', saveW, h/2.5) then
+
+        if presetValid then
+
+            Presets[preset.name] = DeepCopy(preset)
+            SAVE_NAME = false
+
+        end
+
+    end
+
+    -- Cancel button
+    margin(saveW, 0)
+    UiButtonImageBox('ui/common/box-outline-6.png', 10,10, 1,1,1, 1)
+    if UiTextButton('Cancel', cancelW, h/2.5) then
+        SAVE_NAME = false
+    end
+
 end
 
-function preset_Delete(preset_id)
 
-    local p, i = FindPresetById(preset_id)
-    table.remove(Presets, i)
-
-    PrintTable(Presets)
-end
-
-
-
-
-function createPreset(name, tb)
+--- Creates a preset containing a snapshot of the current item and component objects.
+---@param name string Name of the preset.
+---@param IC table Item chain.
+---@param EO table Event objects.
+---@param CO table Camera objects.
+---@return table
+function createPreset(name, IC, EO, CO)
 
     PRESET_ID = PRESET_ID + 1
 
     local preset = {
         id = PRESET_ID,
         name = name,
-        table = DeepCopy(tb),
+        ic = DeepCopy(IC),
+        eo = DeepCopy(EO),
+        co = DeepCopy(CO),
     }
 
     return preset
 
 end
-
-function FindPresetByName(name)
-    for index, preset in ipairs(Presets) do
-        if preset.name == name then
-            return preset, index
-        end
+function isPresetValid(preset)
+    if preset.name == '' or preset.name == nil or Presets[preset.name] then
+        return false
     end
+    return true
 end
 
-function FindPresetById(id)
-    for index, preset in ipairs(Presets) do
-        if preset.id == id then
-            return preset, index
-        end
-    end
-end
+-- function getSharedTable(regPath, pathToKey)
+-- end

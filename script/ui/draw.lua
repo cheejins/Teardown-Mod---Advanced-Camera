@@ -18,8 +18,6 @@ function drawUi()
 
             do UiPush()
 
-                drawControls()
-
                 margin(350, 10)
                 -- drawItemChain()
 
@@ -82,6 +80,8 @@ function ui_Panes()
             -- PANE 1
             do UiPush()
 
+                UiButtonHoverColor(0.5, 0.5, 1, 1)
+
                 margin(pad, pad)
                 UiImageBox('ui/common/box-solid-6.png', UiWidth()/3 - pad2, paneAH - pad2, 10,10)
                 mouseInUi = mouseInUi or UiIsMouseInRect(UiWidth()/3 - pad2, paneAH - pad2)
@@ -97,7 +97,7 @@ function ui_Panes()
                 margin(pad/2,70)
 
                 UiWindow(UiWidth() - pad, paneAH - 120)
-                drawPresetCanvas(UiWidth(), UiHeight())
+                drawPresetCanvas(UiWidth(), UiHeight(), 50)
 
             UiPop() end
             margin(UiWidth()/3, 0)
@@ -121,8 +121,10 @@ function ui_Panes()
                     UiPop() end
                     margin(pad/2,70)
 
-                    scrolly = scrolly + (InputValue('mousewheel') * -30)
-                    scrolly = clamp(scrolly, 0, #ITEM_CHAIN * 40)
+                    if UiIsMouseInRect(UiWidth(), UiHeight()) then
+                        scrolly = scrolly + (InputValue('mousewheel') * -30)
+                        scrolly = clamp(scrolly, 0, #ITEM_CHAIN * 40)
+                    end
 
                     UiColor(0,0,0, 1)
                     UiWindow(UiWidth(), UiHeight() - 100, true)

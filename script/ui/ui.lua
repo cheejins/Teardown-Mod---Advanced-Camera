@@ -1,4 +1,5 @@
 scrolly = 0
+scrolly_presets = 0
 
 
 --- Draw the pane containing the list of items.

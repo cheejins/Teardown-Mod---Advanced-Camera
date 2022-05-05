@@ -1,20 +1,22 @@
 #include "script/debug.lua"
-#include "script/ui/draw.lua"
-#include "script/ui/drawDebug.lua"
+#include "script/input.lua"
 #include "script/item/camera.lua"
 #include "script/item/event.lua"
 #include "script/item/item.lua"
 #include "script/item/itemChain.lua"
 #include "script/item/itemSelection.lua"
 #include "script/keys.lua"
+#include "script/regKeys.lua"
+#include "script/sharedTable.lua"
 #include "script/tool.lua"
+#include "script/ui/draw.lua"
+#include "script/ui/drawDebug.lua"
 #include "script/ui/ui.lua"
 #include "script/ui/uiBinding.lua"
-#include "script/ui/uiPresetSystem.lua"
 #include "script/ui/uiControlPanel.lua"
 #include "script/ui/uiModItem.lua"
+#include "script/ui/uiPresetSystem.lua"
 #include "script/ui/uiTools.lua"
-#include "script/input.lua"
 #include "script/umf.lua"
 #include "script/util.lua"
 #include "script/utility.lua"
@@ -54,6 +56,11 @@ end
 
 
 function tick()
+
+    if InputPressed('f1') then
+        ClearKey("savegame.mod.presets")
+        print('Presets cleared.')
+    end
 
     if OPTIONS then -- Do not run mod for options.lua.
         return
@@ -98,27 +105,6 @@ function runMod()
 
     if RUN_CAMERAS then
         SetCameraTransform(getSelectedCameraItem().item.viewTr) -- View the camera.
-    end
-
-end
-
--- Manages user input.
-function manageInput()
-
-    for i = 1, #UiControls do
-
-        local control = UiControls[i]
-
-        local comboKey = ternary(KEYS[control.name].key1 == '-', '', KEYS[control.name].key1)
-
-        if InputDown(comboKey) and InputPressed(KEYS[control.name].key2) then
-            _G[control.func]()
-        end
-
-    end
-
-    if InputPressed('rmb') and isUsingTool then
-        UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
     end
 
 end

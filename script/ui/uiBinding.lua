@@ -8,6 +8,14 @@ font_size = 28
 function isActiveTableKey(tb, key) return tb == activeTable.tb and activeTable.key == key end
 function resetActiveTable() activeTable = {tb = '', key = ''} end
 
+function enableTextField(tb, key)
+    activeNameAssignment = true
+    activeTable = {tb = tb, key = key}
+end
+function disableTextField()
+    activeNameAssignment = false
+end
+
 
 function uiTextField(w, h, tb, key)
 
@@ -140,12 +148,12 @@ end
 --- Manage keybinds and textfields.
 function manageUiBinding()
 
-    DebugWatch('activeAssignment', activeAssignment)
-    DebugWatch('activeNameAssignment', activeNameAssignment)
-    DebugWatch('activeTable.tb', activeTable.tb)
-    DebugWatch('activeTable.key', activeTable.key)
-    DebugWatch('lastKeyPressed', lastKeyPressed)
-    DebugWatch('font_size', font_size)
+    -- DebugWatch('activeAssignment', activeAssignment)
+    -- DebugWatch('activeNameAssignment', activeNameAssignment)
+    -- DebugWatch('activeTable.tb', activeTable.tb)
+    -- DebugWatch('activeTable.key', activeTable.key)
+    -- DebugWatch('lastKeyPressed', lastKeyPressed)
+    -- DebugWatch('font_size', font_size)
 
     lastKeyPressed = string.lower(InputLastPressedKey())
 

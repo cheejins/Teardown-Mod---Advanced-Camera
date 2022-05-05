@@ -1,30 +1,3 @@
-function drawControls()
-
-    do UiPush()
-
-        local yMargin = 30
-
-        margin(50, 200)
-        UiAlign('left top')
-
-        UiColor(0,0,0, 0.7)
-        UiRect(290, (GetTableSize(KEYS) + 1) * 30 + 40)
-
-        margin(20,20)
-        UiColor(1,1,1, 1)
-        UiText('CONTROLS')
-        UiFont('regular.ttf', 24)
-        UiTextShadow(0,0,0,0.5, 0.5,0)
-
-        for key, k in pairs(KEYS) do
-            margin(0, yMargin)
-            UiText(k.key .. ' = ' .. k.desc)
-        end
-
-    UiPop() end
-
-end
-
 function drawVideoDesc(text)
 
     if not text then

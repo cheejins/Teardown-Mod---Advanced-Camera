@@ -7,21 +7,22 @@ function uiMod_Item(item)
         UiAlign('left top')
 
 
-        do UiPush()
-            UiText('Item: ')
-            margin(100, 0)
-            UiText(tostring(item.type))
-        UiPop() end
-        margin(0, 32)
-
-        do UiPush()
-            UiText('Type: ')
-            margin(100, 0)
-            UiText(tostring(item.item.type))
-        UiPop() end
-        margin(0, 32)
-
         if item.type ~= 'uninitialized' then
+
+            do UiPush()
+                UiText('Item: ')
+                margin(100, 0)
+                UiText(tostring(item.type))
+            UiPop() end
+            margin(0, 32)
+
+            do UiPush()
+                UiText('Type: ')
+                margin(100, 0)
+                UiText(tostring(item.item.type))
+            UiPop() end
+            margin(0, 32)
+
             do UiPush()
                 UiText('Name: ')
                 margin(100, 0)
@@ -150,7 +151,7 @@ function ui_Mod_Event(item)
 
         UiFont('regular.ttf', 36)
 
-        if item.item.type == 'lerpTimed' then
+        if item.item.type == 'lerpTimed' or item.item.type == 'wait' then
 
             if createSlider('Time', item.item.val, 'time', 's', 0, 100, UiWidth() - 200, 10, 24) then
                 event_replaceDef(item.item)
