@@ -3,17 +3,13 @@ PRESET_ID = 0
 
 SAVE_NAME = false
 
+presetCanvasScroll = 0
 
 function initPresets()
 
-    -- ClearKey('savegame.mod.presets')
-
     Presets = util.shared_table('savegame.mod.presets')
 
-    -- Presets = {}
-
 end
-
 
 
 function drawPresetCanvas(w,h, listItemH)
@@ -24,15 +20,22 @@ function drawPresetCanvas(w,h, listItemH)
     local contH = UiHeight() - 100
     local buttonsH = 100
 
+
     -- List
     do UiPush()
 
         local rowH = listItemH * 0.7
         uiSetFont(24)
 
-        UiWindow(w, contH)
+        UiWindow(w, contH - buttonsH/2, true)
         UiImageBox('ui/common/box-outline-6.png', UiWidth(), UiHeight(), 10,10)
 
+        if UiIsMouseInRect(UiWidth(), UiHeight()) then
+            presetCanvasScroll = presetCanvasScroll + (InputValue('mousewheel') * listItemH * 0.7)
+        end
+        presetCanvasScroll = clamp(presetCanvasScroll, -#ListKeys('savegame.mod.presets') * listItemH * 0.7, 0)
+
+        margin(0, presetCanvasScroll)
 
         local keys = ListKeys("savegame.mod.presets")
 
@@ -138,16 +141,39 @@ function preset_Load(key)
 
     local tb = ConvertSharedTable(preset_path)[key]
 
-    PrintTable(tb)
-
     ITEM_CHAIN = tb.ic
     CAMERA_OBJECTS = tb.co
     EVENT_OBJECTS = tb.eo
 
+    ITEM_IDS = tb.ii
+    CAMERA_IDS = tb.ci
+    EVENT_IDS = tb.ei
+
+
+    initializeItemChain()
+
+    for index, item in ipairs(ITEM_CHAIN) do
+
+        if item.type == 'event' then
+
+            item.item = getEventById(item.item.id)
+
+            event_replaceDef(item.item)
+
+        elseif item.type == 'camera' then
+
+            item.item = getCameraById(item.item.id)
+            item.item.viewTr = TransformCopy(item.item.tr)
+
+            cam_replaceDef(item.item)
+
+        end
+
+    end
+
 end
 function preset_Delete(preset)
     ClearKey('savegame.mod.presets.'..preset.name)
-    -- Presets[preset.name] = nil
 end
 
 
@@ -224,9 +250,14 @@ function createPreset(name, IC, EO, CO)
     local preset = {
         id = PRESET_ID,
         name = name,
+
         ic = DeepCopy(IC),
         eo = DeepCopy(EO),
         co = DeepCopy(CO),
+
+        ii = ITEM_IDS,
+        ci = CAMERA_IDS,
+        ei = EVENT_IDS,
     }
 
     return preset
@@ -238,6 +269,3 @@ function isPresetValid(preset)
     end
     return true
 end
-
--- function getSharedTable(regPath, pathToKey)
--- end

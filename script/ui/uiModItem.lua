@@ -153,14 +153,14 @@ function ui_Mod_Event(item)
 
         if item.item.type == 'lerpTimed' or item.item.type == 'wait' then
 
-            if createSlider('Time', item.item.val, 'time', 's', 0, 100, UiWidth() - 200, 10, 24) then
+            if createSlider('Time', item.item.val, 'time', 's', 0, 120, UiWidth() - 200, 10, 24) then
                 event_replaceDef(item.item)
             end
             UiTranslate(0, 50)
 
         elseif item.item.type == 'lerpConst' then
 
-            if createSlider('Speed', item.item.val, 'speed', 'm/s', 0, 0.5, UiWidth() - 200, 10, 24) then
+            if createSlider('Speed', item.item.val, 'speed', 'm/s', 0, 2, UiWidth() - 200, 10, 24) then
                 event_replaceDef(item.item)
             end
             UiTranslate(0, 50)

@@ -1,6 +1,6 @@
 name = Advanced Camera
 author = Cheejins and GGProGaming
-description = [noupload] Set up cameras and create transitions between them. Made for YouTubers.
+description = [noupload] Set up cameras and create transitions between them. Made for YouTubers and cinimatic creations. Let us know if there's anything you'd like to see in the mod.
 tags= Tool, Gameplay
 
 # If description contains [noupload] the description on Steam workshop will not be overwritten.

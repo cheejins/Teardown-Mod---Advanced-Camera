@@ -1,30 +1,30 @@
 #include "script/debug.lua"
-#include "script/input.lua"
+#include "script/input/controlPanel.lua"
+#include "script/input/input.lua"
+#include "script/input/keybinds.lua"
 #include "script/item/camera.lua"
 #include "script/item/event.lua"
 #include "script/item/item.lua"
 #include "script/item/itemChain.lua"
 #include "script/item/itemSelection.lua"
-#include "script/keys.lua"
-#include "script/regKeys.lua"
-#include "script/sharedTable.lua"
 #include "script/tool.lua"
 #include "script/ui/draw.lua"
-#include "script/ui/drawDebug.lua"
 #include "script/ui/ui.lua"
-#include "script/ui/uiBinding.lua"
-#include "script/ui/uiControlPanel.lua"
+#include "script/ui/uiDebug.lua"
 #include "script/ui/uiModItem.lua"
+#include "script/ui/uiPanes.lua"
 #include "script/ui/uiPresetSystem.lua"
+#include "script/ui/uiTextBinding.lua"
 #include "script/ui/uiTools.lua"
 #include "script/umf.lua"
 #include "script/util.lua"
 #include "script/utility.lua"
 
 
--- Item objects are used as base containers for components (event and camera objects).
+RunMod = true
 
 OPTIONS = false
+
 
 -- UI middle pane.
 UI_SELECTED_ITEM = 1
@@ -46,7 +46,7 @@ function init()
     initUiControlPanel()
     initPresets()
 
-    if OPTIONS then -- Do not run mod for options.lua.
+    if OPTIONS then -- Do not run the main mod for options.lua.
         return
     end
 
@@ -57,12 +57,17 @@ end
 
 function tick()
 
-    if InputPressed('f1') then
-        ClearKey("savegame.mod.presets")
-        print('Presets cleared.')
-    end
+    -- presetCanvasScroll = presetCanvasScroll - (InputValue('mousewheel') * 30)
+    -- presetCanvasScroll = clamp(presetCanvasScroll, 0, #Presets * 30)
+    -- print(presetCanvasScroll)
 
-    if OPTIONS then -- Do not run mod for options.lua.
+
+
+    if PauseMenuButton('Show Adv Cam') then
+        UI_SHOW_OPTIONS = true
+	end
+
+    if OPTIONS then -- Do not run the main mod for options.lua.
         return
     end
 
@@ -70,25 +75,27 @@ function tick()
     osc = oscillate(1.5)/2
     startWithTool()
 
-    runMod()
+    -- The whole entire mod in one funcdsfjl;ktokjl;ansdf
+    if RunMod then
+        runMod()
+    end
 
-    manageDebugMode(UI_SHOW_DETAILS)
+    -- Debug information
+    manageDebugMode()
     debugMod()
-
-
-    local spinner = FindJoint('spinner', true)
-    SetJointMotor(spinner, 0.5, 50)
 
 end
 
 
 function draw()
 
-    if OPTIONS then -- Do not run mod for options.lua.
+    if OPTIONS then -- Do not run the main mod for options.lua.
         return
     end
 
-    drawUi()
+    if RunMod then
+        drawUi()
+    end
 
 end
 
@@ -99,12 +106,17 @@ function runMod()
     manageCameras()
     manageUiBinding()
 
+    if #ITEM_CHAIN <= 2  then
+        RUN_ITEM_CHAIN = false
+    end
+
     if RUN_ITEM_CHAIN then
         runItemChain()
     end
 
-    if RUN_CAMERAS then
-        SetCameraTransform(getSelectedCameraItem().item.viewTr) -- View the camera.
+    if RUN_CAMERAS and #CAMERA_OBJECTS >= 1 then
+        local viewTr = getSelectedCameraItem().item.viewTr
+        SetCameraTransform(viewTr) -- View the selected camera.
     end
 
 end

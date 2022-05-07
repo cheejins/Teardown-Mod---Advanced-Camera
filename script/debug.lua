@@ -1,26 +1,29 @@
 function debugMod()
 
-    -- dbw('#CAMERA_OBJECTS', #CAMERA_OBJECTS)
-    -- dbw('#EVENT_OBJECTS', #EVENT_OBJECTS)
+    dbw('#CAMERA_OBJECTS', #CAMERA_OBJECTS)
+    dbw('#EVENT_OBJECTS', #EVENT_OBJECTS)
 
-    -- dbw('RUN_ITEM_CHAIN', RUN_ITEM_CHAIN)
-    -- dbw('RUN_CAMERAS', RUN_CAMERAS)
-    -- dbw('SELECTED_CAMERA', SELECTED_CAMERA)
-    -- dbw('SELECTED_EVENT', SELECTED_EVENT)
+    dbw('RUN_ITEM_CHAIN', RUN_ITEM_CHAIN)
+    dbw('RUN_CAMERAS', RUN_CAMERAS)
+    dbw('SELECTED_CAMERA', SELECTED_CAMERA)
+    dbw('SELECTED_EVENT', SELECTED_EVENT)
 
-    -- dbw('UI_SHOW_OPTIONS', UI_SHOW_OPTIONS)
-    -- dbw('UI_SET_CAMERA', UI_SET_CAMERA)
+    dbw('UI_SHOW_OPTIONS', UI_SHOW_OPTIONS)
+    dbw('UI_SET_CAMERA', UI_SET_CAMERA)
 
 end
 
+
+-- Manage debug toggling in the registry using a keyind.
 function manageDebugMode(override)
-    -- db = not GetBool('savegame.mod.debugMode') or override
-    -- if InputDown('ctrl') and InputPressed('d')  then
-    --     SetBool('savegame.mod.debugMode', not GetBool('savegame.mod.debugMode'))
-    --     db = GetBool('savegame.mod.debugMode')
-    --     beep()
-    -- end
+    db = not GetBool('savegame.mod.debugMode') or override
+    if InputDown('ctrl') and InputDown('shift') and InputPressed('alt')  then
+        SetBool('savegame.mod.debugMode', not GetBool('savegame.mod.debugMode'))
+        db = GetBool('savegame.mod.debugMode')
+        beep()
+    end
 end
+
 
 function db_func(func) if db then func() end end -- debug function call
 

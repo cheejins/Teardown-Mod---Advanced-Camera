@@ -44,6 +44,7 @@ function uiList_Item(text, itemChainIndex, item, listH)
     do UiPush()
 
         UiAlign('left top')
+        UiTextShadow(0,0,0, 0.5, 0.5, 0)
 
         local w = UiWidth() - listH
         local h = listH
@@ -53,6 +54,12 @@ function uiList_Item(text, itemChainIndex, item, listH)
 
         local r,g,b,a = 0.6,0.6,0.6,1 -- Button solid color
         local ro,go,bo,ao = 1,1,1,0 -- Button outline color
+
+        local indent = 30
+        if item.type == 'event' then
+            w = w - indent
+            margin(indent, 0)
+        end
 
         -- Selected item.
         if itemChainIndex == UI_SELECTED_ITEM then
@@ -81,19 +88,25 @@ function uiList_Item(text, itemChainIndex, item, listH)
         end
 
 
-        -- Button base
-        UiButtonImageBox('ui/common/box-solid-6.png', 10,10, r,g,b, a)
-        if UiTextButton(' ', w,h) then
-            UI_SELECTED_ITEM = itemChainIndex -- Changed selected ui item
-        end
+        do UiPush()
+            -- Button base
+            UiButtonImageBox('ui/common/box-solid-6.png', 10,10, r,g,b, a)
+            if UiTextButton(' ', w,h) then
+                UI_SELECTED_ITEM = itemChainIndex -- Changed selected ui item
+            end
+        end UiPop()
 
 
         -- Left side
         do UiPush()
 
+            if item.type ~= 'event' then
+                margin(indent, 0)
+            end
+
+
             UiAlign('center middle')
             UiColor(0,0,0, 1)
-
 
             margin(bw/1.5, bh)
             UiText(tostring(itemChainIndex)) -- Item number index.
@@ -113,7 +126,6 @@ function uiList_Item(text, itemChainIndex, item, listH)
                 UiImageBox('MOD/img/icon_event.png', bw * 1.25, bh * 1.25, 0,0)
             end
 
-            UiColor(0,0,0, 1)
 
             UiAlign('left middle')
             margin(bw*1.5, 0)

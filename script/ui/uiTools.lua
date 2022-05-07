@@ -92,7 +92,7 @@ function createSlider(title, tb, key, valueText, min, max, w, h, fs)
             UiAlign('right middle')
             UiButtonImageBox('ui/common/box-outline-6.png', 10,10, 1,1,1, 1)
             if UiTextButton('RND', fs*len, fs*1.25) then
-                tb[key] = math.ceil(tb[key])
+                tb[key] = math.floor(tb[key])
             end
 
         UiPop() end

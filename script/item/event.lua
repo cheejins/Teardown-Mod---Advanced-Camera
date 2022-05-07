@@ -1,4 +1,4 @@
--- An event is an item that is used to control cameras or other events.
+-- An event is a component used to control cameras or other events.
 
 
 EVENT_OBJECTS = {}
@@ -20,17 +20,6 @@ function createEventObject(type)
             started = false,
             running = false,
             done = false,
-        },
-
-        link = {
-            event = {
-                master = 0,
-                next = 0,
-            },
-            camera = {
-                master = 0,
-                next = 0,
-            },
         },
 
         val = {

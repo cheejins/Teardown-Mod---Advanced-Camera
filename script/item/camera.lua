@@ -1,6 +1,3 @@
--- Cameras are items which usually don't control any other items.
-
-
 CAMERA_OBJECTS = {}
 CAMERA_IDS = 0
 
@@ -16,7 +13,7 @@ function createCameraObject(tr, type)
         name = '',
 
         tr = tr,
-        viewTr = tr,
+        viewTr = TransformCopy(tr),
     }
 
     return DeepCopy(cam)
@@ -78,9 +75,14 @@ function manageCameras()
                 cam.tr = TransformToParentTransform(GetShapeWorldTransform(cam.shape), cam.relativeTr) -- Keep the tr relative to the shape's tr.
             end
 
-            if cam ~= camera then
+            if not tableContainsComponentType(ITEM_CHAIN, 'event') then
                 cam.viewTr = TransformCopy(cam.tr) -- Adhere viewTr to tr. The item chain is called after this and uses viewTr how it needs.
+            else
+                if cam ~= camera then
+                    cam.viewTr = TransformCopy(cam.tr) -- Adhere viewTr to tr. The item chain is called after this and uses viewTr how it needs.
+                end
             end
+
 
         end
 

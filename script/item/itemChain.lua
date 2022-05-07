@@ -5,35 +5,12 @@ SELECTED_CAMERA = 1 -- camera id
 SELECTED_EVENT = 1 -- event id
 
 
---- Set the selected camera and selected event to the first camera and first event in the item chain.
-function initializeItemChain()
-
-    -- First camera in ITEM_CHAIN.
-    for index, item in ipairs(ITEM_CHAIN) do
-        if item.type == 'camera' then
-            setSelectedCameraId(item.item.id)
-            cam_reset(item.item)
-            break
-        end
-    end
-
-    -- First event in ITEM_CHAIN.
-    for index, item in ipairs(ITEM_CHAIN) do
-        if item.type == 'event' then
-            setSelectedEventId(item.item.id)
-            event_reset(item.item)
-            break
-        end
-    end
-
-end
-
-
 --- Manages the camera and event selection and actions.
 function runItemChain()
 
     local event = getEventById(SELECTED_EVENT)
     local cam = getCameraById(SELECTED_CAMERA)
+
 
     if event.status.done then -- Event finished.
 
@@ -42,6 +19,7 @@ function runItemChain()
     elseif event.type == 'wait' then -- Wait until timer is 100% consumed.
 
         waitCamera(cam)
+
         event.val.time = event.val.time - GetTimeStep()
         if event.val.time <= 0 then event.status.done = true end
 
@@ -86,13 +64,12 @@ function ChangeEvent(direction, ignoreCamera)
         cam_replaceDef(prevCamItem.item)
     end
 
-
 end
 function NextEvent() ChangeEvent(1) end
 function PrevEvent() ChangeEvent(-1) end
 
 
-function ChangeCamera(direction, ignoreEvents)
+function ChangeCamera(direction)
 
     -- Reset selected camera.
     cam_reset(getCameraById(SELECTED_CAMERA))
@@ -121,9 +98,41 @@ function NextCamera() ChangeCamera(1) end
 function PrevCamera() ChangeCamera(-1) end
 
 
--- function validateItemChain()
---     local camItem = getItemByCameraId(SELECTED_CAMERA)
---     local camItemIndex = getItemIndex(ITEM_CHAIN, camItem)
---     local nextCamItem = getNextCameraItem(camItemIndex)
---     SELECTED_CAMERA = nextCamItem.item.id
--- end
+--- Set the selected camera and selected event to the first camera and first event in the item chain.
+function initializeItemChain()
+
+    -- First camera in ITEM_CHAIN.
+    for index, item in ipairs(ITEM_CHAIN) do
+        if item.type == 'camera' then
+            setSelectedCameraId(item.item.id)
+            cam_reset(item.item)
+            break
+        end
+    end
+
+    -- First event in ITEM_CHAIN.
+    for index, item in ipairs(ITEM_CHAIN) do
+        if item.type == 'event' then
+            setSelectedEventId(item.item.id)
+            event_reset(item.item)
+            break
+        end
+    end
+
+end
+function validateItemChain()
+
+    if #CAMERA_OBJECTS >= 1 and #EVENT_OBJECTS >=1 then
+
+        local selectedComponentsInvalid =
+            getItemByComponentId('camera', SELECTED_CAMERA) == nil
+            or getItemByComponentId('event', SELECTED_EVENT) == nil
+
+        -- Check if selected components are valid
+        if selectedComponentsInvalid then
+            initializeItemChain()
+        end
+
+    end
+
+end

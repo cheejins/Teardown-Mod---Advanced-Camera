@@ -88,7 +88,6 @@ function createUninitializedItem(tb, index)
     table.remove(tb, #tb)
 
 end
-
 function convertUninitializedItem(tb, index, itemType, itemSubType)
 
     local eventId = tb[index].item.id -- Delete temp event.

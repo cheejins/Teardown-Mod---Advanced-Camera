@@ -26,6 +26,7 @@ function getCameraById(id)
             return CAMERA_OBJECTS[i], i
         end
     end
+    return false
 end
 function getEventById(id)
     for i = 1, #EVENT_OBJECTS do
@@ -33,6 +34,7 @@ function getEventById(id)
             return EVENT_OBJECTS[i], i
         end
     end
+    return false
 end
 
 

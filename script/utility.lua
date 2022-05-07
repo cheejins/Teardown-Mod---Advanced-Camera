@@ -273,7 +273,7 @@ do
 
         for key, value in pairs(tbl) do
             if (key and type(key) == "number" or type(key) == "string") then
-                key = string.format("[\"%s\"]", key);
+                key = string.format("%s", key);
 
                 if (type(value) == "table") then
                     if (next(value)) then
@@ -340,11 +340,9 @@ do
         -- Get value type.
         local type = GetString(pathConcType)
 
-
         -- Assign simple value to tb key.
         if     type == 'boolean' then tb[key] = GetBool(pathConcVal)
         elseif type == 'number'  then tb[key] = GetFloat(pathConcVal)
-        elseif type == 'integer'  then tb[key] = GetInt(pathConcVal)
         elseif type == 'string'  then tb[key] = GetString(pathConcVal)
         end
 
@@ -621,8 +619,8 @@ do
     end
 
     -- Only runs the timer countdown if there is time left.
-    function TimerRunTime(timer)
-        if timer.time > 0 then
+    function TimerRunTime(timer, stopPoint)
+        if timer.time > (stopPoint or 0) then
             timer.time = timer.time - GetTimeStep()
         end
     end
@@ -636,6 +634,11 @@ do
     function TimerResetTime(timer)
         timer.time = 60/timer.rpm
     end
+
+    function TimerConsumed(timer)
+        return timer.time == 0
+    end
+
 end
 
 

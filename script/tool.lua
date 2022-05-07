@@ -22,7 +22,7 @@ TOOL:init()
 
 
 function setTool()
-    SetString('game.player.tool', 'advancedCamera')
+    SetString('game.player.tool', TOOL.setup.name)
 end
 
 function startWithTool()
