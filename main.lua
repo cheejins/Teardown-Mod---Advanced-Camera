@@ -50,6 +50,8 @@ function init()
         return
     end
 
+    debugInit()
+
     playerRelCamPos = TransformToLocalPoint(GetPlayerTransform(), GetCameraTransform().pos)
 
 end
@@ -57,27 +59,21 @@ end
 
 function tick()
 
-    -- presetCanvasScroll = presetCanvasScroll - (InputValue('mousewheel') * 30)
-    -- presetCanvasScroll = clamp(presetCanvasScroll, 0, #Presets * 30)
-    -- print(presetCanvasScroll)
-
+    if OPTIONS then -- Do not run the main mod for options.lua.
+        return
+    end
 
 
     if PauseMenuButton('Show Adv Cam') then
         UI_SHOW_OPTIONS = true
 	end
 
-    if OPTIONS then -- Do not run the main mod for options.lua.
-        return
-    end
-
     isUsingTool = TOOL:active()
     osc = oscillate(1.5)/2
-    startWithTool()
 
     -- The whole entire mod in one funcdsfjl;ktokjl;ansdf
     if RunMod then
-        runMod()
+        RunMod()
     end
 
     -- Debug information
@@ -100,18 +96,18 @@ function draw()
 end
 
 -- Control center for the mod.
-function runMod()
+function RunMod()
 
-    manageInput()
-    manageCameras()
-    manageUiBinding()
+    ManageInput()
+    ManageCameras()
+    ManageUiBinding()
 
     if #ITEM_CHAIN <= 2  then
         RUN_ITEM_CHAIN = false
     end
 
     if RUN_ITEM_CHAIN then
-        runItemChain()
+        RunItemChain()
     end
 
     if RUN_CAMERAS and #CAMERA_OBJECTS >= 1 then

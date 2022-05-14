@@ -35,7 +35,7 @@ function ui_Panes()
                     UiAlign('center top')
                     UiFont('regular.ttf', fs_title)
                     margin(UiCenter(), pad)
-                    UiText('ADVANCED CAMERA')
+                    UiText('PRESETS')
                 UiPop() end
                 margin(pad/2,70)
 
@@ -110,7 +110,7 @@ function ui_Panes()
 
 
     -- Draw control panel.
-    if UI_SHOW_OPTIONS or UI_PIN_CONTROL_PANEL and isUsingTool then
+    if UI_SHOW_OPTIONS or UI_PIN_CONTROL_PANEL then
         do UiPush()
 
             -- PANE 2B
@@ -131,7 +131,7 @@ function ui_Panes()
 
 
     -- Close UI if mouse is clicked off of a panel.
-    if InputPressed('lmb') and UI_SHOW_OPTIONS and not mouseInUi and isUsingTool then
+    if InputPressed('lmb') and UI_SHOW_OPTIONS and not mouseInUi then
         UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
     end
 

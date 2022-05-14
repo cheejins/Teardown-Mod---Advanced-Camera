@@ -55,7 +55,7 @@ function setCameraRelativeShape(cam, shape)
     cam.relativeTr = TransformToLocalTransform(GetShapeWorldTransform(shape), cam.tr)
 end
 
-function manageCameras()
+function ManageCameras()
 
     if tableContainsComponentType(ITEM_CHAIN, 'camera') then -- If there is at least one camera.
 

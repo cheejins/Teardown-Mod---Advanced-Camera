@@ -26,7 +26,10 @@ function uiMod_Item(item)
             do UiPush()
                 UiText('Name: ')
                 margin(100, 0)
-                uiTextField(300, 32, item.item, 'name')
+                if uiTextField(300, 32, item.item, 'name') then
+                    print('replaced def')
+                    cam_replaceDef(item.item)
+                end
             UiPop() end
             margin(0, 32)
         end
@@ -138,6 +141,7 @@ function uiMod_UninitializedItem(tb, index)
         -- Convert uninitialized item into valid item.
         if itemType then
             convertUninitializedItem(tb, index, itemType, itemSubType)
+            validateItemChain()
         end
 
     UiPop() end

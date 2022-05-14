@@ -89,9 +89,21 @@ function drawPresetCanvas(w,h, listItemH)
     -- Button panel.
     do UiPush()
 
-        margin(0, contH)
         UiWindow(w, buttonsH)
 
+        margin(0, contH - 100)
+        do UiPush()
+            UiAlign('center top')
+            margin(w/2, 50)
+            UiColor(1,0,0,0.75)
+            UiWordWrap(w)
+            UiText('CAUTION: Mod updates may corrupt presets until the final version of the mod is released.')
+        UiPop() end
+
+
+        UiAlign('left top')
+        margin(0, 100)
+        UiColor(1,1,1,1)
         if SAVE_NAME then
             preset_save_window(w, buttonsH, Preset_temp)
         else

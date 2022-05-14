@@ -46,7 +46,7 @@ function uiList_Item(text, itemChainIndex, item, listH)
         UiAlign('left top')
         UiTextShadow(0,0,0, 0.5, 0.5, 0)
 
-        local w = UiWidth() - listH
+        local w = UiWidth() - listH - listH
         local h = listH
 
         local bw = listH / 2
@@ -55,10 +55,22 @@ function uiList_Item(text, itemChainIndex, item, listH)
         local r,g,b,a = 0.6,0.6,0.6,1 -- Button solid color
         local ro,go,bo,ao = 1,1,1,0 -- Button outline color
 
-        local indent = 30
+        local indent = listH
+        local isSelectedItem = item.type == 'camera' and item.item.id == SELECTED_CAMERA or item.type == 'event' and item.item.id == SELECTED_EVENT 
+        if isSelectedItem then
+            do UiPush()
+                UiColor(0.2,0.2,1, 1)
+                UiAlign('left middle')
+                margin(0, listH/2)
+                UiImageBox('MOD/img/icon_selected.png', listH * 0.6, listH * 0.6, 0,0)
+            end UiPop()
+        end
+        margin(indent, 0)
+
+        local event_indent = 30
         if item.type == 'event' then
-            w = w - indent
-            margin(indent, 0)
+            w = w - event_indent
+            margin(event_indent, 0)
         end
 
         -- Selected item.
@@ -101,12 +113,15 @@ function uiList_Item(text, itemChainIndex, item, listH)
         do UiPush()
 
             if item.type ~= 'event' then
-                margin(indent, 0)
+                margin(event_indent, 0)
             end
-
 
             UiAlign('center middle')
             UiColor(0,0,0, 1)
+
+            if isSelectedItem then
+                UiColor(0.2,0.2,1, 1)
+            end
 
             margin(bw/1.5, bh)
             UiText(tostring(itemChainIndex)) -- Item number index.
@@ -114,11 +129,6 @@ function uiList_Item(text, itemChainIndex, item, listH)
             margin(bw*1.5, 0)
             UiAlign('center middle')
 
-            if item.type == 'camera' and item.item.id == SELECTED_CAMERA then
-                UiColor(0,0,1, 1)
-            elseif item.type == 'event' and item.item.id == SELECTED_EVENT then
-                UiColor(0,0,1, 1)
-            end
             -- Icon: Item type
             if item.type == 'camera' then
                 UiImageBox('MOD/img/icon_camera.png', bw * 1.25, bh * 1.25, 0,0)
@@ -154,19 +164,19 @@ function uiList_Item(text, itemChainIndex, item, listH)
                 deleteItem(ITEM_CHAIN, itemChainIndex)
             end
 
-            margin(-bw*1.5, 0)
-            local c = {0,0,0,1}
-            -- if UI_SELECTED_ITEM == itemChainIndex and RUN_CAMERAS then
-            --     c = {0,1,0,1}
-            -- end
-            UiButtonImageBox('MOD/img/icon_eye.png', 0,0, c[1],c[2],c[3],c[4])
-            if UiTextButton(' ', bw * mult, bh * mult) then
-                UI_SELECTED_ITEM = itemChainIndex
+            if item.type == 'camera'  then
+                margin(-bw*1.5, 0)
+                local c = {0,0,0,1}
 
-                local tr = TransformCopy(ITEM_CHAIN[UI_SELECTED_ITEM].item.tr)
-                tr.pos = VecSub(tr.pos, playerRelCamPos) -- Compensate for player tr to cam tr
+                UiButtonImageBox('MOD/img/icon_eye.png', 0,0, c[1],c[2],c[3],c[4])
+                if UiTextButton(' ', bw * mult, bh * mult) then
+                    UI_SELECTED_ITEM = itemChainIndex
 
-                SetPlayerTransform(tr)
+                    local tr = TransformCopy(ITEM_CHAIN[UI_SELECTED_ITEM].item.tr)
+                    tr.pos = VecSub(tr.pos, playerRelCamPos) -- Compensate for player tr to cam tr
+
+                    SetPlayerTransform(tr)
+                end
             end
 
         end UiPop()

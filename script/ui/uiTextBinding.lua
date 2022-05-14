@@ -148,7 +148,7 @@ function Ui_Option_Keybind_Combo(w, h, marginX, title, label, tb, key)
 end
 
 --- Manage keybinds and textfields.
-function manageUiBinding()
+function ManageUiBinding()
 
     lastKeyPressed = string.lower(InputLastPressedKey())
 

@@ -14,7 +14,7 @@ end
 
 function tick()
 
-    manageUiBinding()
+    ManageUiBinding()
 
 end
 

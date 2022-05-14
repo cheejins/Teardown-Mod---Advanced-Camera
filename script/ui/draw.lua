@@ -13,29 +13,27 @@ function drawUi()
     end
 
     -- Is wielding tool
-    -- if TOOL:active() then
-        if UI_SHOW_DETAILS then
+    if UI_SHOW_DETAILS then
 
-            do UiPush()
+        do UiPush()
 
-                margin(200, 10)
-                drawItemChain()
+            margin(200, 10)
+            drawItemChain()
 
-                margin(500, 0)
-                -- drawItemObjects()
+            margin(500, 0)
+            -- drawItemObjects()
 
-                margin(400, 0)
-                drawCameraList()
+            margin(400, 0)
+            drawCameraList()
 
-                margin(400, 0)
-                drawEventList()
+            margin(400, 0)
+            drawEventList()
 
-                -- drawItemChain()
+            -- drawItemChain()
 
-            UiPop() end
+        UiPop() end
 
-        end
-    -- end
+    end
 
     -- Main UI
     ui_Panes()

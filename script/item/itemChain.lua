@@ -6,7 +6,7 @@ SELECTED_EVENT = 1 -- event id
 
 
 --- Manages the camera and event selection and actions.
-function runItemChain()
+function RunItemChain()
 
     local event = getEventById(SELECTED_EVENT)
     local cam = getCameraById(SELECTED_CAMERA)
@@ -37,65 +37,71 @@ end
 
 
 function ChangeEvent(direction, ignoreCamera)
+    if tableContainsComponentType(ITEM_CHAIN, 'event') then
 
-    local event = getEventById(SELECTED_EVENT)
+        local event = getEventById(SELECTED_EVENT)
 
 
-    -- Reset selected event before changing events.
-    event_reset(event)
+        -- Reset selected event before changing events.
+        event_reset(event)
 
-    -- Switch to next or prev event.
-    if direction > 0 then
-        SELECTED_EVENT = getNextEventItem().item.id
-    elseif direction < 0 then
-        SELECTED_EVENT = getPrevEventItem().item.id
+        -- Switch to next or prev event.
+        if direction > 0 then
+            SELECTED_EVENT = getNextEventItem().item.id
+        elseif direction < 0 then
+            SELECTED_EVENT = getPrevEventItem().item.id
+        end
+
+
+        -- Reset selected camera.
+        cam_reset(getCameraById(SELECTED_CAMERA))
+
+        -- Set the selected camera to the camera before the selected event
+        if not ignoreCamera then
+            local eventItem = getItemByEventId(SELECTED_EVENT)
+            local eventItemIndex = getItemIndex(ITEM_CHAIN, eventItem)
+            local prevCamItem = getPrevCameraItem(eventItemIndex)
+            SELECTED_CAMERA = prevCamItem.item.id
+            cam_replaceDef(prevCamItem.item)
+        end
     end
-
-
-    -- Reset selected camera.
-    cam_reset(getCameraById(SELECTED_CAMERA))
-
-    -- Set the selected camera to the camera before the selected event
-    if not ignoreCamera then
-        local eventItem = getItemByEventId(SELECTED_EVENT)
-        local eventItemIndex = getItemIndex(ITEM_CHAIN, eventItem)
-        local prevCamItem = getPrevCameraItem(eventItemIndex)
-        SELECTED_CAMERA = prevCamItem.item.id
-        cam_replaceDef(prevCamItem.item)
-    end
-
 end
 function NextEvent() ChangeEvent(1) end
 function PrevEvent() ChangeEvent(-1) end
 
 
 function ChangeCamera(direction)
+    if tableContainsComponentType(ITEM_CHAIN, 'camera') then
 
-    -- Reset selected camera.
-    cam_reset(getCameraById(SELECTED_CAMERA))
+        -- Reset selected camera.
+        cam_reset(getCameraById(SELECTED_CAMERA))
 
 
-    -- Set the selected camera to the camera before the selected event
-    local camItem = getItemByCameraId(SELECTED_CAMERA)
-    local camItemIndex = getItemIndex(ITEM_CHAIN, camItem)
+        -- Set the selected camera to the camera before the selected event
+        local camItem = getItemByCameraId(SELECTED_CAMERA)
+        local camItemIndex = getItemIndex(ITEM_CHAIN, camItem)
 
-    if direction > 0 then
+        if direction > 0 then
 
-        local nextCamItem = getNextCameraItem(camItemIndex)
-        SELECTED_CAMERA = nextCamItem.item.id
-        cam_replaceDef(nextCamItem.item)
+            local nextCamItem = getNextCameraItem(camItemIndex)
+            SELECTED_CAMERA = nextCamItem.item.id
+            cam_replaceDef(nextCamItem.item)
 
-    elseif direction < 0 then
+        elseif direction < 0 then
 
-        local prevCamItem = getPrevCameraItem(camItemIndex)
-        SELECTED_CAMERA = prevCamItem.item.id
-        cam_replaceDef(prevCamItem.item)
+            local prevCamItem = getPrevCameraItem(camItemIndex)
+            SELECTED_CAMERA = prevCamItem.item.id
+            cam_replaceDef(prevCamItem.item)
 
+        end
     end
-
 end
-function NextCamera() ChangeCamera(1) end
-function PrevCamera() ChangeCamera(-1) end
+function NextCamera()
+    ChangeCamera(1)
+end
+function PrevCamera()
+    ChangeCamera(-1)
+end
 
 
 --- Set the selected camera and selected event to the first camera and first event in the item chain.

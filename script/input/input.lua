@@ -56,7 +56,7 @@ end
 
 
 -- Manages user input.
-function manageInput()
+function ManageInput()
 
     if not shouldDisableControlPanel() then
 
