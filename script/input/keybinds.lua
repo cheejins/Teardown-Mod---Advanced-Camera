@@ -1,6 +1,6 @@
 function InitKeys()
 
-    KEYS = util.structured_table("savegame.mod.keys",
+    KEYS = util.structured_table('savegame.mod.keys',
 
         {
             runChain = {

@@ -289,6 +289,11 @@ function ui_Mod_Camera_SetShape(item)
             UI_SHOW_OPTIONS = true
             UI_SET_CAMERA_SHAPE = false
 
+        elseif InputPressed('rmb') then
+
+            UI_SHOW_OPTIONS = true
+            UI_SET_CAMERA_SHAPE = false
+
         else
 
             UI_SHOW_OPTIONS = false

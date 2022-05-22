@@ -589,6 +589,17 @@ do
 
     end
 
+    function splitString(str, delimiter)
+        local result = {}
+        for word in string.gmatch(str, '([^'..delimiter..']+)') do
+            result[#result+1] = trim(word)
+        end
+        return result
+    end
+    function trim(s)
+        return (s:gsub("^%s*(.-)%s*$", "%1"))
+    end
+
 end
 
 

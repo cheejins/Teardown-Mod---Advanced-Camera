@@ -2,7 +2,6 @@ CAMERA_OBJECTS = {}
 CAMERA_IDS = 0
 
 
-
 function createCameraObject(tr, type)
 
     CAMERA_IDS = CAMERA_IDS + 1
@@ -82,7 +81,6 @@ function ManageCameras()
                     cam.viewTr = TransformCopy(cam.tr) -- Adhere viewTr to tr. The item chain is called after this and uses viewTr how it needs.
                 end
             end
-
 
         end
 

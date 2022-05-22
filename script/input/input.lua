@@ -85,8 +85,8 @@ function ManageInput()
 
     end
 
-    if InputPressed('rmb') and isUsingTool then
-        UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
-    end
+    -- if InputPressed('rmb') and isUsingTool then
+    --     UI_SHOW_OPTIONS = not UI_SHOW_OPTIONS
+    -- end
 
 end

@@ -1,3 +1,4 @@
+#include "script/quickload.lua"
 #include "script/debug.lua"
 #include "script/input/controlPanel.lua"
 #include "script/input/input.lua"
@@ -21,26 +22,23 @@
 #include "script/utility.lua"
 
 
-RunMod = true
-
-OPTIONS = false
-
-
--- UI middle pane.
-UI_SELECTED_ITEM = 1
-UI_SET_CAMERA = false
-UI_SET_CAMERA_SHAPE = false
-
--- Control panel.
-UI_SHOW_OPTIONS = true
-UI_PIN_CONTROL_PANEL = true
-UI_SHOW_DETAILS = false
-DRAW_CAMERAS = true
-RUN_CAMERAS = false
-
-
 
 function init()
+
+    runMod = true
+    OPTIONS = false
+
+    -- UI middle pane.
+    UI_SELECTED_ITEM = 1
+    UI_SET_CAMERA = false
+    UI_SET_CAMERA_SHAPE = false
+
+    -- Control panel.
+    UI_SHOW_OPTIONS = true
+    UI_PIN_CONTROL_PANEL = true
+    UI_SHOW_DETAILS = false
+    DRAW_CAMERAS = true
+    RUN_CAMERAS = false
 
     InitKeys()
     initUiControlPanel()
@@ -63,18 +61,16 @@ function tick()
         return
     end
 
-
-    if PauseMenuButton('Show Adv Cam') then
-        UI_SHOW_OPTIONS = true
-	end
+    -- if PauseMenuButton('Show Adv Cam') then
+    --     UI_SHOW_OPTIONS = true
+	-- end
 
     isUsingTool = TOOL:active()
     osc = oscillate(1.5)/2
 
-    -- The whole entire mod in one funcdsfjl;ktokjl;ansdf
-    if RunMod then
+    -- if runMod then
         RunMod()
-    end
+    -- end
 
     -- Debug information
     manageDebugMode()
@@ -89,9 +85,9 @@ function draw()
         return
     end
 
-    if RunMod then
+    -- if runMod then
         drawUi()
-    end
+    -- end
 
 end
 

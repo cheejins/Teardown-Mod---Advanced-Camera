@@ -11,6 +11,7 @@ end
 function uiShowMessage(stringsTable)
     do UiPush()
 
+        UiAlign('center middle')
         margin(UiCenter(), UiMiddle() + 200)
 
         for index, str in ipairs(stringsTable) do
